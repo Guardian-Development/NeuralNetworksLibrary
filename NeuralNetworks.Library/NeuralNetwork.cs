@@ -69,6 +69,31 @@ namespace NeuralNetworks.Library
             }
         }
 
+        public NeuralNetwork PopulateInputLayer(double[] inputs)
+        {
+            PerformInputLayerConfigurationChecks(inputs.Length);
+            for (var i = 0; i < inputLayer.Neurons.Length; i++)
+            {
+                inputLayer.Neurons[i].UserInputValue = inputs[i];
+            }
+
+            return this; 
+        }
+
+        private void PerformInputLayerConfigurationChecks(int inputSize)
+        {
+            if (inputLayer == null)
+            {
+                throw new InvalidOperationException(
+                    $"You must specify an input layer before populating, call {nameof(WithInputLayer)} first.");
+            }
+
+            if (inputLayer.Neurons.Length != inputSize)
+            {
+                throw new ArgumentException($"{nameof(inputLayer)} Neurons count must be the same length as the {inputSize}");
+            }
+        }
+
         public static NeuralNetwork Create(Random randomNumberGenerator = null)
         {
             randomNumberGenerator = randomNumberGenerator ?? new Random(1);
