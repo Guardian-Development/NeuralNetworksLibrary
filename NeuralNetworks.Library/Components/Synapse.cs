@@ -2,16 +2,16 @@
 {
     public sealed class Synapse
     {
-        private Neuron Target { get; }
-        private decimal Weight { get; }
+        public Neuron Target { get; }
+        public double Weight { get; set; }
 
-        private Synapse(Neuron target, decimal weight)
+        private Synapse(Neuron target, double weight)
         {
             Target = target;
             Weight = weight;
         }
 
-        public static Synapse For(Neuron target, decimal weight)
+        public static Synapse For(Neuron target, double weight)
         {
             return new Synapse(target, weight);
         }

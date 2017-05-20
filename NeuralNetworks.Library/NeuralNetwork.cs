@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.Components.Activation;
@@ -12,7 +13,13 @@ namespace NeuralNetworks.Library
         private readonly IList<Layer> hiddenLayers = new List<Layer>();
         private Layer outputLayer;
 
-        private NeuralNetwork() {}
+        private double RandomDouble => randomNumberGenerator.NextDouble(); 
+        private readonly Random randomNumberGenerator;
+
+        private NeuralNetwork(Random randomNumberGenerator)
+        {
+            this.randomNumberGenerator = randomNumberGenerator; 
+        }
 
         public NeuralNetwork WithInputLayer(int neuronCount, ActivationType activationType)
         {
@@ -26,7 +33,7 @@ namespace NeuralNetworks.Library
             var hiddenLayer = HiddenLayer.For(neuronCount, activationType, previousLayer);
 
             hiddenLayers.Add(hiddenLayer);
-            CreateNeuronConnectionsToPreviousLayer(previousLayer, hiddenLayer, 0);
+            CreateNeuronConnectionsToPreviousLayer(previousLayer, hiddenLayer);
 
             return this;
         }
@@ -36,7 +43,7 @@ namespace NeuralNetworks.Library
             var previousLayer = GetPreviousLayer();
 
             outputLayer = OutputLayer.For(neuronCount, activationType, previousLayer);
-            CreateNeuronConnectionsToPreviousLayer(previousLayer, outputLayer, 0);
+            CreateNeuronConnectionsToPreviousLayer(previousLayer, outputLayer);
 
             return this;
         }
@@ -46,22 +53,26 @@ namespace NeuralNetworks.Library
             return hiddenLayers.Any() ? hiddenLayers.Last() : inputLayer;
         }
 
-        private void CreateNeuronConnectionsToPreviousLayer(
-            Layer previousLayer, Layer newLayer, decimal startingWeight)
+        private void CreateNeuronConnectionsToPreviousLayer(Layer previousLayer, Layer newLayer)
         {
             foreach (var newLayerNeuron in newLayer.Neurons)
             {
-                foreach (var previousLayerNeuron in previousLayer.Neurons)
-                {
-                    newLayerNeuron.AddInputConnection(Synapse.For(previousLayerNeuron, startingWeight));
-                }
+                AddNeuronConnection(previousLayer, newLayerNeuron);
             }
-
         }
 
-        public static NeuralNetwork Create()
+        private void AddNeuronConnection(Layer previousLayer, Neuron newLayerNeuron)
         {
-            return new NeuralNetwork();
+            foreach (var previousLayerNeuron in previousLayer.Neurons)
+            {
+                newLayerNeuron.AddInputConnection(Synapse.For(previousLayerNeuron, RandomDouble));
+            }
+        }
+
+        public static NeuralNetwork Create(Random randomNumberGenerator = null)
+        {
+            randomNumberGenerator = randomNumberGenerator ?? new Random(1);
+            return new NeuralNetwork(randomNumberGenerator);
         }
     }
 }
