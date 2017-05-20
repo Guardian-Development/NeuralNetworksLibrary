@@ -1,4 +1,6 @@
-﻿namespace NeuralNetworks.Library.Components.Layers
+﻿using NeuralNetworks.Library.Components.Activation;
+
+namespace NeuralNetworks.Library.Components.Layers
 {
     public sealed class HiddenLayer : Layer
     {

@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using NeuralNetworks.Library.Components.Activation;
 
 namespace NeuralNetworks.Library.Components
 {
     public sealed class Neuron
     {
-        private readonly ActivationType activationType;
+        private readonly Func<double, double> activationFunction;
         private IList<Synapse> InputConnections { get; } = new List<Synapse>();
 
-        private Neuron(ActivationType activationType)
+        private Neuron(Func<double, double> activationFunction)
         {
-            this.activationType = activationType;
+            this.activationFunction = activationFunction;
         }
 
         public void AddInputConnection(Synapse connection)
@@ -19,7 +21,7 @@ namespace NeuralNetworks.Library.Components
 
         public static Neuron For(ActivationType activationType)
         {
-            return new Neuron(activationType);
+            return new Neuron(activationType.ToFunction());
         }
     }
 }

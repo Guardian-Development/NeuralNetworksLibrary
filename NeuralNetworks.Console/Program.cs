@@ -1,5 +1,5 @@
 ﻿using NeuralNetworks.Library;
-using NeuralNetworks.Library.Components;
+using NeuralNetworks.Library.Components.Activation;
 
 namespace NeuralNetworks.Console
 {

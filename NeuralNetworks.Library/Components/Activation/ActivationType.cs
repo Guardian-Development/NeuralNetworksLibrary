@@ -1,4 +1,4 @@
-﻿namespace NeuralNetworks.Library.Components
+﻿namespace NeuralNetworks.Library.Components.Activation
 {
     public enum ActivationType
     {

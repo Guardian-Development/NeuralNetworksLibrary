@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using NeuralNetworks.Library.Components.Activation;
 
 namespace NeuralNetworks.Library.Components.Layers
 {
