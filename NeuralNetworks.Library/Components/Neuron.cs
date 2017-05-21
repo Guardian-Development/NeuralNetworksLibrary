@@ -8,9 +8,10 @@ namespace NeuralNetworks.Library.Components
     public sealed class Neuron
     {
         private readonly Func<double, double> activationFunction;
-        private double lastFedValue; 
-        public double UserInputValue { get; set; }
         private IList<Synapse> InputConnections { get; } = new List<Synapse>();
+
+        //need to look at how best to access this + use this in math equations 
+        public double Output { get; set; }
 
         private Neuron(Func<double, double> activationFunction)
         {
@@ -22,15 +23,13 @@ namespace NeuralNetworks.Library.Components
             InputConnections.Add(connection);
         }
 
-        public double ActivateNeuron()
+        public void ActivateNeuron()
         {
             var sumOfInputValues = InputConnections.ToList()
-                .Sum(synapse => synapse.Weight * synapse.Target.UserInputValue);
+                .Sum(synapse => synapse.Weight * synapse.Target.Output);
 
-            lastFedValue = activationFunction.Invoke(sumOfInputValues);
+            Output = activationFunction.Invoke(sumOfInputValues);
             //feels like here we could use another metrics struct to hold last fed value , derivitve etc
-
-            return lastFedValue; 
         }
 
         public static Neuron For(ActivationType activationType)

@@ -9,9 +9,9 @@ namespace NeuralNetworks.Library
 {
     public sealed class NeuralNetwork
     {
-        private Layer inputLayer;
+        private InputLayer inputLayer;
         private readonly IList<Layer> hiddenLayers = new List<Layer>();
-        private Layer outputLayer;
+        private OutputLayer outputLayer;
 
         private double RandomDouble => randomNumberGenerator.NextDouble(); 
         private readonly Random randomNumberGenerator;
@@ -48,6 +48,19 @@ namespace NeuralNetworks.Library
             return this;
         }
 
+        public double[] MakePrediction(double[] inputs)
+        {
+            PopulateInputLayer(inputs);
+
+            inputLayer
+                .Concat(hiddenLayers)
+                .Concat(outputLayer)
+                .ToList()
+                .ForEach(layer => layer.ActivateLayer());
+
+            return outputLayer.GetPrediction(); 
+        }
+
         private Layer GetPreviousLayer()
         {
             return hiddenLayers.Any() ? hiddenLayers.Last() : inputLayer;
@@ -69,15 +82,13 @@ namespace NeuralNetworks.Library
             }
         }
 
-        public NeuralNetwork PopulateInputLayer(double[] inputs)
+        private void PopulateInputLayer(double[] input)
         {
-            PerformInputLayerConfigurationChecks(inputs.Length);
+            PerformInputLayerConfigurationChecks(input.Length);
             for (var i = 0; i < inputLayer.Neurons.Length; i++)
             {
-                inputLayer.Neurons[i].UserInputValue = inputs[i];
+                inputLayer.Neurons[i].Output = input[i];
             }
-
-            return this; 
         }
 
         private void PerformInputLayerConfigurationChecks(int inputSize)

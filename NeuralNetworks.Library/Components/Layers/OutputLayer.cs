@@ -1,4 +1,5 @@
-﻿using NeuralNetworks.Library.Components.Activation;
+﻿using System.Linq;
+using NeuralNetworks.Library.Components.Activation;
 
 namespace NeuralNetworks.Library.Components.Layers
 {
@@ -10,6 +11,11 @@ namespace NeuralNetworks.Library.Components.Layers
             : base(neuronCount, activationType)
         {
             this.previousLayer = previousLayer;
+        }
+
+        public double[] GetPrediction()
+        {
+            return Neurons.Select(neuron => neuron.Output).ToArray();
         }
 
         public static OutputLayer For(int neuronCount, ActivationType activationType, Layer previousLayer)
