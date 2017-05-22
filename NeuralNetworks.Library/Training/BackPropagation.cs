@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using NeuralNetworks.Library.Components;
+using NeuralNetworks.Library.Components.Layers;
 
 namespace NeuralNetworks.Library.Training
 {
@@ -27,13 +30,60 @@ namespace NeuralNetworks.Library.Training
                 MatchTrainingInputToExpectedOutput(i, 
                     trainingInputs, 
                     expectedOutputs, 
-                    out var inputRow, 
-                    out var expectedOutputRow);
+                    out var input, 
+                    out var expectedOutput);
 ;
-                var predictedOutput = neuralNetwork.MakePrediction(inputRow);
-                //now need to proagate error rate back through the network. 
+                var predictedOutput = neuralNetwork.MakePrediction(input);
+
+                SetOutputLayerNeuronErrorRates(neuralNetwork.OutputLayer, predictedOutput, expectedOutput);
+
+                neuralNetwork
+                    .HiddenLayers
+                    .Reverse()
+                    .ToList()
+                    .ForEach(SetHiddenLayerNeuronErrorRates);
             }
         }
+
+        private void SetOutputLayerNeuronErrorRates(
+            OutputLayer outputLayer, 
+            double[] predictedOutput, 
+            double[] expectedOutput)
+        {
+            for (var i = 0; i < outputLayer.Neurons.Length; i++)
+            {
+                var currentNeuron = outputLayer.Neurons[i];
+                var errorRate = currentNeuron.ActivationFunction.Derivative(currentNeuron.SumOfInputValues) *
+                        (predictedOutput[i] - expectedOutput[i]);
+                currentNeuron.ErrorRate = errorRate; 
+            }
+        }
+
+        private void SetHiddenLayerNeuronErrorRates(HiddenLayer hiddenLayer)
+        {
+            foreach (var currentNeuron in hiddenLayer.Neurons)
+            {
+                var sumOfErrorsFedIntoNeuron = 
+                    GetSumOfErrorsNeuronContributesTo(hiddenLayer.NextLayer, currentNeuron);
+
+                var neuronErrorRate = currentNeuron.ActivationFunction.Derivative(currentNeuron.SumOfInputValues);
+                currentNeuron.ErrorRate = neuronErrorRate * sumOfErrorsFedIntoNeuron;
+            }
+        }
+
+        private double GetSumOfErrorsNeuronContributesTo(Layer nextLayer, Neuron sourceNeuron) =>
+            nextLayer.Neurons
+                .Select(effectedNeuron => new
+                {
+                    effectedNeuron,
+                    synapsesForSourceNeuron =
+                    effectedNeuron.InputConnections.Where(synapse => synapse.Source == sourceNeuron)
+                })
+                .SelectMany(neuronWithSynapses =>
+                    neuronWithSynapses
+                        .synapsesForSourceNeuron
+                        .Select(synapse => synapse.Weight * neuronWithSynapses.effectedNeuron.ErrorRate)
+                ).Sum();
 
         private void ValidateTrainingInputsWithExepctedOutputs(
             double[][] trainingInputs,

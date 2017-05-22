@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NeuralNetworks.Library.Components.Activation;
@@ -9,6 +8,7 @@ namespace NeuralNetworks.Library.Components.Layers
     public abstract class Layer: IEnumerable<Layer>
     {
         public Neuron[] Neurons { get; }
+        public abstract Layer NextLayer { get; set; }
 
         public void ActivateLayer()
         {

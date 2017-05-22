@@ -12,7 +12,8 @@ namespace NeuralNetworks.Library.Components.Activation
                 {ActivationType.Sigmoid, SigmoidActivationFunction.Create()}
             };
 
-        public static Func<double, double> ToFunction(this ActivationType activationType)
+        public static IProvideNeuronActivation ToNeuronActivationProvider(
+            this ActivationType activationType)
         {
             ActivationFunctions.TryGetValue(activationType, out var activationFunction);
             if (activationFunction == null)
@@ -21,7 +22,7 @@ namespace NeuralNetworks.Library.Components.Activation
                     $"The activaion type {nameof(activationType)} does not have a corresponding {nameof(IProvideNeuronActivation)} function.");
             }
 
-            return activationFunction.Activate; 
+            return activationFunction; 
         }
     }
 }

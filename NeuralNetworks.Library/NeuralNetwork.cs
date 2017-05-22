@@ -9,9 +9,9 @@ namespace NeuralNetworks.Library
 {
     public sealed class NeuralNetwork
     {
-        private InputLayer inputLayer;
-        private readonly IList<Layer> hiddenLayers = new List<Layer>();
-        private OutputLayer outputLayer;
+        internal InputLayer InputLayer;
+        internal readonly IList<HiddenLayer> HiddenLayers = new List<HiddenLayer>();
+        internal OutputLayer OutputLayer;
 
         private double RandomDouble => randomNumberGenerator.NextDouble(); 
         private readonly Random randomNumberGenerator;
@@ -23,17 +23,18 @@ namespace NeuralNetworks.Library
 
         public NeuralNetwork WithInputLayer(int neuronCount, ActivationType activationType)
         {
-            inputLayer = InputLayer.For(neuronCount, activationType);
+            InputLayer = InputLayer.For(neuronCount, activationType);
             return this;
         }
 
         public NeuralNetwork WithHiddenLayer(int neuronCount, ActivationType activationType)
         {
+            var hiddenLayer = HiddenLayer.For(neuronCount, activationType);
             var previousLayer = GetPreviousLayer();
-            var hiddenLayer = HiddenLayer.For(neuronCount, activationType, previousLayer);
 
-            hiddenLayers.Add(hiddenLayer);
+            HiddenLayers.Add(hiddenLayer);
             CreateNeuronConnectionsToPreviousLayer(previousLayer, hiddenLayer);
+            previousLayer.NextLayer = hiddenLayer;
 
             return this;
         }
@@ -42,8 +43,9 @@ namespace NeuralNetworks.Library
         {
             var previousLayer = GetPreviousLayer();
 
-            outputLayer = OutputLayer.For(neuronCount, activationType, previousLayer);
-            CreateNeuronConnectionsToPreviousLayer(previousLayer, outputLayer);
+            OutputLayer = OutputLayer.For(neuronCount, activationType);
+            CreateNeuronConnectionsToPreviousLayer(previousLayer, OutputLayer);
+            previousLayer.NextLayer = OutputLayer; 
 
             return this;
         }
@@ -52,18 +54,18 @@ namespace NeuralNetworks.Library
         {
             PopulateInputLayer(inputs);
 
-            inputLayer
-                .Concat(hiddenLayers)
-                .Concat(outputLayer)
+            InputLayer
+                .Concat(HiddenLayers)
+                .Concat(OutputLayer)
                 .ToList()
                 .ForEach(layer => layer.ActivateLayer());
 
-            return outputLayer.GetPrediction(); 
+            return OutputLayer.GetPrediction(); 
         }
 
         private Layer GetPreviousLayer()
         {
-            return hiddenLayers.Any() ? hiddenLayers.Last() : inputLayer;
+            return HiddenLayers.Any() ? (Layer) HiddenLayers.Last() : InputLayer;
         }
 
         private void CreateNeuronConnectionsToPreviousLayer(Layer previousLayer, Layer newLayer)
@@ -85,23 +87,23 @@ namespace NeuralNetworks.Library
         private void PopulateInputLayer(double[] input)
         {
             PerformInputLayerConfigurationChecks(input.Length);
-            for (var i = 0; i < inputLayer.Neurons.Length; i++)
+            for (var i = 0; i < InputLayer.Neurons.Length; i++)
             {
-                inputLayer.Neurons[i].Output = input[i];
+                InputLayer.Neurons[i].Output = input[i];
             }
         }
 
         private void PerformInputLayerConfigurationChecks(int inputSize)
         {
-            if (inputLayer == null)
+            if (InputLayer == null)
             {
                 throw new InvalidOperationException(
                     $"You must specify an input layer before populating, call {nameof(WithInputLayer)} first.");
             }
 
-            if (inputLayer.Neurons.Length != inputSize)
+            if (InputLayer.Neurons.Length != inputSize)
             {
-                throw new ArgumentException($"{nameof(inputLayer)} Neurons count must be the same length as the {inputSize}");
+                throw new ArgumentException($"{nameof(InputLayer)} Neurons count must be the same length as the {inputSize}");
             }
         }
 

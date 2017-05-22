@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using NeuralNetworks.Library;
+﻿using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Training;
 
@@ -24,7 +23,7 @@ namespace NeuralNetworks.Console
 
             BackPropagation
                 .For(neuralNetwork, learningRate: 0.1, momentum: 0.9)
-                .TrainNetwork(trainingInputs, trainingOutputs); 
+                .TrainNetwork(trainingInputs, trainingOutputs);
         }
 
         private static void GetXorTrainingData(

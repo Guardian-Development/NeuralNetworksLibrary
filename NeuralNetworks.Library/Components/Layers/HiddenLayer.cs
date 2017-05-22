@@ -4,17 +4,16 @@ namespace NeuralNetworks.Library.Components.Layers
 {
     public sealed class HiddenLayer : Layer
     {
-        private readonly Layer previousLayer;
 
-        public HiddenLayer(int neuronCount, ActivationType activationType, Layer previousLayer)
+        public HiddenLayer(int neuronCount, ActivationType activationType)
             : base(neuronCount, activationType)
+        {}
+
+        public static HiddenLayer For(int neuronCount, ActivationType activationType)
         {
-            this.previousLayer = previousLayer;
+            return new HiddenLayer(neuronCount, activationType);
         }
 
-        public static HiddenLayer For(int neuronCount, ActivationType activationType, Layer previousLayer)
-        {
-            return new HiddenLayer(neuronCount, activationType, previousLayer);
-        }
+        public override Layer NextLayer { get; set; }
     }
 }
