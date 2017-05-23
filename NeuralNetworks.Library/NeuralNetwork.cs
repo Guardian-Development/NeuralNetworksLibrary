@@ -1,52 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using NeuralNetworks.Library.Components;
-using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Components.Layers;
 
 namespace NeuralNetworks.Library
 {
     public sealed class NeuralNetwork
     {
-        internal InputLayer InputLayer;
-        internal readonly IList<HiddenLayer> HiddenLayers = new List<HiddenLayer>();
-        internal OutputLayer OutputLayer;
+        internal InputLayer InputLayer { get; private set; }
+        internal IReadOnlyList<HiddenLayer> HiddenLayers { get; private set; }
+        internal OutputLayer OutputLayer { get; private set; }
 
-        private double RandomDouble => randomNumberGenerator.NextDouble(); 
-        private readonly Random randomNumberGenerator;
+        internal NeuralNetwork()
+        {}
 
-        private NeuralNetwork(Random randomNumberGenerator)
+        internal NeuralNetwork AddInputLayer(InputLayer inputLayer)
         {
-            this.randomNumberGenerator = randomNumberGenerator; 
+            InputLayer = inputLayer;
+            return this; 
         }
 
-        public NeuralNetwork WithInputLayer(int neuronCount, ActivationType activationType)
+        internal NeuralNetwork AddHiddenLayers(IList<HiddenLayer> hiddenLayers)
         {
-            InputLayer = InputLayer.For(neuronCount, activationType);
-            return this;
+            HiddenLayers = new ReadOnlyCollection<HiddenLayer>(hiddenLayers);
+            return this; 
         }
 
-        public NeuralNetwork WithHiddenLayer(int neuronCount, ActivationType activationType)
+        internal NeuralNetwork AddOutputLayer(OutputLayer outputLayer)
         {
-            var hiddenLayer = HiddenLayer.For(neuronCount, activationType);
-            var previousLayer = GetPreviousLayer();
-
-            HiddenLayers.Add(hiddenLayer);
-            CreateNeuronConnectionsToPreviousLayer(previousLayer, hiddenLayer);
-            previousLayer.NextLayer = hiddenLayer;
-
-            return this;
-        }
-
-        public NeuralNetwork WithOutputLayer(int neuronCount, ActivationType activationType)
-        {
-            var previousLayer = GetPreviousLayer();
-
-            OutputLayer = OutputLayer.For(neuronCount, activationType);
-            CreateNeuronConnectionsToPreviousLayer(previousLayer, OutputLayer);
-            previousLayer.NextLayer = OutputLayer; 
-
+            OutputLayer = outputLayer; 
             return this;
         }
 
@@ -63,27 +46,6 @@ namespace NeuralNetworks.Library
             return OutputLayer.GetPrediction(); 
         }
 
-        private Layer GetPreviousLayer()
-        {
-            return HiddenLayers.Any() ? (Layer) HiddenLayers.Last() : InputLayer;
-        }
-
-        private void CreateNeuronConnectionsToPreviousLayer(Layer previousLayer, Layer newLayer)
-        {
-            foreach (var newLayerNeuron in newLayer.Neurons)
-            {
-                AddNeuronConnection(previousLayer, newLayerNeuron);
-            }
-        }
-
-        private void AddNeuronConnection(Layer previousLayer, Neuron newLayerNeuron)
-        {
-            foreach (var previousLayerNeuron in previousLayer.Neurons)
-            {
-                newLayerNeuron.AddInputConnection(Synapse.For(previousLayerNeuron, RandomDouble));
-            }
-        }
-
         private void PopulateInputLayer(double[] input)
         {
             PerformInputLayerConfigurationChecks(input.Length);
@@ -98,7 +60,7 @@ namespace NeuralNetworks.Library
             if (InputLayer == null)
             {
                 throw new InvalidOperationException(
-                    $"You must specify an input layer before populating, call {nameof(WithInputLayer)} first.");
+                    $"You must specify an input layer before populating, call {nameof(AddInputLayer)} first.");
             }
 
             if (InputLayer.Neurons.Length != inputSize)
@@ -107,10 +69,10 @@ namespace NeuralNetworks.Library
             }
         }
 
-        public static NeuralNetwork Create(Random randomNumberGenerator = null)
+        public static NeuralNetworkBuilder For(Random randomNumberGenerator = null)
         {
             randomNumberGenerator = randomNumberGenerator ?? new Random(1);
-            return new NeuralNetwork(randomNumberGenerator);
+            return new NeuralNetworkBuilder(randomNumberGenerator);
         }
     }
 }

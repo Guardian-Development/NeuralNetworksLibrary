@@ -10,10 +10,11 @@ namespace NeuralNetworks.Console
         {
             System.Console.WriteLine("Creating Neural Network");
 
-            var neuralNetwork = NeuralNetwork.Create()
+            var neuralNetwork = NeuralNetwork.For()
                 .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
                 .WithHiddenLayer(neuronCount: 3, activationType: ActivationType.Sigmoid)
-                .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid);
+                .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
+                .Build();
 
             System.Console.WriteLine("Creating Training Data");
 
@@ -24,6 +25,8 @@ namespace NeuralNetworks.Console
             BackPropagation
                 .For(neuralNetwork, learningRate: 0.1, momentum: 0.9)
                 .TrainNetwork(trainingInputs, trainingOutputs);
+
+            if (System.Diagnostics.Debugger.IsAttached) System.Console.ReadLine();
         }
 
         private static void GetXorTrainingData(
