@@ -24,7 +24,16 @@ namespace NeuralNetworks.Console
 
             BackPropagation
                 .For(neuralNetwork, learningRate: 0.1, momentum: 0.9)
-                .TrainNetwork(trainingInputs, trainingOutputs);
+                .TrainNetwork(trainingInputs, trainingOutputs, epochs: 1000);
+
+            System.Console.WriteLine(
+                $"PREDICTION (0, 1): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 1");
+            System.Console.WriteLine(
+                $"PREDICTION (1, 0): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 1");
+            System.Console.WriteLine(
+                $"PREDICTION (0, 0): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 0");
+            System.Console.WriteLine(
+                $"PREDICTION (1, 1): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 0");
 
             if (System.Diagnostics.Debugger.IsAttached) System.Console.ReadLine();
         }
