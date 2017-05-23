@@ -12,9 +12,8 @@ A Library that implements Neural Networks. Example initialisation of a Neural Ne
                 .Build();
 
 BackPropagation
-                .For(neuralNetwork, learningRate: 0.1, momentum: 0.9)
-                .TrainNetwork(trainingInputs, trainingOutputs, epochs: 1000);
-
+    .For(neuralNetwork, learningRate: 0.1, momentum: 0.9)
+    .TrainNetwork(trainingInputs, trainingOutputs, epochs: 1000);
 ```
 ## Next Steps
 - Add back propagation (this should drive the final model for neurons and layers etc)
