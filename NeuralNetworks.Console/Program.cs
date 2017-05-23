@@ -1,5 +1,7 @@
-﻿using NeuralNetworks.Library;
+﻿using Microsoft.Extensions.Logging;
+using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
+using NeuralNetworks.Library.Logging;
 using NeuralNetworks.Library.Training;
 
 namespace NeuralNetworks.Console
@@ -8,7 +10,11 @@ namespace NeuralNetworks.Console
     {
         public static void Main(string[] args)
         {
-            System.Console.WriteLine("Creating Neural Network");
+            var logger = new LoggerFactory();
+
+            logger
+                .AddConsole(LogLevel.Debug)
+                .InitialiseLoggingForNeuralNetworksLibrary();
 
             var neuralNetwork = NeuralNetwork.For()
                 .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
@@ -16,11 +22,7 @@ namespace NeuralNetworks.Console
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
                 .Build();
 
-            System.Console.WriteLine("Creating Training Data");
-
             GetXorTrainingData(out var trainingInputs, out var trainingOutputs);
-
-            System.Console.WriteLine("Training Neural Network");
 
             BackPropagation
                 .For(neuralNetwork, learningRate: 0.1, momentum: 0.9)
