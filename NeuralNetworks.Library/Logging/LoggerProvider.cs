@@ -3,13 +3,13 @@ using Microsoft.Extensions.Logging;
 
 namespace NeuralNetworks.Library.Logging
 {
-    public static class ApplicationLogging
+    public static class LoggerProvider
     {
-        private static ILogger Log => Logger.CreateLogger(typeof(ApplicationLogging));
+        private static ILogger Log => Logger.CreateLogger(typeof(LoggerFactory));
         private static ILoggerFactory Logger { get; set; } = new LoggerFactory();
 
-        public static ILogger For<T>() => Logger.CreateLogger<T>();
-        public static ILogger For(Type type) => Logger.CreateLogger(type);
+        internal static ILogger For<T>() => Logger.CreateLogger<T>();
+        internal static ILogger For(Type type) => Logger.CreateLogger(type);
 
         public static void InitialiseLoggingForNeuralNetworksLibrary(this ILoggerFactory factory)
         {

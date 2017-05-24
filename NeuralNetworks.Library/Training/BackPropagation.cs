@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.Components.Layers;
+using NeuralNetworks.Library.Logging;
 
 namespace NeuralNetworks.Library.Training
 {
     public sealed class BackPropagation : ITrainNeuralNetworks
     {
+        private static ILogger Log => LoggerProvider.For<BackPropagation>();
+
         private readonly NeuralNetwork neuralNetwork;
         private readonly double learningRate;
         private readonly double momentum;
@@ -17,6 +21,7 @@ namespace NeuralNetworks.Library.Training
             this.neuralNetwork = neuralNetwork;
             this.learningRate = learningRate;
             this.momentum = momentum;
+            Log.LogDebug($"{nameof(BackPropagation)} created with. LearningRate: {learningRate}. Momentum: {momentum}");
         }
 
         public void TrainNetwork(
@@ -32,7 +37,7 @@ namespace NeuralNetworks.Library.Training
             while (currentEpoch <= epochs && currentErrorRate >= errorThreshold)
             {
                 currentErrorRate = ExecuteSingleEpoch(trainingInputs, expectedOutputs);
-                Console.WriteLine($"EPOCH: {currentEpoch}. ERROR RATE: {currentErrorRate}");
+                Log.LogDebug($"{nameof(currentEpoch)}: {currentEpoch}. {nameof(currentErrorRate)}: {currentErrorRate}");
                 currentEpoch++; 
             }
         }
@@ -51,6 +56,7 @@ namespace NeuralNetworks.Library.Training
                     out var expectedOutput);
 
                 var predictedOutput = neuralNetwork.MakePrediction(input);
+                Log.LogDebug($"{nameof(ExecuteSingleEpoch)}{nameof(predictedOutput)}: {predictedOutput.LogArray()}");
 
                 SetOutputLayerNeuronErrorRates(neuralNetwork.OutputLayer, predictedOutput, expectedOutput);
 
@@ -69,7 +75,10 @@ namespace NeuralNetworks.Library.Training
 
 
                 predictedOutput = neuralNetwork.MakePrediction(input);
+                Log.LogDebug($"{nameof(ExecuteSingleEpoch)}{nameof(predictedOutput)}: {predictedOutput.LogArray()}");
+
                 currentErrorRate += NeuralNetworkErrorRate(predictedOutput, expectedOutput);
+                Log.LogDebug($"{nameof(ExecuteSingleEpoch)}{nameof(currentErrorRate)}: {currentErrorRate}");
             }
 
             return currentErrorRate; 
@@ -83,9 +92,14 @@ namespace NeuralNetworks.Library.Training
             for (var i = 0; i < outputLayer.Neurons.Length; i++)
             {
                 var currentNeuron = outputLayer.Neurons[i];
-                var errorRate = currentNeuron.ActivationFunction.Derivative(currentNeuron.SumOfInputValues) *
+                var errorRate = currentNeuron.ActivationFunction.Derivative(currentNeuron.LastCalculatedSumOfInputs) *
                                 (predictedOutput[i] - expectedOutput[i]);
+
+                Log.LogDebug($"{nameof(SetOutputLayerNeuronErrorRates)} {nameof(errorRate)}: {errorRate}");
+
                 currentNeuron.ErrorRate = errorRate;
+
+                Log.LogDebug($"{nameof(SetOutputLayerNeuronErrorRates)} Current Neuron Error Rate Set: {currentNeuron.ErrorRate}");
             }
         }
 
@@ -95,9 +109,13 @@ namespace NeuralNetworks.Library.Training
             {
                 var sumOfErrorsFedIntoNeuron =
                     GetSumOfErrorsNeuronContributesTo(hiddenLayer.NextLayer, currentNeuron);
+                Log.LogDebug($"{nameof(sumOfErrorsFedIntoNeuron)}: {sumOfErrorsFedIntoNeuron}");
 
-                var neuronErrorRate = currentNeuron.ActivationFunction.Derivative(currentNeuron.SumOfInputValues);
+                var neuronErrorRate = currentNeuron.ActivationFunction.Derivative(currentNeuron.LastCalculatedSumOfInputs);
+                Log.LogDebug($"{nameof(neuronErrorRate)}: {neuronErrorRate}");
+
                 currentNeuron.ErrorRate = neuronErrorRate * sumOfErrorsFedIntoNeuron;
+                Log.LogDebug($"Current Neuron Error Rate: {currentNeuron.ErrorRate}");
             }
         }
 
@@ -108,15 +126,23 @@ namespace NeuralNetworks.Library.Training
                 foreach (var synapse in neuron.InputConnections)
                 {
                     var delta = learningRate * neuron.ErrorRate * synapse.Source.Output;
+                    Log.LogDebug($"{nameof(synapse)} {nameof(delta)}: {delta}");
+
                     synapseKnownDeltas.TryGetValue(synapse, out var knownDelta);
+                    Log.LogDebug($"{nameof(knownDelta)} : {knownDelta}");
 
                     if (knownDelta.HasValue)
                     {
-                        delta += momentum * knownDelta.Value; 
+                        delta += momentum * knownDelta.Value;
+                        Log.LogDebug($"{nameof(delta)} : {delta}");
                     }
+
+                    Log.LogDebug($"Pre Synapse Weight : {synapse.Weight}");
 
                     synapse.Weight = synapse.Weight - delta; 
                     synapseKnownDeltas[synapse] = delta;
+
+                    Log.LogDebug($"Post Synapse Weight : {synapse.Weight}");
                 }
             }
 

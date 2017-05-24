@@ -1,17 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Components.Activation;
+using NeuralNetworks.Library.Logging;
 
 namespace NeuralNetworks.Library.Components.Layers
 {
     public abstract class Layer: IEnumerable<Layer>
     {
+        private ILogger Log => LoggerProvider.For(GetType());
+
         public Neuron[] Neurons { get; }
         public abstract Layer NextLayer { get; set; }
 
         public void ActivateLayer()
         {
+            Log.LogDebug("Activating Layer");
             foreach (var neuron in Neurons)
             {
                 neuron.ActivateNeuron(); 

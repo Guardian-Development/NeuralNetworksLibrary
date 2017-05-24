@@ -1,19 +1,27 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
+using NeuralNetworks.Library.Logging;
 
 namespace NeuralNetworks.Library.Components.Activation.Functions
 {
     public sealed class SigmoidActivationFunction : IProvideNeuronActivation
     {
+        private static ILogger Log => LoggerProvider.For<SigmoidActivationFunction>();
+
         private SigmoidActivationFunction() {}
 
         public double Activate(double sumOfWeights)
         {
-            return 1.0 / (1 + Math.Exp(-1.0 * sumOfWeights));
+            var result = 1.0 / (1 + Math.Exp(-1.0 * sumOfWeights));
+            Log.LogDebug($"{nameof(Activate)} called with {nameof(sumOfWeights)} : {sumOfWeights}. Result: {result}");
+            return result; 
         }
 
         public double Derivative(double sumOfWeights)
         {
-            return sumOfWeights * (1.0 - sumOfWeights);
+            var result = sumOfWeights * (1.0 - sumOfWeights);
+            Log.LogDebug($"{nameof(Derivative)} called with {nameof(sumOfWeights)}. Result: {result}");
+            return result; 
         }
 
         public static SigmoidActivationFunction Create()

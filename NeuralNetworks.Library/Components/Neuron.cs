@@ -1,20 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Components.Activation.Functions;
+using NeuralNetworks.Library.Logging;
 
 namespace NeuralNetworks.Library.Components
 {
     public sealed class Neuron
     {
+        private static ILogger Log => LoggerProvider.For<Neuron>();
+
+        public double Output { get; set; }
+        public double LastCalculatedSumOfInputs { get; private set; }
+
         internal IProvideNeuronActivation ActivationFunction { get; }
         internal IList<Synapse> InputConnections { get; } = new List<Synapse>();
         internal double ErrorRate { get; set; }
 
-        //need to look at how best to access this + use this in math equations 
-        public double Output { get; set; }
-
-        public double SumOfInputValues =>
+        private double SumOfInputValues =>
             InputConnections.ToList()
                 .Sum(synapse => synapse.Weight * synapse.Source.Output);
 
@@ -30,8 +34,13 @@ namespace NeuralNetworks.Library.Components
 
         public void ActivateNeuron()
         {
-            Output = ActivationFunction.Activate(SumOfInputValues);
-            //feels like here we could use another metrics struct to hold last fed value , derivitve etc
+            Log.LogDebug($"Neuron activated previous {nameof(Output)} : {Output}");
+
+            LastCalculatedSumOfInputs = SumOfInputValues;
+            Output = ActivationFunction.Activate(LastCalculatedSumOfInputs);
+
+            Log.LogDebug($"Neuron activated producing {nameof(Output)} : {Output}");
+            //TODO: feels like here we could use another metrics struct to hold last fed value , derivitve etc
         }
 
         public static Neuron For(ActivationType activationType)

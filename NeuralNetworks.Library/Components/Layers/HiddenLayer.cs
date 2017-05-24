@@ -4,7 +4,6 @@ namespace NeuralNetworks.Library.Components.Layers
 {
     public sealed class HiddenLayer : Layer
     {
-
         public HiddenLayer(int neuronCount, ActivationType activationType)
             : base(neuronCount, activationType)
         {}
