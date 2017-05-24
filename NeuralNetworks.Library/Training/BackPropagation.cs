@@ -37,7 +37,7 @@ namespace NeuralNetworks.Library.Training
             while (currentEpoch <= epochs && currentErrorRate >= errorThreshold)
             {
                 currentErrorRate = ExecuteSingleEpoch(trainingInputs, expectedOutputs);
-                Log.LogDebug($"{nameof(currentEpoch)}: {currentEpoch}. {nameof(currentErrorRate)}: {currentErrorRate}");
+                Log.LogInformation($"{nameof(currentEpoch)}: {currentEpoch}. {nameof(currentErrorRate)}: {currentErrorRate}");
                 currentEpoch++; 
             }
         }
@@ -107,14 +107,11 @@ namespace NeuralNetworks.Library.Training
         {
             foreach (var currentNeuron in hiddenLayer.Neurons)
             {
-                var sumOfErrorsFedIntoNeuron =
-                    GetSumOfErrorsNeuronContributesTo(hiddenLayer.NextLayer, currentNeuron);
-                Log.LogDebug($"{nameof(sumOfErrorsFedIntoNeuron)}: {sumOfErrorsFedIntoNeuron}");
-
-                var neuronErrorRate = currentNeuron.ActivationFunction.Derivative(currentNeuron.LastCalculatedSumOfInputs);
+                var neuronErrorRate =
+                    CalculateNeuronErrorRate(hiddenLayer.NextLayer, currentNeuron);
                 Log.LogDebug($"{nameof(neuronErrorRate)}: {neuronErrorRate}");
 
-                currentNeuron.ErrorRate = neuronErrorRate * sumOfErrorsFedIntoNeuron;
+                currentNeuron.ErrorRate = neuronErrorRate;
                 Log.LogDebug($"Current Neuron Error Rate: {currentNeuron.ErrorRate}");
             }
         }
@@ -148,19 +145,24 @@ namespace NeuralNetworks.Library.Training
 
         }
 
-        private double GetSumOfErrorsNeuronContributesTo(Layer nextLayer, Neuron sourceNeuron) =>
-            nextLayer.Neurons
+        private double CalculateNeuronErrorRate(Layer nextLayer, Neuron sourceNeuron)
+        {
+            var neuronError = sourceNeuron.ActivationFunction.Derivative(sourceNeuron.LastCalculatedSumOfInputs);
+
+            var sumOfErrors = nextLayer.Neurons
                 .Select(effectedNeuron => new
                 {
                     effectedNeuron,
-                    synapsesForSourceNeuron =
-                    effectedNeuron.InputConnections.Where(synapse => synapse.Source == sourceNeuron)
+                    effectedNeuronSynapse =
+                    effectedNeuron.InputConnections.First(synapse => synapse.Source == sourceNeuron)
                 })
-                .SelectMany(neuronWithSynapses =>
-                    neuronWithSynapses
-                        .synapsesForSourceNeuron
-                        .Select(synapse => synapse.Weight * neuronWithSynapses.effectedNeuron.ErrorRate)
-                ).Sum();
+                .Select(effectedNeuronWithSynapse =>
+                    effectedNeuronWithSynapse.effectedNeuronSynapse.Weight * effectedNeuronWithSynapse.effectedNeuron.ErrorRate)
+                .Sum();
+
+            neuronError *= sumOfErrors;
+            return neuronError; 
+        }
 
         private void ValidateTrainingInputsWithExepctedOutputs(
             double[][] trainingInputs,

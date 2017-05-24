@@ -20,7 +20,8 @@ namespace NeuralNetworks.Library.Components
 
         private double SumOfInputValues =>
             InputConnections.ToList()
-                .Sum(synapse => synapse.Weight * synapse.Source.Output);
+                .Select(synapse => synapse.Weight * synapse.Source.Output)
+                .Sum();
 
         private Neuron(IProvideNeuronActivation activationFunction)
         {
@@ -38,6 +39,7 @@ namespace NeuralNetworks.Library.Components
 
             LastCalculatedSumOfInputs = SumOfInputValues;
             Output = ActivationFunction.Activate(LastCalculatedSumOfInputs);
+            //TODO: looks like problem is something around here. either inputs wrong, or output not updating. 
 
             Log.LogDebug($"Neuron activated producing {nameof(Output)} : {Output}");
             //TODO: feels like here we could use another metrics struct to hold last fed value , derivitve etc

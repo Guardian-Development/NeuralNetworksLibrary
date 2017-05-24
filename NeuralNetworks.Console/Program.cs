@@ -13,7 +13,7 @@ namespace NeuralNetworks.Console
             var logger = new LoggerFactory();
 
             logger
-                .AddConsole(LogLevel.Debug)
+                .AddConsole(LogLevel.Information)
                 .InitialiseLoggingForNeuralNetworksLibrary();
 
             var neuralNetwork = NeuralNetwork.For()
@@ -26,7 +26,7 @@ namespace NeuralNetworks.Console
 
             BackPropagation
                 .For(neuralNetwork, learningRate: 0.1, momentum: 0.9)
-                .TrainNetwork(trainingInputs, trainingOutputs, epochs: 10);
+                .TrainNetwork(trainingInputs, trainingOutputs, epochs: 1000);
 
             System.Console.WriteLine(
                 $"PREDICTION (0, 1): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 1");
