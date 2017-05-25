@@ -49,7 +49,7 @@ namespace NeuralNetworks.Library
         private void PopulateInputLayer(double[] input)
         {
             PerformInputLayerConfigurationChecks(input.Length);
-            for (var i = 0; i < InputLayer.Neurons.Length; i++)
+            for (var i = 0; i < InputLayer.NeuronCount; i++)
             {
                 InputLayer.Neurons[i].Output = input[i];
             }
@@ -63,7 +63,7 @@ namespace NeuralNetworks.Library
                     $"You must specify an input layer before populating, call {nameof(AddInputLayer)} first.");
             }
 
-            if (InputLayer.Neurons.Length != inputSize)
+            if (InputLayer.NeuronCount != inputSize)
             {
                 throw new ArgumentException($"{nameof(InputLayer)} Neurons count must be the same length as the {inputSize}");
             }

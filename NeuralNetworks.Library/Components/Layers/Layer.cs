@@ -10,25 +10,34 @@ namespace NeuralNetworks.Library.Components.Layers
     public abstract class Layer: IEnumerable<Layer>
     {
         private ILogger Log => LoggerProvider.For(GetType());
+       
+        public Neuron[] Neurons => null == biasNeuron ? 
+            neuronsExcludingBias : neuronsExcludingBias.Append(biasNeuron).ToArray();
 
-        public Neuron[] Neurons { get; }
+        public int NeuronCount => neuronsExcludingBias.Length; 
+
         public abstract Layer NextLayer { get; set; }
+
+        private readonly Neuron[] neuronsExcludingBias;
+        private readonly Neuron biasNeuron;
+
+        protected Layer(int neuronCount, ActivationType activationType, Neuron bias = null)
+        {
+            neuronsExcludingBias = Enumerable
+                .Range(0, neuronCount)
+                .Select(n => Neuron.For(activationType))
+                .ToArray();
+
+            biasNeuron = bias; 
+        }
 
         public void ActivateLayer()
         {
             Log.LogDebug("Activating Layer");
-            foreach (var neuron in Neurons)
+            foreach (var neuron in neuronsExcludingBias)
             {
-                neuron.ActivateNeuron(); 
+                neuron.ActivateNeuron();
             }
-        }
-
-        protected Layer(int neuronCount, ActivationType activationType)
-        {
-            Neurons = Enumerable
-                .Range(0, neuronCount)
-                .Select(n => Neuron.For(activationType))
-                .ToArray();
         }
 
         public IEnumerator<Layer> GetEnumerator()

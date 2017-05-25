@@ -68,8 +68,7 @@ namespace NeuralNetworks.Library.Training
 
                 neuralNetwork
                     .OutputLayer
-                    .Concat(neuralNetwork.HiddenLayers)
-                    .Reverse()
+                    .Concat(neuralNetwork.HiddenLayers.Reverse())
                     .ToList()
                     .ForEach(layer => UpdateSynapseWeights(layer, synapseKnownDeltas));
 
@@ -92,7 +91,7 @@ namespace NeuralNetworks.Library.Training
             for (var i = 0; i < outputLayer.Neurons.Length; i++)
             {
                 var currentNeuron = outputLayer.Neurons[i];
-                var errorRate = currentNeuron.ActivationFunction.Derivative(currentNeuron.LastCalculatedSumOfInputs) *
+                var errorRate = currentNeuron.ActivationFunction.Derivative(currentNeuron.Output) *
                                 (predictedOutput[i] - expectedOutput[i]);
 
                 Log.LogDebug($"{nameof(SetOutputLayerNeuronErrorRates)} {nameof(errorRate)}: {errorRate}");
@@ -147,7 +146,7 @@ namespace NeuralNetworks.Library.Training
 
         private double CalculateNeuronErrorRate(Layer nextLayer, Neuron sourceNeuron)
         {
-            var neuronError = sourceNeuron.ActivationFunction.Derivative(sourceNeuron.LastCalculatedSumOfInputs);
+            var neuronError = sourceNeuron.ActivationFunction.Derivative(sourceNeuron.Output);
 
             var sumOfErrors = nextLayer.Neurons
                 .Select(effectedNeuron => new
@@ -159,9 +158,8 @@ namespace NeuralNetworks.Library.Training
                 .Select(effectedNeuronWithSynapse =>
                     effectedNeuronWithSynapse.effectedNeuronSynapse.Weight * effectedNeuronWithSynapse.effectedNeuron.ErrorRate)
                 .Sum();
-
-            neuronError *= sumOfErrors;
-            return neuronError; 
+            var result = sumOfErrors * neuronError; 
+            return result; 
         }
 
         private void ValidateTrainingInputsWithExepctedOutputs(
