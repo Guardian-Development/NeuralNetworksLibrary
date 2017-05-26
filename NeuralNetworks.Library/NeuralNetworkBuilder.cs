@@ -11,7 +11,7 @@ namespace NeuralNetworks.Library
     public sealed class NeuralNetworkBuilder
     {
         private Layer inputLayer;
-        private readonly IList<Layer> hiddenLayers = new List<Layer>();
+        private Layer hiddenLayer;
         private Layer outputLayer;
 
         private readonly IProvideRandomNumberGeneration randomNumberGenerator;
@@ -23,10 +23,12 @@ namespace NeuralNetworks.Library
 
         public NeuralNetworkBuilder WithInputLayer(int neuronCount, ActivationType activationType)
         {
-            var neurons =
-                Enumerable.Repeat(
-                    Neuron.For(activationType, randomNumberGenerator.GetNextRandomNumber()),
-                    neuronCount);
+            var neurons = new List<Neuron>();
+
+            for (var i = 0; i < neuronCount; i++)
+            {
+                neurons.Add(Neuron.For(activationType, randomNumberGenerator.GetNextRandomNumber()));
+            }
 
             inputLayer = Layer.For(neurons);
             return this;
@@ -34,37 +36,38 @@ namespace NeuralNetworks.Library
 
         public NeuralNetworkBuilder WithHiddenLayer(int neuronCount, ActivationType activationType)
         {
-            var previousLayer = GetPreviousLayer();
-            var neurons =
-                Enumerable.Repeat(
-                    Neuron.For(
-                        activationType,
-                        randomNumberGenerator,
-                        randomNumberGenerator.GetNextRandomNumber(),
-                        previousLayer.Neurons), neuronCount); 
+            var neurons = new List<Neuron>();
 
-            hiddenLayers.Add(Layer.For(neurons));
+            for (var i = 0; i < neuronCount; i++)
+            {
+                neurons.Add(Neuron.For(
+                    activationType,
+                    randomNumberGenerator,
+                    randomNumberGenerator.GetNextRandomNumber(),
+                    inputLayer.Neurons));
+            }
+
+            hiddenLayer = Layer.For(neurons);
             return this;
         }
 
         public NeuralNetworkBuilder WithOutputLayer(int neuronCount, ActivationType activationType)
         {
-            var previousLayer = GetPreviousLayer();
-            var neurons =
-                Enumerable.Repeat(
-                    Neuron.For(
-                        activationType,
-                        randomNumberGenerator,
-                        randomNumberGenerator.GetNextRandomNumber(),
-                        previousLayer.Neurons), neuronCount);
+            var neurons = new List<Neuron>();
+
+            for (var i = 0; i < neuronCount; i++)
+            {
+                neurons.Add(Neuron.For(
+                    activationType,
+                    randomNumberGenerator,
+                    randomNumberGenerator.GetNextRandomNumber(),
+                    hiddenLayer.Neurons));
+            }
 
             outputLayer = Layer.For(neurons);
 
             return this;
         }
-
-        private Layer GetPreviousLayer() =>
-            hiddenLayers.Any() ? hiddenLayers.Last() : inputLayer;
 
         public NeuralNetwork Build()
         {
@@ -82,7 +85,7 @@ namespace NeuralNetworks.Library
         {
             return new NeuralNetwork()
                 .AddInputLayer(inputLayer)
-                .AddHiddenLayers(hiddenLayers)
+                .AddHiddenLayer(hiddenLayer)
                 .AddOutputLayer(outputLayer);
         }
     }

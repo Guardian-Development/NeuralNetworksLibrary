@@ -9,9 +9,9 @@ namespace NeuralNetworks.Library.Components.Layers
     {
         private ILogger Log => LoggerProvider.For(GetType());
         
-        public IEnumerable<Neuron> Neurons { get; }
+        public List<Neuron> Neurons { get; }
 
-        private Layer(IEnumerable<Neuron> neurons)
+        private Layer(List<Neuron> neurons)
         {
             Neurons = neurons; 
         }
@@ -26,7 +26,7 @@ namespace NeuralNetworks.Library.Components.Layers
             return GetEnumerator();
         }
 
-        public static Layer For(IEnumerable<Neuron> neurons)
+        public static Layer For(List<Neuron> neurons)
         {
             return new Layer(neurons);
         }

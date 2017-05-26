@@ -2,7 +2,7 @@
 {
     public interface IProvideNeuronActivation
     {
-        double Activate(double sumOfWeights);
+        double Activate(double x);
         double Derivative(double sumOfWeights); 
     }
 }

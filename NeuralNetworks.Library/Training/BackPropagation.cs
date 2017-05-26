@@ -7,7 +7,7 @@ using NeuralNetworks.Library.Logging;
 
 namespace NeuralNetworks.Library.Training
 {
-    public sealed class BackPropagation : ITrainNeuralNetworks
+    public sealed class BackPropagation 
     {
         private static ILogger Log => LoggerProvider.For<BackPropagation>();
 
@@ -22,18 +22,27 @@ namespace NeuralNetworks.Library.Training
             this.momentum = momentum;
         }
 
-        public void TrainNetwork(
-            IList<TrainingDataSet> trainingDataSet,
-            int maximumEpochs = 100,
-            double errorThreshold = 0.0001)
+        public void Train(List<TrainingDataSet> dataSets, int numEpochs)
+        {
+            for (var i = 0; i < numEpochs; i++)
+            {
+                foreach (var dataSet in dataSets)
+                {
+                    ForwardPropagate(dataSet.Inputs);
+                    BackPropagate(dataSet.Outputs);
+                }
+            }
+        }
+
+        public void Train(List<TrainingDataSet> dataSets, double minimumError)
         {
             var error = 1.0;
             var numEpochs = 0;
 
-            while (error > errorThreshold && numEpochs < maximumEpochs)
+            while (error > minimumError && numEpochs < int.MaxValue)
             {
                 var errors = new List<double>();
-                foreach (var dataSet in trainingDataSet)
+                foreach (var dataSet in dataSets)
                 {
                     ForwardPropagate(dataSet.Inputs);
                     BackPropagate(dataSet.Outputs);
@@ -44,19 +53,34 @@ namespace NeuralNetworks.Library.Training
             }
         }
 
-        private void ForwardPropagate(double[] inputs)
+        private void ForwardPropagate(params double[] inputs)
         {
-            throw new NotImplementedException();
+            var i = 0;
+            neuralNetwork.InputLayer.Neurons.ForEach(a => a.Value = inputs[i++]);
+            neuralNetwork.HiddenLayer.Neurons.ForEach(a => a.CalculateOutput());
+            neuralNetwork.OutputLayer.Neurons.ForEach(a => a.CalculateOutput());
         }
 
-        private void BackPropagate(double[] expectedOutputs)
+        private void BackPropagate(params double[] targets)
         {
-            throw new NotImplementedException();
+            var i = 0;
+            neuralNetwork.OutputLayer.Neurons.ForEach(a => a.CalculateGradient(targets[i++]));
+            neuralNetwork.HiddenLayer.Neurons.ForEach(a => a.CalculateGradient());
+
+            neuralNetwork.HiddenLayer.Neurons.ForEach(a => a.UpdateWeights(learningRate, momentum));
+            neuralNetwork.OutputLayer.Neurons.ForEach(a => a.UpdateWeights(learningRate, momentum));
         }
 
-        private double CalculateError(double[] targets)
+        public double[] Compute(params double[] inputs)
         {
-            throw new NotImplementedException();
+            ForwardPropagate(inputs);
+            return neuralNetwork.OutputLayer.Neurons.Select(a => a.Value).ToArray();
+        }
+
+        private double CalculateError(params double[] targets)
+        {
+            var i = 0;
+            return neuralNetwork.OutputLayer.Neurons.Sum(a => Math.Abs(a.CalculateError(targets[i++])));
         }
 
         public static BackPropagation For(NeuralNetwork network, double learningRate, double momentum)

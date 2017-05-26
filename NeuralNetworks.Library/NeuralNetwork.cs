@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NeuralNetworks.Library.Components.Layers;
 using NeuralNetworks.Library.NetworkInitialisation;
 
@@ -9,25 +7,25 @@ namespace NeuralNetworks.Library
     public sealed class NeuralNetwork
     {
         public Layer InputLayer { get; private set; }
-        public IReadOnlyList<Layer> HiddenLayers { get; private set; }
+        public Layer HiddenLayer { get; private set; }
         public Layer OutputLayer { get; private set; }
 
-        internal NeuralNetwork()
+        public NeuralNetwork()
         {}
 
-        internal NeuralNetwork AddInputLayer(Layer inputLayer)
+        public NeuralNetwork AddInputLayer(Layer inputLayer)
         {
             InputLayer = inputLayer;
             return this; 
         }
 
-        internal NeuralNetwork AddHiddenLayers(IList<Layer> hiddenLayers)
+        public NeuralNetwork AddHiddenLayer(Layer hiddenLayer)
         {
-            HiddenLayers = new ReadOnlyCollection<Layer>(hiddenLayers);
+            HiddenLayer = hiddenLayer;
             return this; 
         }
 
-        internal NeuralNetwork AddOutputLayer(Layer outputLayer)
+        public NeuralNetwork AddOutputLayer(Layer outputLayer)
         {
             OutputLayer = outputLayer; 
             return this;
