@@ -1,19 +1,27 @@
-﻿namespace NeuralNetworks.Library.Components
+﻿using NeuralNetworks.Library.NetworkInitialisation;
+
+namespace NeuralNetworks.Library.Components
 {
     public sealed class Synapse
     {
-        public Neuron Source { get; }
+        public Neuron InputNeuron { get; }
+        public Neuron OutputNeuron { get; }
         public double Weight { get; set; }
+        public double WeightDelta { get; set; }
 
-        private Synapse(Neuron source, double weight)
+        private Synapse(Neuron inputNeuron, Neuron outputNeuron, double weight)
         {
-            Source = source;
+            InputNeuron = inputNeuron;
+            OutputNeuron = outputNeuron; 
             Weight = weight;
         }
 
-        public static Synapse For(Neuron source, double weight)
+        public static Synapse For(
+            Neuron inputNeuron, 
+            Neuron outputNeuron, 
+            IProvideRandomNumberGeneration randomNumberGenerator)
         {
-            return new Synapse(source, weight);
+            return new Synapse(inputNeuron, outputNeuron, randomNumberGenerator.GetNextRandomNumber());
         }
     }
 }

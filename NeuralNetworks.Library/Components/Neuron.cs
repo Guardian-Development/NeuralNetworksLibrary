@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Components.Activation.Functions;
 using NeuralNetworks.Library.Logging;
+using NeuralNetworks.Library.NetworkInitialisation;
 
 namespace NeuralNetworks.Library.Components
 {
@@ -11,43 +11,51 @@ namespace NeuralNetworks.Library.Components
     {
         private static ILogger Log => LoggerProvider.For<Neuron>();
 
-        public double Output { get; set; }
-        public double LastCalculatedSumOfInputs { get; private set; }
+        public List<Synapse> InputSynapses { get; } = new List<Synapse>();
+        public List<Synapse> OutputSynapses { get; } = new List<Synapse>();
+        public double Bias { get; set; }
+        public double BiasDelta { get; set; }
+        public double Gradient { get; set; }
+        public double Value { get; set; }
 
         internal IProvideNeuronActivation ActivationFunction { get; }
-        internal IList<Synapse> InputConnections { get; } = new List<Synapse>();
-        internal double ErrorRate { get; set; }
 
-        private double SumOfInputValues =>
-            InputConnections.ToList()
-                .Select(synapse => synapse.Weight * synapse.Source.Output)
-                .Sum();
-
-        private Neuron(IProvideNeuronActivation activationFunction)
+        private Neuron(IProvideNeuronActivation activationFunction, double bias)
         {
             ActivationFunction = activationFunction;
+            Bias = bias;
         }
 
-        public void AddInputConnection(Synapse connection)
+        private Neuron(
+            IProvideNeuronActivation activationFunction,
+            IProvideRandomNumberGeneration randomNumberGeneration, 
+            IEnumerable<Neuron> inputNeurons,
+            double bias) : this(activationFunction, bias)
         {
-            InputConnections.Add(connection);
+            foreach (var inputNeuron in inputNeurons)
+            {
+                var synapse = Synapse.For(inputNeuron, this, randomNumberGeneration);
+                inputNeuron.OutputSynapses.Add(synapse);
+                InputSynapses.Add(synapse);
+            }
         }
 
-        public void ActivateNeuron()
+        public static Neuron For(ActivationType activationType, double bias)
         {
-            Log.LogDebug($"Neuron activated previous {nameof(Output)} : {Output}");
-
-            LastCalculatedSumOfInputs = SumOfInputValues;
-            Output = ActivationFunction.Activate(LastCalculatedSumOfInputs);
-            //TODO: looks like problem is something around here. either inputs wrong, or output not updating. 
-
-            Log.LogDebug($"Neuron activated producing {nameof(Output)} : {Output}");
-            //TODO: feels like here we could use another metrics struct to hold last fed value , derivitve etc
+            return new Neuron(activationType.ToNeuronActivationProvider(), bias);
         }
 
-        public static Neuron For(ActivationType activationType)
+        public static Neuron For(
+            ActivationType activationType,
+            IProvideRandomNumberGeneration randomNumberGeneration,
+            double bias,
+            IEnumerable<Neuron> inputNeurons)
         {
-            return new Neuron(activationType.ToNeuronActivationProvider());
+            return new Neuron(
+                activationType.ToNeuronActivationProvider(), 
+                randomNumberGeneration, 
+                inputNeurons, 
+                bias);
         }
     }
 }

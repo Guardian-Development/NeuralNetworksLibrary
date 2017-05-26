@@ -1,11 +1,13 @@
-﻿namespace NeuralNetworks.Library.Training
+﻿using System.Collections.Generic;
+using NeuralNetworks.Library.Data;
+
+namespace NeuralNetworks.Library.Training
 {
     public interface ITrainNeuralNetworks
     {
         void TrainNetwork(
-            double[][] trainingInputs,
-            double[][] expectedOutputs,
-            int epochs = 100,
+            IList<TrainingDataSet> trainingDataSet,
+            int maximumEpochs = 100,
             double errorThreshold = 0.0001);
     }
 }

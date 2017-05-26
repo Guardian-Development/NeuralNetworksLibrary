@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
+using NeuralNetworks.Library.Data;
 using NeuralNetworks.Library.Logging;
 using NeuralNetworks.Library.Training;
 
@@ -22,37 +25,37 @@ namespace NeuralNetworks.Console
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
                 .Build();
 
-            GetXorTrainingData(out var trainingInputs, out var trainingOutputs);
+            var trainingSet = GetXorTrainingData();
 
             BackPropagation
                 .For(neuralNetwork, learningRate: 0.1, momentum: 0.9)
-                .TrainNetwork(trainingInputs, trainingOutputs, epochs: 1000);
+                .TrainNetwork(trainingSet.ToList());
 
-            System.Console.WriteLine(
+/*            System.Console.WriteLine(
                 $"PREDICTION (0, 1): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 1");
             System.Console.WriteLine(
                 $"PREDICTION (1, 0): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 1");
             System.Console.WriteLine(
                 $"PREDICTION (0, 0): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 0");
             System.Console.WriteLine(
-                $"PREDICTION (1, 1): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 0");
+                $"PREDICTION (1, 1): {neuralNetwork.MakePrediction(new[] { 0.0, 1.0 })[0]}, EXPECTED: 0");*/
 
             if (System.Diagnostics.Debugger.IsAttached) System.Console.ReadLine();
         }
 
-        private static void GetXorTrainingData(
-            out double[][] trainingInputs,
-            out double[][] trainingOutputs)
+        private static IEnumerable<TrainingDataSet> GetXorTrainingData()
         {
-            trainingInputs = new[]
+            var inputs = new[]
             {
                 new[] {0.0, 0.0}, new[] {0.0, 1.0}, new[] {1.0, 0.0}, new[] {1.0, 1.0}
             };
 
-            trainingOutputs = new[]
+            var outputs = new[]
             {
                 new[] {0.0}, new[] {1.0}, new[] {1.0}, new[] {0.0}
             };
+
+            return inputs.Select((input, i) => TrainingDataSet.For(input, outputs[i]));
         }
     }
 }
