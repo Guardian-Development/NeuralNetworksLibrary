@@ -7,7 +7,7 @@ using NeuralNetworks.Library.Logging;
 
 namespace NeuralNetworks.Library.Training
 {
-    public sealed class BackPropagation 
+    public sealed class BackPropagation
     {
         private static ILogger Log => LoggerProvider.For<BackPropagation>();
 
@@ -49,6 +49,8 @@ namespace NeuralNetworks.Library.Training
                     errors.Add(CalculateError(dataSet.Outputs));
                 }
                 error = errors.Average();
+                Log.LogInformation($"Error Rate: {error}. Epoch: {numEpochs}");
+
                 numEpochs++;
             }
         }
@@ -57,7 +59,8 @@ namespace NeuralNetworks.Library.Training
         {
             var i = 0;
             neuralNetwork.InputLayer.Neurons.ForEach(a => a.Value = inputs[i++]);
-            neuralNetwork.HiddenLayer.Neurons.ForEach(a => a.CalculateOutput());
+            neuralNetwork.HiddenLayers
+                .ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateOutput()));
             neuralNetwork.OutputLayer.Neurons.ForEach(a => a.CalculateOutput());
         }
 
@@ -65,10 +68,12 @@ namespace NeuralNetworks.Library.Training
         {
             var i = 0;
             neuralNetwork.OutputLayer.Neurons.ForEach(a => a.CalculateGradient(targets[i++]));
-            neuralNetwork.HiddenLayer.Neurons.ForEach(a => a.CalculateGradient());
+            neuralNetwork.HiddenLayers
+                .ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateGradient()));
 
-            neuralNetwork.HiddenLayer.Neurons.ForEach(a => a.UpdateWeights(learningRate, momentum));
             neuralNetwork.OutputLayer.Neurons.ForEach(a => a.UpdateWeights(learningRate, momentum));
+            neuralNetwork.HiddenLayers
+                .ApplyInReverse(layer => layer.Neurons.ForEach(a => a.UpdateWeights(learningRate, momentum)));
         }
 
         public double[] Compute(params double[] inputs)

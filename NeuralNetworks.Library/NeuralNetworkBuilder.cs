@@ -11,7 +11,7 @@ namespace NeuralNetworks.Library
     public sealed class NeuralNetworkBuilder
     {
         private Layer inputLayer;
-        private Layer hiddenLayer;
+        private readonly List<Layer> hiddenLayers = new List<Layer>();
         private Layer outputLayer;
 
         private readonly IProvideRandomNumberGeneration randomNumberGenerator;
@@ -44,10 +44,10 @@ namespace NeuralNetworks.Library
                     activationType,
                     randomNumberGenerator,
                     randomNumberGenerator.GetNextRandomNumber(),
-                    inputLayer.Neurons));
+                    PreviousLayer.Neurons));
             }
 
-            hiddenLayer = Layer.For(neurons);
+            hiddenLayers.Add(Layer.For(neurons));
             return this;
         }
 
@@ -61,13 +61,15 @@ namespace NeuralNetworks.Library
                     activationType,
                     randomNumberGenerator,
                     randomNumberGenerator.GetNextRandomNumber(),
-                    hiddenLayer.Neurons));
+                    PreviousLayer.Neurons));
             }
 
             outputLayer = Layer.For(neurons);
 
             return this;
         }
+
+        private Layer PreviousLayer => hiddenLayers.Any() ? hiddenLayers.Last() : inputLayer; 
 
         public NeuralNetwork Build()
         {
@@ -85,7 +87,7 @@ namespace NeuralNetworks.Library
         {
             return new NeuralNetwork()
                 .AddInputLayer(inputLayer)
-                .AddHiddenLayer(hiddenLayer)
+                .AddHiddenLayers(hiddenLayers)
                 .AddOutputLayer(outputLayer);
         }
     }
