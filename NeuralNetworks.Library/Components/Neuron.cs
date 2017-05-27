@@ -41,18 +41,18 @@ namespace NeuralNetworks.Library.Components
             }
         }
 
-        public void CalculateOutput()
+        public double CalculateOutput()
         {
             var inputValuesWithBias = InputSynapses.Sum(a => a.Weight * a.InputNeuron.Value) + Bias;
-            Value = ActivationFunction.Activate(inputValuesWithBias);
+            return Value = ActivationFunction.Activate(inputValuesWithBias);
         }
 
-        public void CalculateGradient(double target)
+        public void CalculateErrorGradient(double target)
         {
             Gradient = CalculateError(target) * ActivationFunction.Derivative(Value);
         }
 
-        public void CalculateGradient()
+        public void CalculateErrorGradient()
         {
             Gradient = OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) *
                        ActivationFunction.Derivative(Value);

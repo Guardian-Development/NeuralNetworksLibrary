@@ -9,7 +9,8 @@ namespace NeuralNetworks.Library.Components.Activation
         private static readonly IDictionary<ActivationType, IProvideNeuronActivation>
             ActivationFunctions = new Dictionary<ActivationType, IProvideNeuronActivation>
             {
-                {ActivationType.Sigmoid, SigmoidActivationFunction.Create()}
+                {ActivationType.Sigmoid, SigmoidActivationFunction.Create()},
+                {ActivationType.TanH, TanHActivationFunction.Create()}
             };
 
         public static IProvideNeuronActivation ToNeuronActivationProvider(

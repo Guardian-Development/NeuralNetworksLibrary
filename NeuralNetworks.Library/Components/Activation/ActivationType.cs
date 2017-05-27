@@ -2,6 +2,7 @@
 {
     public enum ActivationType
     {
-        Sigmoid
+        Sigmoid,
+        TanH
     }
 }

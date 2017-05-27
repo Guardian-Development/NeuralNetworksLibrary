@@ -20,27 +20,26 @@ namespace NeuralNetworks.Console
                 .AddConsole(LogLevel.Information)
                 .InitialiseLoggingForNeuralNetworksLibrary();
 
+            var trainingSet = GetXorTrainingData();
+
             var neuralNetwork = NeuralNetwork.For()
                 .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
-                .WithHiddenLayer(neuronCount: 3, activationType: ActivationType.Sigmoid)
+                .WithHiddenLayer(neuronCount: 3, activationType: ActivationType.TanH)
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
                 .Build();
 
-            var trainingSet = GetXorTrainingData();
-
-            var propagation = BackPropagation
-                .For(neuralNetwork, learningRate: 0.4, momentum: 0.9);
-                
-            propagation.Train(trainingSet.ToList(), 0.01);
+            BackPropagation
+                .For(neuralNetwork, learningRate: 0.4, momentum: 0.9)
+                .TrainNetwork(trainingSet.ToList(), maximumEpochs: 3000, errorThreshold: 0.1);
 
             System.Console.WriteLine(
-                $"PREDICTION (0, 1): {propagation.Compute(0.0, 1.0)[0]}, EXPECTED: 1");
+                $"PREDICTION (0, 1): {neuralNetwork.PredictionFor(0.0, 1.0)[0]}, EXPECTED: 1");
             System.Console.WriteLine(
-                $"PREDICTION (1, 0): {propagation.Compute(1.0, 0.0)[0]}, EXPECTED: 1");
+                $"PREDICTION (1, 0): {neuralNetwork.PredictionFor(1.0, 0.0)[0]}, EXPECTED: 1");
             System.Console.WriteLine(
-                $"PREDICTION (0, 0): {propagation.Compute(0.0, 0.0)[0]}, EXPECTED: 0");
+                $"PREDICTION (0, 0): {neuralNetwork.PredictionFor(0.0, 0.0)[0]}, EXPECTED: 0");
             System.Console.WriteLine(
-                $"PREDICTION (1, 1): {propagation.Compute(1.0, 1.0)[0]}, EXPECTED: 0");
+                $"PREDICTION (1, 1): {neuralNetwork.PredictionFor(1.0, 1.0)[0]}, EXPECTED: 0");
 
             if (Debugger.IsAttached) System.Console.ReadLine();
         }
