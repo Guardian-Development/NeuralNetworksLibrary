@@ -47,22 +47,6 @@ namespace NeuralNetworks.Library.Components
             return Output = ActivationFunction.Activate(inputValuesWithBias);
         }
 
-        public void CalculateErrorGradient(double target)
-        {
-            Gradient = CalculateError(target) * ActivationFunction.Derivative(Output);
-        }
-
-        public void CalculateErrorGradient()
-        {
-            Gradient = OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) *
-                       ActivationFunction.Derivative(Output);
-        }
-
-        public double CalculateError(double target)
-        {
-            return target - Output;
-        }
-
         public static Neuron For(ActivationType activationType, double bias)
         {
             return new Neuron(activationType.ToNeuronActivationProvider(), bias);

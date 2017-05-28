@@ -50,20 +50,36 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         private void BackPropagate(params double[] targets)
         {
             CalculateErrorRate(targets);
-            UpdateSynapseWeights();
+            PropagateResultOfErrors();
         }
 
         private void CalculateErrorRate(double[] targets)
         {
             var i = 0;
             neuralNetwork.OutputLayer.Neurons
-                .ForEach(a => a.CalculateErrorGradient(targets[i++]));
+                .ForEach(a => CalculateNeuronErrorGradient(a, targets[i++]));
 
             neuralNetwork.HiddenLayers
-                .ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateErrorGradient()));
+                .ApplyInReverse(layer => layer.Neurons.ForEach(CalculateNeuronErrorGradient));
         }
 
-        private void UpdateSynapseWeights()
+        private void CalculateNeuronErrorGradient(Neuron neuron, double target)
+        {
+            neuron.Gradient = CalculateError(neuron, target) * neuron.ActivationFunction.Derivative(neuron.Output);
+        }
+
+        private void CalculateNeuronErrorGradient(Neuron neuron)
+        {
+            neuron.Gradient = neuron.OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) *
+                              neuron.ActivationFunction.Derivative(neuron.Output);
+        }
+
+        private double CalculateError(Neuron neuron, double target)
+        {
+            return target - neuron.Output;
+        }
+
+        private void PropagateResultOfErrors()
         {
             neuralNetwork.OutputLayer.Neurons.ForEach(CalculateAndUpdateInputSynapseWeights);
             neuralNetwork.HiddenLayers
@@ -93,7 +109,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         private double CalculateError(params double[] targets)
         {
             var i = 0;
-            return neuralNetwork.OutputLayer.Neurons.Sum(a => Math.Abs(a.CalculateError(targets[i++])));
+            return neuralNetwork.OutputLayer.Neurons.Sum(a => Math.Abs(CalculateError(a, targets[i++])));
         }
 
         public static BackPropagation For(NeuralNetwork network, double learningRate, double momentum)
