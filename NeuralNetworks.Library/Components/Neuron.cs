@@ -47,23 +47,20 @@ namespace NeuralNetworks.Library.Components
             return Output = ActivationFunction.Activate(inputValuesWithBias);
         }
 
+        public void CalculateErrorGradient(double target)
+        {
+            Gradient = CalculateError(target) * ActivationFunction.Derivative(Output);
+        }
+
+        public void CalculateErrorGradient()
+        {
+            Gradient = OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) *
+                       ActivationFunction.Derivative(Output);
+        }
+
         public double CalculateError(double target)
         {
             return target - Output;
-        }
-
-        public void UpdateWeights(double learnRate, double momentum)
-        {
-            var prevDelta = BiasDelta;
-            BiasDelta = learnRate * Gradient;
-            Bias += BiasDelta + momentum * prevDelta;
-
-            foreach (var synapse in InputSynapses)
-            {
-                prevDelta = synapse.WeightDelta;
-                synapse.WeightDelta = learnRate * Gradient * synapse.InputNeuron.Output;
-                synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
-            }
         }
 
         public static Neuron For(ActivationType activationType, double bias)

@@ -49,38 +49,45 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
         private void BackPropagate(params double[] targets)
         {
-            CalculateErrorRateFor(targets);
+            CalculateErrorRate(targets);
             UpdateSynapseWeights();
         }
 
-        private void CalculateErrorRateFor(double[] targets)
+        private void CalculateErrorRate(double[] targets)
         {
             var i = 0;
             neuralNetwork.OutputLayer.Neurons
-                .ForEach(a => SetNeuronErrorGradient(a, targets[i++]));
+                .ForEach(a => a.CalculateErrorGradient(targets[i++]));
 
             neuralNetwork.HiddenLayers
-                .ApplyInReverse(layer => layer.Neurons.ForEach(SetNeuronErrorGradient));
-        }
-
-        public void SetNeuronErrorGradient(Neuron neuron, double target)
-        {
-            neuron.Gradient =
-                CalculateError(target) * neuron.ActivationFunction.Derivative(neuron.Output);
-        }
-
-        public void SetNeuronErrorGradient(Neuron neuron)
-        {
-            neuron.Gradient =
-                neuron.OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) *
-                neuron.ActivationFunction.Derivative(neuron.Output);
+                .ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateErrorGradient()));
         }
 
         private void UpdateSynapseWeights()
         {
-            neuralNetwork.OutputLayer.Neurons.ForEach(a => a.UpdateWeights(learningRate, momentum));
+            neuralNetwork.OutputLayer.Neurons.ForEach(CalculateAndUpdateInputSynapseWeights);
             neuralNetwork.HiddenLayers
-                .ApplyInReverse(layer => layer.Neurons.ForEach(a => a.UpdateWeights(learningRate, momentum)));
+                .ApplyInReverse(layer => layer.Neurons.ForEach(CalculateAndUpdateInputSynapseWeights));
+        }
+
+        private void CalculateAndUpdateInputSynapseWeights(Neuron neuron)
+        {
+            UpdateNeuronDelta(neuron);
+            neuron.InputSynapses.ForEach(UpdateSynapseWeight);
+        }
+
+        private void UpdateNeuronDelta(Neuron neuron)
+        {
+            var prevDelta = neuron.BiasDelta;
+            neuron.BiasDelta = learningRate * neuron.Gradient;
+            neuron.Bias += neuron.BiasDelta + momentum * prevDelta;
+        }
+
+        private void UpdateSynapseWeight(Synapse synapse)
+        {
+            var prevDelta = synapse.WeightDelta;
+            synapse.WeightDelta = learningRate * synapse.OutputNeuron.Gradient * synapse.InputNeuron.Output;
+            synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
         }
 
         private double CalculateError(params double[] targets)
