@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.Data;
 using NeuralNetworks.Library.Logging;
 
-namespace NeuralNetworks.Library.Training
+namespace NeuralNetworks.Library.Training.BackPropagation
 {
     public sealed class BackPropagation : ITrainNeuralNetworks
     {
@@ -48,11 +49,35 @@ namespace NeuralNetworks.Library.Training
 
         private void BackPropagate(params double[] targets)
         {
-            var i = 0;
-            neuralNetwork.OutputLayer.Neurons.ForEach(a => a.CalculateErrorGradient(targets[i++]));
-            neuralNetwork.HiddenLayers
-                .ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateErrorGradient()));
+            CalculateErrorRateFor(targets);
+            UpdateSynapseWeights();
+        }
 
+        private void CalculateErrorRateFor(double[] targets)
+        {
+            var i = 0;
+            neuralNetwork.OutputLayer.Neurons
+                .ForEach(a => SetNeuronErrorGradient(a, targets[i++]));
+
+            neuralNetwork.HiddenLayers
+                .ApplyInReverse(layer => layer.Neurons.ForEach(SetNeuronErrorGradient));
+        }
+
+        public void SetNeuronErrorGradient(Neuron neuron, double target)
+        {
+            neuron.Gradient =
+                CalculateError(target) * neuron.ActivationFunction.Derivative(neuron.Output);
+        }
+
+        public void SetNeuronErrorGradient(Neuron neuron)
+        {
+            neuron.Gradient =
+                neuron.OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) *
+                neuron.ActivationFunction.Derivative(neuron.Output);
+        }
+
+        private void UpdateSynapseWeights()
+        {
             neuralNetwork.OutputLayer.Neurons.ForEach(a => a.UpdateWeights(learningRate, momentum));
             neuralNetwork.HiddenLayers
                 .ApplyInReverse(layer => layer.Neurons.ForEach(a => a.UpdateWeights(learningRate, momentum)));

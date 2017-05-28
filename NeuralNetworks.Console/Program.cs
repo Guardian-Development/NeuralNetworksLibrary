@@ -7,6 +7,7 @@ using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Data;
 using NeuralNetworks.Library.Logging;
 using NeuralNetworks.Library.Training;
+using NeuralNetworks.Library.Training.BackPropagation;
 
 namespace NeuralNetworks.Console
 {
