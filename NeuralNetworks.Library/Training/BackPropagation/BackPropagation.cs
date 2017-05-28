@@ -57,26 +57,10 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         {
             var i = 0;
             neuralNetwork.OutputLayer.Neurons
-                .ForEach(a => CalculateNeuronErrorGradient(a, targets[i++]));
+                .ForEach(a => NeuronErrorGradientCalculator.SetNeuronErrorGradient(a, targets[i++]));
 
             neuralNetwork.HiddenLayers
-                .ApplyInReverse(layer => layer.Neurons.ForEach(CalculateNeuronErrorGradient));
-        }
-
-        private void CalculateNeuronErrorGradient(Neuron neuron, double target)
-        {
-            neuron.Gradient = CalculateError(neuron, target) * neuron.ActivationFunction.Derivative(neuron.Output);
-        }
-
-        private void CalculateNeuronErrorGradient(Neuron neuron)
-        {
-            neuron.Gradient = neuron.OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) *
-                              neuron.ActivationFunction.Derivative(neuron.Output);
-        }
-
-        private double CalculateError(Neuron neuron, double target)
-        {
-            return target - neuron.Output;
+                .ApplyInReverse(layer => layer.Neurons.ForEach(NeuronErrorGradientCalculator.SetNeuronErrorGradient));
         }
 
         private void PropagateResultOfErrors()
@@ -109,7 +93,9 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         private double CalculateError(params double[] targets)
         {
             var i = 0;
-            return neuralNetwork.OutputLayer.Neurons.Sum(a => Math.Abs(CalculateError(a, targets[i++])));
+            return neuralNetwork.OutputLayer.Neurons.Sum(
+                neuron => Math.Abs(
+                    NeuronErrorGradientCalculator.CalculateErrorForOutputAgainstTarget(neuron, targets[i++])));
         }
 
         public static BackPropagation For(NeuralNetwork network, double learningRate, double momentum)
