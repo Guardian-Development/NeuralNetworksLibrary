@@ -25,7 +25,7 @@ namespace NeuralNetworks.Console
 
             TrainingController<BackPropagation>
                 .For(BackPropagation.WithConfiguration(neuralNetwork, learningRate: 0.4, momentum: 0.9))
-                .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData().ToList(), maximumEpochs: 3000, errorThreshold: 0.1);
+                .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.1);
 
             MakeExamplePredictions(neuralNetwork);
         }
@@ -53,7 +53,7 @@ namespace NeuralNetworks.Console
             if (Debugger.IsAttached) System.Console.ReadLine();
         }
 
-        private static IEnumerable<TrainingDataSet> GetXorTrainingData()
+        private static List<TrainingDataSet> GetXorTrainingData()
         {
             var inputs = new[]
             {
@@ -65,7 +65,7 @@ namespace NeuralNetworks.Console
                 new[] {0.0}, new[] {1.0}, new[] {1.0}, new[] {0.0}
             };
 
-            return inputs.Select((input, i) => TrainingDataSet.For(input, outputs[i]));
+            return inputs.Select((input, i) => TrainingDataSet.For(input, outputs[i])).ToList();
         }
     }
 }

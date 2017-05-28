@@ -5,15 +5,15 @@
 A Library that implements Neural Networks. Example initialisation of a Neural Network would be: 
 
 ```csharp
- var neuralNetwork = NeuralNetwork.For()
-                .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
-                .WithHiddenLayer(neuronCount: 3, activationType: ActivationType.Sigmoid)
-                .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
-                .Build();
+var neuralNetwork = NeuralNetwork.For()
+            .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
+            .WithHiddenLayer(neuronCount: 3, activationType: ActivationType.TanH)
+            .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
+            .Build();
 
-BackPropagation
-    .For(neuralNetwork, learningRate: 0.1, momentum: 0.9)
-    .TrainNetwork(trainingInputs, trainingOutputs, epochs: 1000);
+TrainingController<BackPropagation>
+	.For(BackPropagation.WithConfiguration(neuralNetwork, learningRate: 0.4, momentum: 0.9))
+	.TrainForEpochsOrErrorThresholdMet(GetXorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.1);
 ```
 ## Next Steps
 - Add back propagation (this should drive the final model for neurons and layers etc)
