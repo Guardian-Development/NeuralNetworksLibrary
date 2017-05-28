@@ -38,7 +38,7 @@ namespace NeuralNetworks.Library
             ValidateInputs(inputs.Length);
 
             var i = 0;
-            InputLayer.Neurons.ForEach(a => a.Value = inputs[i++]);
+            InputLayer.Neurons.ForEach(a => a.Output = inputs[i++]);
             HiddenLayers.ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateOutput()));
             return OutputLayer.Neurons.Select(a => a.CalculateOutput()).ToArray();
         }

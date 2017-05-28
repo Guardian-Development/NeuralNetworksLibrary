@@ -17,7 +17,7 @@ namespace NeuralNetworks.Library.Components
         public double Bias { get; set; }
         public double BiasDelta { get; set; }
         public double Gradient { get; set; }
-        public double Value { get; set; }
+        public double Output { get; set; }
 
         internal IProvideNeuronActivation ActivationFunction { get; }
 
@@ -43,24 +43,24 @@ namespace NeuralNetworks.Library.Components
 
         public double CalculateOutput()
         {
-            var inputValuesWithBias = InputSynapses.Sum(a => a.Weight * a.InputNeuron.Value) + Bias;
-            return Value = ActivationFunction.Activate(inputValuesWithBias);
+            var inputValuesWithBias = InputSynapses.Sum(a => a.Weight * a.InputNeuron.Output) + Bias;
+            return Output = ActivationFunction.Activate(inputValuesWithBias);
         }
 
         public void CalculateErrorGradient(double target)
         {
-            Gradient = CalculateError(target) * ActivationFunction.Derivative(Value);
+            Gradient = CalculateError(target) * ActivationFunction.Derivative(Output);
         }
 
         public void CalculateErrorGradient()
         {
             Gradient = OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) *
-                       ActivationFunction.Derivative(Value);
+                       ActivationFunction.Derivative(Output);
         }
 
         public double CalculateError(double target)
         {
-            return target - Value;
+            return target - Output;
         }
 
         public void UpdateWeights(double learnRate, double momentum)
@@ -72,7 +72,7 @@ namespace NeuralNetworks.Library.Components
             foreach (var synapse in InputSynapses)
             {
                 prevDelta = synapse.WeightDelta;
-                synapse.WeightDelta = learnRate * Gradient * synapse.InputNeuron.Value;
+                synapse.WeightDelta = learnRate * Gradient * synapse.InputNeuron.Output;
                 synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
             }
         }
