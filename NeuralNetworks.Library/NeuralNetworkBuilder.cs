@@ -43,8 +43,8 @@ namespace NeuralNetworks.Library
                 neurons.Add(Neuron.For(
                     activationType,
                     randomNumberGenerator,
-                    randomNumberGenerator.GetNextRandomNumber(),
-                    PreviousLayer.Neurons));
+                    PreviousLayer.Neurons,
+                    randomNumberGenerator.GetNextRandomNumber()));
             }
 
             hiddenLayers.Add(Layer.For(neurons));
@@ -60,8 +60,8 @@ namespace NeuralNetworks.Library
                 neurons.Add(Neuron.For(
                     activationType,
                     randomNumberGenerator,
-                    randomNumberGenerator.GetNextRandomNumber(),
-                    PreviousLayer.Neurons));
+                    PreviousLayer.Neurons,
+                    randomNumberGenerator.GetNextRandomNumber()));
             }
 
             outputLayer = Layer.For(neurons);
@@ -69,7 +69,7 @@ namespace NeuralNetworks.Library
             return this;
         }
 
-        private Layer PreviousLayer => hiddenLayers.Any() ? hiddenLayers.Last() : inputLayer; 
+        private Layer PreviousLayer => hiddenLayers.Any() ? hiddenLayers.Last() : inputLayer;
 
         public NeuralNetwork Build()
         {

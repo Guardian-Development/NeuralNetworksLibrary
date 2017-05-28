@@ -3,7 +3,7 @@ using NeuralNetworks.Library.Components;
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {
-    public static class NeuronErrorGradientCalculator
+    public static class NeuronErrorGradientOperations
     {
         public static void SetNeuronErrorGradient(Neuron neuron, double target)
         {

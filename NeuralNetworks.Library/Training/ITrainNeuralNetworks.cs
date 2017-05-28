@@ -5,9 +5,6 @@ namespace NeuralNetworks.Library.Training
 {
     public interface ITrainNeuralNetworks
     {
-        void TrainNetwork(
-            IList<TrainingDataSet> trainingDataSet,
-            int maximumEpochs = 100,
-            double errorThreshold = 0.0001);
+        double PerformSingleEpochProducingErrorRate(TrainingDataSet trainingDataSet);
     }
 }

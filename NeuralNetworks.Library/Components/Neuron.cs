@@ -21,24 +21,10 @@ namespace NeuralNetworks.Library.Components
 
         internal IProvideNeuronActivation ActivationFunction { get; }
 
-        private Neuron(IProvideNeuronActivation activationFunction, double bias)
+        private Neuron(IProvideNeuronActivation activationFunction, double startingBias)
         {
             ActivationFunction = activationFunction;
-            Bias = bias;
-        }
-
-        private Neuron(
-            IProvideNeuronActivation activationFunction,
-            IProvideRandomNumberGeneration randomNumberGeneration, 
-            List<Neuron> inputNeurons,
-            double bias) : this(activationFunction, bias)
-        {
-            foreach (var inputNeuron in inputNeurons)
-            {
-                var synapse = Synapse.For(inputNeuron, this, randomNumberGeneration);
-                inputNeuron.OutputSynapses.Add(synapse);
-                InputSynapses.Add(synapse);
-            }
+            Bias = startingBias;
         }
 
         public double CalculateOutput()
@@ -47,22 +33,31 @@ namespace NeuralNetworks.Library.Components
             return Output = ActivationFunction.Activate(inputValuesWithBias);
         }
 
-        public static Neuron For(ActivationType activationType, double bias)
-        {
-            return new Neuron(activationType.ToNeuronActivationProvider(), bias);
-        }
+        public static Neuron For(ActivationType activationType, double bias) 
+            => new Neuron(activationType.ToNeuronActivationProvider(), bias);
 
         public static Neuron For(
             ActivationType activationType,
             IProvideRandomNumberGeneration randomNumberGeneration,
-            double bias,
-            List<Neuron> inputNeurons)
+            List<Neuron> inputNeurons, 
+            double bias)
         {
-            return new Neuron(
-                activationType.ToNeuronActivationProvider(), 
-                randomNumberGeneration, 
-                inputNeurons, 
-                bias);
+            var neuron = For(activationType, bias);
+            ConnectNeuronWithInputNeurons(randomNumberGeneration, inputNeurons, neuron);
+            return neuron; 
+        }
+
+        private static void ConnectNeuronWithInputNeurons(
+            IProvideRandomNumberGeneration randomNumberGeneration, 
+            List<Neuron> inputNeurons, 
+            Neuron neuron)
+        {
+            foreach (var inputNeuron in inputNeurons)
+            {
+                var synapse = Synapse.For(inputNeuron, neuron, randomNumberGeneration);
+                inputNeuron.OutputSynapses.Add(synapse);
+                neuron.InputSynapses.Add(synapse);
+            }
         }
     }
 }

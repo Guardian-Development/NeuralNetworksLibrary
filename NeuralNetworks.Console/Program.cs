@@ -15,13 +15,7 @@ namespace NeuralNetworks.Console
     {
         public static void Main(string[] args)
         {
-            var logger = new LoggerFactory();
-
-            logger
-                .AddConsole(LogLevel.Information)
-                .InitialiseLoggingForNeuralNetworksLibrary();
-
-            var trainingSet = GetXorTrainingData();
+            ConfigureLogging();
 
             var neuralNetwork = NeuralNetwork.For()
                 .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
@@ -29,10 +23,24 @@ namespace NeuralNetworks.Console
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
                 .Build();
 
-            BackPropagation
-                .For(neuralNetwork, learningRate: 0.4, momentum: 0.9)
-                .TrainNetwork(trainingSet.ToList(), maximumEpochs: 3000, errorThreshold: 0.1);
+            TrainingController<BackPropagation>
+                .For(BackPropagation.WithConfiguration(neuralNetwork, learningRate: 0.4, momentum: 0.9))
+                .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData().ToList(), maximumEpochs: 3000, errorThreshold: 0.1);
 
+            MakeExamplePredictions(neuralNetwork);
+        }
+
+        private static void ConfigureLogging()
+        {
+            var logger = new LoggerFactory();
+
+            logger
+                .AddConsole(LogLevel.Information)
+                .InitialiseLoggingForNeuralNetworksLibrary();
+        }
+
+        private static void MakeExamplePredictions(NeuralNetwork neuralNetwork)
+        {
             System.Console.WriteLine(
                 $"PREDICTION (0, 1): {neuralNetwork.PredictionFor(0.0, 1.0)[0]}, EXPECTED: 1");
             System.Console.WriteLine(
