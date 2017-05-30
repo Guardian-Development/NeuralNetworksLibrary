@@ -44,7 +44,9 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
         private void PropagateResultOfNeuronErrors()
         {
-            neuralNetwork.OutputLayer.Neurons.ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights);
+            neuralNetwork.OutputLayer.Neurons
+                .ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights);
+
             neuralNetwork.HiddenLayers
                 .ApplyInReverse(layer =>
                     layer.Neurons.ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights));
