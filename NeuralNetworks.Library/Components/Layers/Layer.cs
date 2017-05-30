@@ -1,19 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Logging;
 
 namespace NeuralNetworks.Library.Components.Layers
 {
-    public sealed class Layer: IEnumerable<Layer>
+    public abstract class Layer: IEnumerable<Layer>
     {
         private ILogger Log => LoggerProvider.For(GetType());
         
         public List<Neuron> Neurons { get; }
 
-        private Layer(List<Neuron> neurons)
+        protected Layer(List<Neuron> neurons)
         {
-            Neurons = neurons; 
+            Neurons = neurons;
         }
 
         public IEnumerator<Layer> GetEnumerator()
@@ -25,10 +26,45 @@ namespace NeuralNetworks.Library.Components.Layers
         {
             return GetEnumerator();
         }
+    }
 
-        public static Layer For(List<Neuron> neurons)
+    public sealed class InputLayer : Layer
+    {
+        public List<Neuron> InputNeurons { get; }
+
+        private InputLayer(List<Neuron> inputNeurons, List<Neuron> neuronsIncludingBias)
+            : base(neuronsIncludingBias)
         {
-            return new Layer(neurons);
+           InputNeurons = inputNeurons;
         }
+
+        public static InputLayer For(List<Neuron> neurons, BiasNeuron biasNeuron)
+        {
+            var neuronsIncludingBias = neurons.Append(biasNeuron).ToList(); 
+            return new InputLayer(neurons, neuronsIncludingBias);
+        }
+    }
+
+    public sealed class HiddenLayer : Layer
+    {
+        public HiddenLayer(List<Neuron> neuronsIncludingBias) 
+            : base(neuronsIncludingBias)
+        {}
+
+        public static HiddenLayer For(List<Neuron> neurons, BiasNeuron biasNeuron)
+        {
+            var neuronsIncludingBias = neurons.Append(biasNeuron).ToList();
+            return new HiddenLayer(neuronsIncludingBias);
+        }
+    }
+
+    public sealed class OutputLayer : Layer
+    {
+        public OutputLayer(List<Neuron> neurons) 
+            : base(neurons)
+        {}
+
+        public static OutputLayer For(List<Neuron> neurons) 
+            => new OutputLayer(neurons);
     }
 }

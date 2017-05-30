@@ -10,9 +10,9 @@ namespace NeuralNetworks.Library
 {
     public sealed class NeuralNetworkBuilder
     {
-        private Layer inputLayer;
-        private readonly List<Layer> hiddenLayers = new List<Layer>();
-        private Layer outputLayer;
+        private InputLayer inputLayer;
+        private readonly List<HiddenLayer> hiddenLayers = new List<HiddenLayer>();
+        private OutputLayer outputLayer;
 
         private readonly IProvideRandomNumberGeneration randomNumberGenerator;
 
@@ -27,10 +27,10 @@ namespace NeuralNetworks.Library
 
             for (var i = 0; i < neuronCount; i++)
             {
-                neurons.Add(Neuron.For(activationType, randomNumberGenerator.GetNextRandomNumber()));
+                neurons.Add(Neuron.For(activationType));
             }
 
-            inputLayer = Layer.For(neurons);
+            inputLayer = InputLayer.For(neurons, BiasNeuron.For(activationType, 1));
             return this;
         }
 
@@ -43,11 +43,10 @@ namespace NeuralNetworks.Library
                 neurons.Add(Neuron.For(
                     activationType,
                     randomNumberGenerator,
-                    PreviousLayer.Neurons,
-                    randomNumberGenerator.GetNextRandomNumber()));
+                    PreviousLayer.Neurons));
             }
 
-            hiddenLayers.Add(Layer.For(neurons));
+            hiddenLayers.Add(HiddenLayer.For(neurons, BiasNeuron.For(activationType, 1)));
             return this;
         }
 
@@ -60,16 +59,15 @@ namespace NeuralNetworks.Library
                 neurons.Add(Neuron.For(
                     activationType,
                     randomNumberGenerator,
-                    PreviousLayer.Neurons,
-                    randomNumberGenerator.GetNextRandomNumber()));
+                    PreviousLayer.Neurons));
             }
 
-            outputLayer = Layer.For(neurons);
+            outputLayer = OutputLayer.For(neurons);
 
             return this;
         }
 
-        private Layer PreviousLayer => hiddenLayers.Any() ? hiddenLayers.Last() : inputLayer;
+        private Layer PreviousLayer => hiddenLayers.Any() ? (Layer)hiddenLayers.Last() : inputLayer;
 
         public NeuralNetwork Build()
         {

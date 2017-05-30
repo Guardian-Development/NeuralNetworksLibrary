@@ -19,13 +19,13 @@ namespace NeuralNetworks.Console
 
             var neuralNetwork = NeuralNetwork.For()
                 .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
-                .WithHiddenLayer(neuronCount: 3, activationType: ActivationType.TanH)
+                .WithHiddenLayer(neuronCount: 20, activationType: ActivationType.TanH)
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
                 .Build();
 
             TrainingController<BackPropagation>
                 .For(BackPropagation.WithConfiguration(neuralNetwork, learningRate: 0.4, momentum: 0.9))
-                .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.1);
+                .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.001);
 
             MakeExamplePredictions(neuralNetwork);
         }

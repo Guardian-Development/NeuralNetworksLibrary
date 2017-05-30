@@ -8,26 +8,26 @@ namespace NeuralNetworks.Library
 {
     public sealed class NeuralNetwork
     {
-        public Layer InputLayer { get; private set; }
-        public List<Layer> HiddenLayers { get; private set; }
-        public Layer OutputLayer { get; private set; }
+        public InputLayer InputLayer { get; private set; }
+        public List<HiddenLayer> HiddenLayers { get; private set; }
+        public OutputLayer OutputLayer { get; private set; }
 
         internal NeuralNetwork()
         {}
 
-        internal NeuralNetwork AddInputLayer(Layer inputLayer)
+        internal NeuralNetwork AddInputLayer(InputLayer inputLayer)
         {
             InputLayer = inputLayer;
             return this; 
         }
 
-        internal NeuralNetwork AddHiddenLayers(List<Layer> hiddenLayers)
+        internal NeuralNetwork AddHiddenLayers(List<HiddenLayer> hiddenLayers)
         {
             HiddenLayers = hiddenLayers;
             return this; 
         }
 
-        internal NeuralNetwork AddOutputLayer(Layer outputLayer)
+        internal NeuralNetwork AddOutputLayer(OutputLayer outputLayer)
         {
             OutputLayer = outputLayer; 
             return this;
@@ -38,14 +38,14 @@ namespace NeuralNetworks.Library
             ValidateInputs(inputs.Length);
 
             var i = 0;
-            InputLayer.Neurons.ForEach(a => a.Output = inputs[i++]);
+            InputLayer.InputNeurons.ForEach(a => a.Output = inputs[i++]);
             HiddenLayers.ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateOutput()));
             return OutputLayer.Neurons.Select(a => a.CalculateOutput()).ToArray();
         }
 
         private void ValidateInputs(int inputsLength)
         {
-            if (inputsLength != InputLayer.Neurons.Count)
+            if (inputsLength != InputLayer.InputNeurons.Count)
             {
                 throw new ArgumentException(
                     "Input length must be the same length as the Input Layer Neurons");

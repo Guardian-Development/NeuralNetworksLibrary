@@ -13,18 +13,8 @@ namespace NeuralNetworks.Library.Training.BackPropagation
             this.momentum = momentum;
         }
 
-        public void CalculateAndUpdateInputSynapseWeights(Neuron neuron)
-        {
-            UpdateNeuronDelta(neuron);
-            neuron.InputSynapses.ForEach(UpdateSynapseWeight);
-        }
-
-        private void UpdateNeuronDelta(Neuron neuron)
-        {
-            var prevDelta = neuron.BiasDelta;
-            neuron.BiasDelta = learningRate * neuron.Gradient;
-            neuron.Bias += neuron.BiasDelta + momentum * prevDelta;
-        }
+        public void CalculateAndUpdateInputSynapseWeights(Neuron neuron) 
+            => neuron.InputSynapses.ForEach(UpdateSynapseWeight);
 
         private void UpdateSynapseWeight(Synapse synapse)
         {
