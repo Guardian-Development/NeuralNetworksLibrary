@@ -11,10 +11,11 @@ namespace NeuralNetworks.Library.Logging
         internal static ILogger For<T>() => Logger.CreateLogger<T>();
         internal static ILogger For(Type type) => Logger.CreateLogger(type);
 
-        public static void InitialiseLoggingForNeuralNetworksLibrary(this ILoggerFactory factory)
+        public static ILoggerFactory InitialiseLoggingForNeuralNetworksLibrary(this ILoggerFactory factory)
         {
             Logger = factory;
             Log.LogInformation("Configured logging for the Neural Networks library");
+            return Logger; 
         }
     }
 }

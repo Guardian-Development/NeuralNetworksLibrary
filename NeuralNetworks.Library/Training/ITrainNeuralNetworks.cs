@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NeuralNetworks.Library.Data;
+﻿using NeuralNetworks.Library.Data;
 
 namespace NeuralNetworks.Library.Training
 {

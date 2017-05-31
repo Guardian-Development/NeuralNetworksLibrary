@@ -27,12 +27,12 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
         private double BackPropagate(params double[] targets)
         {
-            CalculateNeuronErrorRates(targets);
+            SetNeuronErrorRates(targets);
             PropagateResultOfNeuronErrors();
             return CalculateError(targets);
         }
 
-        private void CalculateNeuronErrorRates(double[] targets)
+        private void SetNeuronErrorRates(double[] targets)
         {
             var i = 0;
             neuralNetwork.OutputLayer.Neurons
