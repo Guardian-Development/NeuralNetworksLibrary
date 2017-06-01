@@ -13,15 +13,16 @@ namespace NeuralNetworks.Library
         private InputLayer inputLayer;
         private readonly List<HiddenLayer> hiddenLayers = new List<HiddenLayer>();
         private OutputLayer outputLayer;
-
         private readonly IProvideRandomNumberGeneration randomNumberGenerator;
+
+        private Layer PreviousLayer => hiddenLayers.Any() ? (Layer)hiddenLayers.Last() : inputLayer;
 
         public NeuralNetworkBuilder(IProvideRandomNumberGeneration randomNumberGenerator)
         {
             this.randomNumberGenerator = randomNumberGenerator;
         }
 
-        public NeuralNetworkBuilder WithInputLayer(int neuronCount, ActivationType activationType)
+        public NeuralNetworkBuilder WithInputLayer(int neuronCount, ActivationType activationType, double biasOutput = 1)
         {
             var neurons = new List<Neuron>();
 
@@ -30,11 +31,11 @@ namespace NeuralNetworks.Library
                 neurons.Add(Neuron.For(activationType));
             }
 
-            inputLayer = InputLayer.For(neurons, BiasNeuron.For(activationType, 1));
+            inputLayer = InputLayer.For(neurons, BiasNeuron.For(activationType, biasOutput));
             return this;
         }
 
-        public NeuralNetworkBuilder WithHiddenLayer(int neuronCount, ActivationType activationType)
+        public NeuralNetworkBuilder WithHiddenLayer(int neuronCount, ActivationType activationType, double biasOutput = 1)
         {
             var neurons = new List<Neuron>();
 
@@ -46,7 +47,7 @@ namespace NeuralNetworks.Library
                     PreviousLayer.Neurons));
             }
 
-            hiddenLayers.Add(HiddenLayer.For(neurons, BiasNeuron.For(activationType, 1)));
+            hiddenLayers.Add(HiddenLayer.For(neurons, BiasNeuron.For(activationType, biasOutput)));
             return this;
         }
 
@@ -66,8 +67,6 @@ namespace NeuralNetworks.Library
 
             return this;
         }
-
-        private Layer PreviousLayer => hiddenLayers.Any() ? (Layer)hiddenLayers.Last() : inputLayer;
 
         public NeuralNetwork Build()
         {
