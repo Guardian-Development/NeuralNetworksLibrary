@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NeuralNetworks.Library.Components.Layers;
+using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.NetworkInitialisation;
 
 namespace NeuralNetworks.Library

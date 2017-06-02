@@ -19,7 +19,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         private void UpdateSynapseWeight(Synapse synapse)
         {
             var prevDelta = synapse.WeightDelta;
-            synapse.WeightDelta = learningRate * synapse.OutputNeuron.Gradient * synapse.InputNeuron.Output;
+            synapse.WeightDelta = learningRate * synapse.OutputNeuron.ErrorRate * synapse.InputNeuron.Output;
             synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
         }
 

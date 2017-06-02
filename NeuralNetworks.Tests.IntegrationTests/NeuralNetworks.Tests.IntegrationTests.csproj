@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NeuralNetworks.Library\NeuralNetworks.Library.csproj" />
     <ProjectReference Include="..\NeuralNetworks.Tests.Support\NeuralNetworks.Tests.Support.csproj" />
   </ItemGroup>
 

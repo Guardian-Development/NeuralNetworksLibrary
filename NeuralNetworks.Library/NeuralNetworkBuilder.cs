@@ -2,7 +2,6 @@
 using System.Linq;
 using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.Components.Activation;
-using NeuralNetworks.Library.Components.Layers;
 using NeuralNetworks.Library.NetworkInitialisation;
 using NeuralNetworks.Library.Validation;
 

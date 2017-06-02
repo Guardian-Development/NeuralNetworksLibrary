@@ -13,7 +13,7 @@ using Xunit;
 
 namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
 {
-    public sealed class IrisCaseStudy : NeuralNetworkTest
+    public sealed class IrisDatasetCaseStudy : NeuralNetworkTest
     {
         [Fact]
         public void CanSuccessfullySolveIrisProblem()
@@ -58,12 +58,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
                 indexOfMax = i;
             }
 
-            LogFor(typeof(IrisCaseStudy)).LogInformation($"Predicted for {actual} : {indexOfMax + 1}");
+            LogFor(typeof(IrisDatasetCaseStudy)).LogInformation($"Predicted for {actual} : {indexOfMax + 1}");
         }
 
         private static List<TrainingDataSet> GetIrisTrainingData()
         {
-            var assembly = typeof(IrisCaseStudy).GetTypeInfo().Assembly;
+            var assembly = typeof(IrisDatasetCaseStudy).GetTypeInfo().Assembly;
             var test = assembly.GetManifestResourceNames(); 
 
             var irisData = ReadCsv.FromEmbeddedResource(assembly,
@@ -111,7 +111,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
 
         private static List<IrisDataRow> GetIrisTestData()
         {
-            var assembly = typeof(IrisCaseStudy).GetTypeInfo().Assembly;
+            var assembly = typeof(IrisDatasetCaseStudy).GetTypeInfo().Assembly;
 
             var irisData = ReadCsv.FromEmbeddedResource(assembly,
                 "NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.Iris.csv",

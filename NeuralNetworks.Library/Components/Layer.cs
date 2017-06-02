@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Logging;
 
-namespace NeuralNetworks.Library.Components.Layers
+namespace NeuralNetworks.Library.Components
 {
     public abstract class Layer: IEnumerable<Layer>
     {

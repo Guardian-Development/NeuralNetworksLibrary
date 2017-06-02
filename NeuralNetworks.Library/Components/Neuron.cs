@@ -14,7 +14,7 @@ namespace NeuralNetworks.Library.Components
 
         public List<Synapse> InputSynapses { get; } = new List<Synapse>();
         public List<Synapse> OutputSynapses { get; } = new List<Synapse>();
-        public double Gradient { get; set; }
+        public double ErrorRate { get; set; }
         public double Output { get; set; }
 
         internal IProvideNeuronActivation ActivationFunction { get; }
@@ -55,19 +55,5 @@ namespace NeuralNetworks.Library.Components
                 neuron.InputSynapses.Add(synapse);
             }
         }
-    }
-
-    public class BiasNeuron : Neuron
-    {
-        public BiasNeuron(IProvideNeuronActivation activationFunction, double constantOutput)
-            : base(activationFunction)
-        {
-            Output = constantOutput; 
-        }
-
-        public override double CalculateOutput() => Output;
-
-        public static BiasNeuron For(ActivationType activationType, double constantOutput) 
-            => new BiasNeuron(activationType.ToNeuronActivationProvider(), constantOutput);
     }
 }
