@@ -10,7 +10,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         public void CanTrainNetworkForSingleEpoch()
         {
             BackPropagationTester.For(learningRate: 1, momentum: 2)
-                .WithInitialNeuralNetwork(
+                .WithTargetNeuralNetwork(
                     nn => nn
                         .InputLayer(l => l
                             .Neuron(1, n => n.ErrorRate(1).Output(1).Activation(ActivationType.TanH))
@@ -24,11 +24,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                             .Neuron(1, n => n.ErrorRate(1).Output(1).Activation(ActivationType.TanH))
                             .Neuron(2, n => n.ErrorRate(1).Output(1).Activation(ActivationType.TanH)))
                         .Synapses(ss => ss
-                            .SynapseBetween(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(2))
-                            .SynapseBetween(s => s.InputNeuronId(1).OutputNeuronId(3).Weight(2))
-                            .SynapseBetween(s => s.InputNeuronId(2).OutputNeuronId(4).Weight(2))
-                            .SynapseBetween(s => s.InputNeuronId(2).OutputNeuronId(4).Weight(2))
-                            .SynapseBetween(s => s.InputNeuronId(3).OutputNeuronId(7).Weight(2)))
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2))
                 )
                 .PerformTrainingEpoch(t => t.Inputs(1, 2).ExpectedOutputs(3).ExpectedErrorRate(0.8)
                     .ExpectNeuralNetworkState(nn => nn

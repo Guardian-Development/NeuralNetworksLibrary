@@ -15,7 +15,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             this.momentum = momentum; 
         }
 
-        public BackPropagationTester WithInitialNeuralNetwork(Action<InitialNeuralNetworkBuilder> actions)
+        public BackPropagationTester WithTargetNeuralNetwork(Action<InitialNeuralNetworkBuilder> actions)
         {
             var builder = new InitialNeuralNetworkBuilder();
             actions.Invoke(builder);
