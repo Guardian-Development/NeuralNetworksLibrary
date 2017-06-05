@@ -45,14 +45,18 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         {
             var builder = new SynapseBuilder();
             actions.Invoke(builder);
-            synapses = builder.Build(allNeurons);
+            synapses = builder.ConnectNeurons(allNeurons);
             return this; 
         }
 
         public (NeuralNetwork network, List<(int id, Neuron neuron)> allNeurons, List<Synapse> allSynapses) Build()
         {
-            //connect neurons together here. 
-            throw new NotImplementedException();
+            var neuralNetwork = new NeuralNetwork();
+            neuralNetwork.AddInputLayer(inputLayer);
+            neuralNetwork.AddHiddenLayers(hiddenLayers);
+            neuralNetwork.AddOutputLayer(outputLayer);
+
+            return ValueTuple.Create(neuralNetwork, allNeurons, synapses); 
         }
     }
 }

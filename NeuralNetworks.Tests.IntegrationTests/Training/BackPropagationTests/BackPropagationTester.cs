@@ -1,5 +1,7 @@
 ﻿using NeuralNetworks.Library;
 using System;
+using System.Collections.Generic;
+using NeuralNetworks.Library.Components;
 
 namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
 {
@@ -7,7 +9,9 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
     {
         private readonly double learningRate;
         private readonly double momentum;
-        private NeuralNetwork targetNeuralNetwork; 
+        private NeuralNetwork targetNeuralNetwork;
+        private List<(int id, Neuron neuron)> allNeuronsWithId;
+        private List<Synapse> allSynapses; 
 
         private BackPropagationTester(double learningRate, double momentum)
         {
@@ -19,7 +23,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         {
             var builder = new InitialNeuralNetworkBuilder();
             actions.Invoke(builder);
-            targetNeuralNetwork = builder.Build();
+            (targetNeuralNetwork, allNeuronsWithId, allSynapses) = builder.Build();
             return this; 
         }
 
