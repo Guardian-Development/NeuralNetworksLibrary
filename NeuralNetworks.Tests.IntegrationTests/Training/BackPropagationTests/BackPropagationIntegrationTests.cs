@@ -7,7 +7,17 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
     public sealed class BackPropagationIntegrationTests : NeuralNetworkTest
     {
         [Fact]
-        public void CanTrainNetworkForSingleEpoch()
+        public void CanTrainNoHiddenLayerNetworkForSingleEpoch()
+        {
+        }
+
+        [Fact]
+        public void CanTrainNoHiddenLayerNetworkForMultipleEpochs()
+        {
+        }
+
+        [Fact]
+        public void CanTrainSingleHiddenLayerNetworkForSingleEpoch()
         {
             BackPropagationTester.For(learningRate: 1, momentum: 2)
                 .WithTargetNeuralNetwork(
@@ -46,6 +56,21 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                             .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)
                             .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)))
                 );
+        }
+
+        [Fact]
+        public void CanTrainSingleHiddenLayerNetworkForMultipleEpochs()
+        {
+        }
+
+        [Fact]
+        public void CanTrainMultipleHiddenLayerNetworkForSingleEpoch()
+        {
+        }
+
+        [Fact]
+        public void CanTrainMultipleHiddenLayerNetworkForMultipleEpochs()
+        {
         }
     }
 }
