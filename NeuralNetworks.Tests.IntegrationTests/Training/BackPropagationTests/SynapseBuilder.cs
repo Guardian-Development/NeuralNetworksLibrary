@@ -16,7 +16,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             return this;
         }
 
-        public List<Synapse> ConnectNeurons(List<(int id, Neuron neuron)> neuronsWithId)
+        public List<Synapse> BuildConnectingNeurons(List<(int id, Neuron neuron)> neuronsWithId)
         {
             var connectedSynapses = new List<Synapse>();
             foreach (var synapseStructure in synapses)
@@ -32,6 +32,21 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 connectedSynapses.Add(synapse);
             }
             return connectedSynapses; 
+        }
+
+        public List<Synapse> BuildWithoutConnetingNeurons(List<(int id, Neuron neuron)> neuronsWithId)
+        {
+            var nonConnectedSynapses = new List<Synapse>();
+            foreach (var synapseStructure in synapses)
+            {
+                var inputNeuron = FindNeuronById(neuronsWithId, synapseStructure.inputNeuronId);
+                var outputNeuron = FindNeuronById(neuronsWithId, synapseStructure.outputNeuronId);
+
+                var synapse = Synapse.For(inputNeuron, outputNeuron, PredictableRandomNumberGenerator.Create());
+                synapse.Weight = synapseStructure.weight;
+                nonConnectedSynapses.Add(synapse);
+            }
+            return nonConnectedSynapses; 
         }
 
         private static Neuron FindNeuronById(IEnumerable<(int id, Neuron neuron)> neurons, int id)

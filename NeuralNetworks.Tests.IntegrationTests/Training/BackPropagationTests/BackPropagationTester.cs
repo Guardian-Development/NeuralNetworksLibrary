@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using NeuralNetworks.Library.Components;
+using NeuralNetworks.Library.Training.BackPropagation;
 
 namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
 {
@@ -10,29 +11,31 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         private readonly double learningRate;
         private readonly double momentum;
         private NeuralNetwork targetNeuralNetwork;
-        private List<(int id, Neuron neuron)> allNeuronsWithId;
-        private List<Synapse> allSynapses; 
+        private List<(int id, Neuron neuron)> targetNeuralNetworkNeuronsWithId;
+        private List<Synapse> targetNeuralNetworkSynapses;
 
         private BackPropagationTester(double learningRate, double momentum)
         {
             this.learningRate = learningRate;
-            this.momentum = momentum; 
+            this.momentum = momentum;
         }
 
         public BackPropagationTester WithTargetNeuralNetwork(Action<InitialNeuralNetworkBuilder> actions)
         {
             var builder = new InitialNeuralNetworkBuilder();
             actions.Invoke(builder);
-            (targetNeuralNetwork, allNeuronsWithId, allSynapses) = builder.Build();
-            return this; 
+            (targetNeuralNetwork, targetNeuralNetworkNeuronsWithId, targetNeuralNetworkSynapses) = builder.Build();
+            return this;
         }
 
         public BackPropagationTester PerformTrainingEpoch(Action<TrainingEpochState> actions)
         {
             var state = new TrainingEpochState();
             actions.Invoke(state);
-            state.PerformEpochAndAssertResult();
-            return this; 
+
+            var trainer = BackPropagation.WithConfiguration(targetNeuralNetwork, learningRate, momentum);
+            state.PerformEpochAndAssertResult(trainer, targetNeuralNetworkNeuronsWithId, targetNeuralNetworkSynapses);
+            return this;
         }
 
         public static BackPropagationTester For(double learningRate, double momentum)

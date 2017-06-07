@@ -45,7 +45,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         {
             var builder = new SynapseBuilder();
             actions.Invoke(builder);
-            synapses = builder.ConnectNeurons(allNeurons);
+            synapses = builder.BuildConnectingNeurons(allNeurons);
             return this; 
         }
 

@@ -33,20 +33,18 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 .PerformTrainingEpoch(t => t.Inputs(1, 2).ExpectedOutputs(3).ExpectedErrorRate(0.8)
                     .ExpectNeuralNetworkState(nn => nn
                         .ExpectedNeurons(
-                            n => n.Id(1).ErrorRate(1).Output(1),
-                            n => n.Id(2).ErrorRate(1).Output(1),
-                            n => n.Id(3).ErrorRate(1).Output(1),
-                            n => n.Id(4).ErrorRate(1).Output(1),
-                            n => n.Id(5).ErrorRate(1).Output(1),
-                            n => n.Id(6).ErrorRate(1).Output(1))
-                        .ExpectedSynapses(
-                            s => s.InputNeuronId(1).OutputNeuronId(2).Weight(2),
-                            s => s.InputNeuronId(1).OutputNeuronId(2).Weight(2),
-                            s => s.InputNeuronId(1).OutputNeuronId(2).Weight(2),
-                            s => s.InputNeuronId(1).OutputNeuronId(2).Weight(2),
-                            s => s.InputNeuronId(1).OutputNeuronId(2).Weight(2),
-                            s => s.InputNeuronId(1).OutputNeuronId(2).Weight(2),
-                            s => s.InputNeuronId(1).OutputNeuronId(2).Weight(2)))
+                            (1, n => n.ErrorRate(1).Output(1)),
+                            (2, n => n.ErrorRate(1).Output(1)),
+                            (3, n => n.ErrorRate(1).Output(1)),
+                            (4, n => n.ErrorRate(1).Output(1)),
+                            (5, n => n.ErrorRate(1).Output(1)),
+                            (6, n => n.ErrorRate(1).Output(1)))
+                        .ExpectedSynapses(ss => ss
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 2)))
                 );
         }
     }
