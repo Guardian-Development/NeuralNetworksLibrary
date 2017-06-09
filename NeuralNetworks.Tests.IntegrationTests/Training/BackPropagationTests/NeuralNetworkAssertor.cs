@@ -6,13 +6,15 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
 {
     public sealed class NeuralNetworkAssertor
     {
-        private readonly List<(int id, Neuron neuron)> expectedNeurons;
-        private readonly List<Synapse> expectedSynapses;
+        private readonly List<(int id, NeuronAssertor neuron)> expectedNeuronsAssertors;
+        private readonly List<SynapseAssertor> expectedSynapsesAssertors;
 
-        private NeuralNetworkAssertor(List<(int id, Neuron neuron)> expectedNeurons, List<Synapse> expectedSynapses)
+        private NeuralNetworkAssertor(
+            List<(int id, NeuronAssertor neuron)> expectedNeuronsAssertors, 
+            List<SynapseAssertor> expectedSynapsesAssertors)
         {
-            this.expectedNeurons = expectedNeurons;
-            this.expectedSynapses = expectedSynapses;
+            this.expectedNeuronsAssertors = expectedNeuronsAssertors;
+            this.expectedSynapsesAssertors = expectedSynapsesAssertors;
         }
 
         public void Assert(
@@ -21,7 +23,8 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             => throw new NotImplementedException();
 
         public static NeuralNetworkAssertor For(
-            List<(int id, Neuron neuron)> expectedNeurons,
-            List<Synapse> expectedSynapses) => new NeuralNetworkAssertor(expectedNeurons, expectedSynapses);
+            List<(int id, NeuronAssertor neuron)> expectedNeuronsAssertors,
+            List<SynapseAssertor> expectedSynapsesAssertors) 
+            => new NeuralNetworkAssertor(expectedNeuronsAssertors, expectedSynapsesAssertors);
     }
 }

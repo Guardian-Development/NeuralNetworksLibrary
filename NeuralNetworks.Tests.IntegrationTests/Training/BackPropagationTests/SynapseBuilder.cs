@@ -34,7 +34,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             return connectedSynapses; 
         }
 
-        public List<Synapse> BuildWithoutConnetingNeurons(List<(int id, Neuron neuron)> neuronsWithId)
+        public List<Synapse> BuildWithoutConnectingNeurons(List<(int id, Neuron neuron)> neuronsWithId)
         {
             var nonConnectedSynapses = new List<Synapse>();
             foreach (var synapseStructure in synapses)

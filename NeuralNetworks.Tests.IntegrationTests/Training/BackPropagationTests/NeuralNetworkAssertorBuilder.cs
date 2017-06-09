@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NeuralNetworks.Library.Components;
 
 namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
@@ -25,10 +26,21 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         {
             var builder = new SynapseBuilder();
             actions.Invoke(builder);
-            expectedSynapses = builder.BuildWithoutConnetingNeurons(expectedNeurons);
+            expectedSynapses = builder.BuildWithoutConnectingNeurons(expectedNeurons);
             return this;
         }
 
-        public NeuralNetworkAssertor Build() => NeuralNetworkAssertor.For(expectedNeurons, expectedSynapses);
+        public NeuralNetworkAssertor Build()
+        {
+            var neuronAssertors = expectedNeurons
+                .Select(neuronWithId => ValueTuple.Create(neuronWithId.id, neuronWithId.ToAssertor()))
+                .ToList();
+
+            var synapseAssertors = expectedSynapses
+                .Select(SynapseAssertorExtensions.ToAssertor)
+                .ToList();
+
+            return NeuralNetworkAssertor.For(neuronAssertors, synapseAssertors);
+        }
     }
 }

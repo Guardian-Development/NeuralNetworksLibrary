@@ -11,8 +11,8 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         protected readonly List<(int id, Neuron neuron)> NeuronsWithId = new List<(int id, Neuron neuron)>();
         protected (int id, BiasNeuron neuron) BiasNeuronWithId;
 
-        public IEnumerable<(int id, Neuron neuron)> AllNeurons 
-            => NeuronsWithId.Append(BiasNeuronWithId);
+        public IEnumerable<(int id, Neuron neuron)> AllNeurons
+            => BiasNeuronWithId.neuron == null ? NeuronsWithId : NeuronsWithId.Append(BiasNeuronWithId);
 
         public TBuilder Neuron(int id, Action<NeuronBuilder> actions)
         {
