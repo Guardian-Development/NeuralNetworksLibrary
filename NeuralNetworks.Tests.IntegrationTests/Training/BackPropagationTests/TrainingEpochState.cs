@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.Data;
 using NeuralNetworks.Library.Training;
-using NeuralNetworks.Library.Training.BackPropagation;
 using Xunit;
 
 namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests

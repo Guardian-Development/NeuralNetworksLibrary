@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NeuralNetworks.Library.Components;
 
 namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
@@ -7,24 +7,28 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
     public sealed class NeuralNetworkAssertor
     {
         private readonly List<(int id, NeuronAssertor neuron)> expectedNeuronsAssertors;
-        private readonly List<SynapseAssertor> expectedSynapsesAssertors;
 
-        private NeuralNetworkAssertor(
-            List<(int id, NeuronAssertor neuron)> expectedNeuronsAssertors, 
-            List<SynapseAssertor> expectedSynapsesAssertors)
+        private NeuralNetworkAssertor(List<(int id, NeuronAssertor neuron)> expectedNeuronsAssertors)
         {
             this.expectedNeuronsAssertors = expectedNeuronsAssertors;
-            this.expectedSynapsesAssertors = expectedSynapsesAssertors;
         }
 
         public void Assert(
             List<(int id, Neuron neuron)> targetNeuralNetworkNeurons,
             List<Synapse> targetNeuralNetworkSynapses)
-            => throw new NotImplementedException();
+        {
+            ListAssertionHelpers.AssertEqualLength(targetNeuralNetworkNeurons, expectedNeuronsAssertors);
+            AssertNeurons(targetNeuralNetworkNeurons);
+        }
 
-        public static NeuralNetworkAssertor For(
-            List<(int id, NeuronAssertor neuron)> expectedNeuronsAssertors,
-            List<SynapseAssertor> expectedSynapsesAssertors) 
-            => new NeuralNetworkAssertor(expectedNeuronsAssertors, expectedSynapsesAssertors);
+        private void AssertNeurons(List<(int id, Neuron neuron)> targetNeuralNetworkNeurons)
+        {
+            targetNeuralNetworkNeurons.ForEach(targetNeuron =>
+                expectedNeuronsAssertors.First(assertor => assertor.id == targetNeuron.id)
+                    .neuron.Assert(targetNeuron.neuron));
+        }
+
+        public static NeuralNetworkAssertor For(List<(int id, NeuronAssertor neuron)> expectedNeuronsAssertors)
+            => new NeuralNetworkAssertor(expectedNeuronsAssertors);
     }
 }
