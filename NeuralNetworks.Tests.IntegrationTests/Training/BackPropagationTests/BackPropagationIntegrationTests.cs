@@ -9,6 +9,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         [Fact]
         public void CanTrainNoHiddenLayerNetworkForSingleEpoch()
         {
+            //TODO: make real values and see result 
             BackPropagationTester.For(learningRate: 0.5, momentum: 1)
                 .WithTargetNeuralNetwork(
                     nn => nn
@@ -16,13 +17,9 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                             .Neuron(1, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid))
                             .Neuron(2, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid))
                             .BiasNeuron(3, n => n.ErrorRate(0).Output(0.35).Activation(ActivationType.Sigmoid)))
-                        .HiddenLayer(l => l
-                            .Neuron(4, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid))
-                            .Neuron(5, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid))
-                            .BiasNeuron(6, n => n.ErrorRate(0).Output(0.6).Activation(ActivationType.Sigmoid)))
                         .OutputLayer(l => l
-                            .Neuron(7, n => n.ErrorRate(0).Output(0.01).Activation(ActivationType.Sigmoid))
-                            .Neuron(8, n => n.ErrorRate(0).Output(0.99).Activation(ActivationType.Sigmoid)))
+                            .Neuron(4, n => n.ErrorRate(0).Output(0.01).Activation(ActivationType.Sigmoid))
+                            .Neuron(5, n => n.ErrorRate(0).Output(0.99).Activation(ActivationType.Sigmoid)))
                         .Synapses(ss => ss
                             .SynapseBetween(inputNeuronId: 1, outputNeuronId: 4, weight: 0.15)
                             .SynapseBetween(inputNeuronId: 1, outputNeuronId: 5, weight: 0.20)

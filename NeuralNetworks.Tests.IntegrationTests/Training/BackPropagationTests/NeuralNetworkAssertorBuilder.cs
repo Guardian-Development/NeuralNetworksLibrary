@@ -36,7 +36,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 .Select(neuronWithId => ValueTuple.Create(neuronWithId.id, neuronWithId.ToAssertor(synapseAssertors)))
                 .ToList();
 
-            return NeuralNetworkAssertor.For(neuronAssertors, synapseAssertors);
+            return NeuralNetworkAssertor.For(neuronAssertors);
         }
     }
 }

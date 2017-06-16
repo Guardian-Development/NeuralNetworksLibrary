@@ -25,9 +25,8 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             actualItem.OutputSynapses.ForEach(synapse => synapseAssertors
                 .First(assertor => assertor.OutputNeuronId == neuronId).Assert(synapse));
 
-            //TODO: Assert all other features here. 
-
-            throw new NotImplementedException();
+            Xunit.Assert.Equal(ExpectedItem.ErrorRate, actualItem.ErrorRate);
+            Xunit.Assert.Equal(ExpectedItem.Output, actualItem.Output);
         }
     }
 

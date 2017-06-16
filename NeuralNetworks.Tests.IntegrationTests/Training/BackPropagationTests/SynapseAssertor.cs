@@ -17,7 +17,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
 
         public override void Assert(Synapse actualItem)
         {
-            throw new NotImplementedException();
+            Xunit.Assert.Equal(ExpectedItem.Weight, actualItem.Weight);
         }
     }
 
