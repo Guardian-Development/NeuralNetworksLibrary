@@ -20,10 +20,10 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         public override void Assert(Neuron actualItem)
         {
             actualItem.InputSynapses.ForEach(synapse => synapseAssertors
-                .First(assertor => assertor.InputNeuronId == neuronId).Assert(synapse));
+                .First(assertor => assertor.OutputNeuronId == neuronId).Assert(synapse));
 
             actualItem.OutputSynapses.ForEach(synapse => synapseAssertors
-                .First(assertor => assertor.OutputNeuronId == neuronId).Assert(synapse));
+                .First(assertor => assertor.InputNeuronId == neuronId).Assert(synapse));
 
             Xunit.Assert.Equal(ExpectedItem.ErrorRate, actualItem.ErrorRate);
             Xunit.Assert.Equal(ExpectedItem.Output, actualItem.Output);

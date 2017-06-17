@@ -9,14 +9,13 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         [Fact]
         public void CanTrainNoHiddenLayerNetworkForSingleEpoch()
         {
-            //TODO: make real values and see result 
             BackPropagationTester.For(learningRate: 0.5, momentum: 1)
                 .WithTargetNeuralNetwork(
                     nn => nn
                         .InputLayer(l => l
                             .Neuron(1, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid))
                             .Neuron(2, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid))
-                            .BiasNeuron(3, n => n.ErrorRate(0).Output(0.35).Activation(ActivationType.Sigmoid)))
+                            .BiasNeuron(3, n => n.ErrorRate(0).Output(1.00).Activation(ActivationType.Sigmoid)))
                         .OutputLayer(l => l
                             .Neuron(4, n => n.ErrorRate(0).Output(0.01).Activation(ActivationType.Sigmoid))
                             .Neuron(5, n => n.ErrorRate(0).Output(0.99).Activation(ActivationType.Sigmoid)))
@@ -26,13 +25,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                             .SynapseBetween(inputNeuronId: 2, outputNeuronId: 4, weight: 0.25)
                             .SynapseBetween(inputNeuronId: 2, outputNeuronId: 5, weight: 0.30)
                             .SynapseBetween(inputNeuronId: 3, outputNeuronId: 4, weight: 1.00)
-                            .SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 1.00)
-                            .SynapseBetween(inputNeuronId: 4, outputNeuronId: 7, weight: 0.40)
-                            .SynapseBetween(inputNeuronId: 4, outputNeuronId: 8, weight: 0.45)
-                            .SynapseBetween(inputNeuronId: 5, outputNeuronId: 7, weight: 0.50)
-                            .SynapseBetween(inputNeuronId: 5, outputNeuronId: 8, weight: 0.55)
-                            .SynapseBetween(inputNeuronId: 6, outputNeuronId: 7, weight: 1.00)
-                            .SynapseBetween(inputNeuronId: 6, outputNeuronId: 8, weight: 1.00))
+                            .SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 1.00))
                 )
                 .PerformTrainingEpoch(t => t.Inputs(0.05, 0.10).ExpectedOutputs(0.1, 0.9).ExpectedErrorRate(0.8)
                     .ExpectNeuralNetworkState(nn => nn
@@ -41,23 +34,14 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                             (2, n => n.ErrorRate(1).Output(1)),
                             (3, n => n.ErrorRate(1).Output(1)),
                             (4, n => n.ErrorRate(1).Output(1)),
-                            (5, n => n.ErrorRate(1).Output(1)),
-                            (6, n => n.ErrorRate(1).Output(1)),
-                            (7, n => n.ErrorRate(1).Output(1)),
-                            (8, n => n.ErrorRate(1).Output(1)))
+                            (5, n => n.ErrorRate(1).Output(1)))
                         .ExpectedSynapses(ss => ss
                             .SynapseBetween(inputNeuronId: 1, outputNeuronId: 4, weight: 0.15)
                             .SynapseBetween(inputNeuronId: 1, outputNeuronId: 5, weight: 0.20)
                             .SynapseBetween(inputNeuronId: 2, outputNeuronId: 4, weight: 0.25)
                             .SynapseBetween(inputNeuronId: 2, outputNeuronId: 5, weight: 0.30)
                             .SynapseBetween(inputNeuronId: 3, outputNeuronId: 4, weight: 1.00)
-                            .SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 1.00)
-                            .SynapseBetween(inputNeuronId: 4, outputNeuronId: 7, weight: 0.40)
-                            .SynapseBetween(inputNeuronId: 4, outputNeuronId: 8, weight: 0.45)
-                            .SynapseBetween(inputNeuronId: 5, outputNeuronId: 7, weight: 0.50)
-                            .SynapseBetween(inputNeuronId: 5, outputNeuronId: 8, weight: 0.55)
-                            .SynapseBetween(inputNeuronId: 6, outputNeuronId: 7, weight: 1.00)
-                            .SynapseBetween(inputNeuronId: 6, outputNeuronId: 8, weight: 1.00)))
+                            .SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 1.00)))
                 );
         }
 
