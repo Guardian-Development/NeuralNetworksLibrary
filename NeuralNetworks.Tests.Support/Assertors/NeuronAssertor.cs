@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NeuralNetworks.Library.Components;
 
-namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
+namespace NeuralNetworks.Tests.Support.Assertors
 {
     public sealed class NeuronAssertor : Assertor<Neuron>
     {

@@ -1,6 +1,6 @@
 ﻿using NeuralNetworks.Library.NetworkInitialisation;
 
-namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
+namespace NeuralNetworks.Tests.Support
 {
     public sealed class PredictableRandomNumberGenerator : IProvideRandomNumberGeneration
     {

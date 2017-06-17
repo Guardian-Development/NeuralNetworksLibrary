@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components;
 
-namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
+namespace NeuralNetworks.Tests.Support.Builders
 {
     public sealed class InitialNeuralNetworkBuilder
     {

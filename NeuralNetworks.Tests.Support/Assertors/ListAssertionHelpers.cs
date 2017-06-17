@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 
-namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
+namespace NeuralNetworks.Tests.Support.Assertors
 {
     public sealed class ListAssertionHelpers
     {

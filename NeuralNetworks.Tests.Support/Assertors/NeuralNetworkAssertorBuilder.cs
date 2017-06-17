@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using NeuralNetworks.Library.Components;
+using NeuralNetworks.Tests.Support.Builders;
 
-namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
+namespace NeuralNetworks.Tests.Support.Assertors
 {
     public sealed class NeuralNetworkAssertorBuilder
     {

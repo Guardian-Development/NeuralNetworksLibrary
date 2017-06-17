@@ -1,8 +1,7 @@
-﻿using System;
-using NeuralNetworks.Library.Components;
+﻿using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.Components.Activation;
 
-namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
+namespace NeuralNetworks.Tests.Support.Builders
 {
     public abstract class NeuronBuilderBase<TBuilder>
         where TBuilder : NeuronBuilderBase<TBuilder>

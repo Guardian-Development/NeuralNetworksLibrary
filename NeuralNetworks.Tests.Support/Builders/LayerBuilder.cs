@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NeuralNetworks.Library.Components;
 
-namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
+namespace NeuralNetworks.Tests.Support.Builders
 {
     public abstract class LayerBuilder<TBuilder>
         where TBuilder : LayerBuilder<TBuilder>
