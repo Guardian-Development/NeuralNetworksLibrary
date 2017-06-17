@@ -6,11 +6,9 @@ namespace NeuralNetworks.Library.Components.Activation.Functions
     {
         private SigmoidActivationFunction() {}
 
-        public double Activate(double x) 
-            => 1.0 / (1.0 + Math.Exp(-x));
+        public double Activate(double x) => 1.0 / (1.0 + Math.Exp(-x));
 
-        public double Derivative(double x) 
-            => x * (1 - x);
+        public double Derivative(double x) => x * (1 - x);
 
         public static SigmoidActivationFunction Create() 
             => new SigmoidActivationFunction();

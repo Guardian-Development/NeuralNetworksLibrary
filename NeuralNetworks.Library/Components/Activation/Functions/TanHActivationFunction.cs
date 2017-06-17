@@ -6,11 +6,9 @@ namespace NeuralNetworks.Library.Components.Activation.Functions
     {
         private TanHActivationFunction() {}
 
-        public double Activate(double x) 
-            => Math.Tanh(x);
+        public double Activate(double x) => Math.Tanh(x);
 
-        public double Derivative(double x) 
-            => 1 - Math.Pow(Math.Tanh(x), 2);
+        public double Derivative(double x) => 1 - Math.Pow(Math.Tanh(x), 2);
 
         public static TanHActivationFunction Create() => 
             new TanHActivationFunction();
