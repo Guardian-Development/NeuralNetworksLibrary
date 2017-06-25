@@ -6,12 +6,14 @@ namespace NeuralNetworks.Library.NetworkInitialisation
     {
         private readonly Random randomNumberGenerator; 
 
-        private RandomNumberProvider(Random randomNumberGenerator) =>
-            this.randomNumberGenerator = randomNumberGenerator;
+        private RandomNumberProvider(Random randomGenerator)
+        {
+			randomNumberGenerator = randomGenerator;
+        }
 
         public double GetNextRandomNumber() => randomNumberGenerator.NextDouble(); 
 
-        public static RandomNumberProvider For(Random randomNumberGenerator)=> 
-            new RandomNumberProvider(randomNumberGenerator);
+        public static RandomNumberProvider For(Random randomGenerator) => 
+            new RandomNumberProvider(randomGenerator);
     }
 }
