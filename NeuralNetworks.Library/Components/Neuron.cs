@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Components.Activation.Functions;
-using NeuralNetworks.Library.Logging;
 using NeuralNetworks.Library.NetworkInitialisation;
 
 namespace NeuralNetworks.Library.Components
 {
     public class Neuron
     {
-        private static ILogger Log => LoggerProvider.For<Neuron>();
-
         public List<Synapse> InputSynapses { get; } = new List<Synapse>();
         public List<Synapse> OutputSynapses { get; } = new List<Synapse>();
         public double ErrorRate { get; set; }
