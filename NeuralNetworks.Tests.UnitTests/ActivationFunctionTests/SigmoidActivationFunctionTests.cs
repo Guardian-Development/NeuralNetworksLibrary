@@ -23,5 +23,23 @@ namespace NeuralNetworks.Tests.UnitTests.ActivationFunctionTests
             var activationResult = activationFunction.Activate(activationValue);
             DoubleAssertionHelpers.AssertEqualWithinPrecision(expectedResult, activationResult);
         }
+
+        [Theory]
+        [InlineData(0.59, 0.2419)]
+        public void DerivativeProducesCorrectResultPositiveValue(double inputValue, double expectedResult)
+        {
+            var activationFunction = SigmoidActivationFunction.Create();
+            var derivativeResult = activationFunction.Derivative(inputValue); 
+            DoubleAssertionHelpers.AssertEqualWithinPrecision(expectedResult, derivativeResult);
+        }
+
+        [Theory]
+        [InlineData(-0.78, -1.3884)]
+        public void DerviativeProducesCorrectResultNegativeValue(double inputValue, double expectedResult)
+        {
+            var activationFunction = SigmoidActivationFunction.Create();
+            var derivativeResult = activationFunction.Derivative(inputValue);
+            DoubleAssertionHelpers.AssertEqualWithinPrecision(expectedResult, derivativeResult);
+        }
     }
 }
