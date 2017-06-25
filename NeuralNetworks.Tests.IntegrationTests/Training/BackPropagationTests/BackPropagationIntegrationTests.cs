@@ -7,35 +7,27 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
     public sealed class BackPropagationIntegrationTests : NeuralNetworkTest
     {
         [Fact]
-        public void CanTrainNoHiddenLayerNetworkForSingleEpoch()
+        public void CanTrainNoHiddenLayerSingleInputNeuronSingleOutputNeuronNetworkForSingleEpoch()
         {
-            BackPropagationTester.For(learningRate: 0.5, momentum: 1)
+            //TODO: the output layer neuron seems to be more accurate so need to rerun calcs with accurate numbers
+            // or add rounding default for all operations. 
+            BackPropagationTester.For(learningRate: 0.5, momentum: 0)
                 .WithTargetNeuralNetwork(
                     nn => nn
                         .InputLayer(l => l
-                            .Neuron(1, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid))
-                            .Neuron(2, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
+                            .Neuron(1, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
                         .OutputLayer(l => l
-                            .Neuron(4, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid))
-                            .Neuron(5, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
+                            .Neuron(2, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
                         .Synapses(ss => ss
-                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 4, weight: 0.15)
-                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 5, weight: 0.20)
-                            .SynapseBetween(inputNeuronId: 2, outputNeuronId: 4, weight: 0.25)
-                            .SynapseBetween(inputNeuronId: 2, outputNeuronId: 5, weight: 0.30))
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.15))
                 )
-                .PerformTrainingEpoch(t => t.Inputs(0.05, 0.10).ExpectedOutputs(0.1, 0.9).ExpectedErrorRate(0.8)
+                .PerformTrainingEpoch(t => t.Inputs(0.05).ExpectedOutputs(0.1).ExpectedErrorRate(0.8)
                     .ExpectNeuralNetworkState(nn => nn
                         .ExpectedNeurons(
-                            (1, n => n.ErrorRate(1).Output(1)),
-                            (2, n => n.ErrorRate(1).Output(1)),
-                            (4, n => n.ErrorRate(1).Output(1)),
-                            (5, n => n.ErrorRate(1).Output(1)))
+                            (1, n => n.ErrorRate(0).Output(0.05)),
+                            (2, n => n.ErrorRate(0.08075175428).Output(0.50187499121098693819516206063481)))
                         .ExpectedSynapses(ss => ss
-                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 4, weight: 0.15)
-                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 5, weight: 0.20)
-                            .SynapseBetween(inputNeuronId: 2, outputNeuronId: 4, weight: 0.25)
-                            .SynapseBetween(inputNeuronId: 2, outputNeuronId: 5, weight: 0.30)))
+                            .SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.1496232475)))
                 );
         }
 
