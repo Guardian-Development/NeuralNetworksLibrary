@@ -1,4 +1,5 @@
-﻿using NeuralNetworks.Library.Components.Activation;
+﻿using NeuralNetworks.Library;
+using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Tests.Support;
 using Xunit;
 
@@ -9,11 +10,10 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         [Fact]
         public void CanTrainNoHiddenLayerSingleInputNeuronSingleOutputNeuronNetworkForSingleEpoch()
         {
-            //TODO: the output layer neuron seems to be more accurate so need to rerun calcs with accurate numbers
-            // or add rounding default for all operations. 
             BackPropagationTester.For(learningRate: 0.5, momentum: 0)
                 .WithTargetNeuralNetwork(
                     nn => nn
+                        .Context(errorRateDecimalPlaces: 10, outputDecimalPlaces: 10, synapseWeightDecimalPlaces: 10)
                         .InputLayer(l => l
                             .Neuron(1, n => n.ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
                         .OutputLayer(l => l

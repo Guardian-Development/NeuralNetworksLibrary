@@ -9,16 +9,17 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
 {
     public sealed class BackPropagationTester
     {
-        private readonly double learningRate;
-        private readonly double momentum;
         private NeuralNetwork targetNeuralNetwork;
         private List<(int id, Neuron neuron)> targetNeuralNetworkNeuronsWithId;
         private List<Synapse> targetNeuralNetworkSynapses;
 
+        private readonly double learningRate;
+        private readonly double momentum;
+
         private BackPropagationTester(double learningRate, double momentum)
         {
-            this.learningRate = learningRate;
             this.momentum = momentum;
+            this.learningRate = learningRate;
         }
 
         public BackPropagationTester WithTargetNeuralNetwork(Action<InitialNeuralNetworkBuilder> actions)
@@ -39,7 +40,9 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             return this;
         }
 
-        public static BackPropagationTester For(double learningRate, double momentum)
-            => new BackPropagationTester(learningRate, momentum);
+        public static BackPropagationTester For(double learningRate,double momentum)
+        {
+            return new BackPropagationTester(learningRate, momentum);
+        }
     }
 }

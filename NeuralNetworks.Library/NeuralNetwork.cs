@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.NetworkInitialisation;
+using NeuralNetworks.Library.Extensions; 
 
 namespace NeuralNetworks.Library
 {
@@ -12,8 +13,12 @@ namespace NeuralNetworks.Library
         public List<HiddenLayer> HiddenLayers { get; private set; }
         public OutputLayer OutputLayer { get; private set; }
 
-        internal NeuralNetwork()
-        {}
+        public NeuralNetworkContext Context { get; }
+
+        internal NeuralNetwork(NeuralNetworkContext context)
+        {
+            Context = context; 
+        }
 
         internal NeuralNetwork AddInputLayer(InputLayer inputLayer)
         {
@@ -52,10 +57,12 @@ namespace NeuralNetworks.Library
             }
         }
 
-        public static NeuralNetworkBuilder For(IProvideRandomNumberGeneration randomNumberGenerater = null)
+        public static NeuralNetworkBuilder For(
+            NeuralNetworkContext context, 
+            IProvideRandomNumberGeneration randomNumberGenerater = null)
         {
             randomNumberGenerater = randomNumberGenerater ?? RandomNumberProvider.For(new Random(1));
-            return new NeuralNetworkBuilder(randomNumberGenerater);
+            return new NeuralNetworkBuilder(context, randomNumberGenerater);
         }
     }
 }

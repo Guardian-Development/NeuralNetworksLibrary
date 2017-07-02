@@ -14,6 +14,8 @@ namespace NeuralNetworks.Tests.Support.Builders
         private List<Synapse> synapses;
         private readonly List<(int id, Neuron neuron)> allNeurons = new List<(int id, Neuron neuron)>();
 
+        private NeuralNetworkContext context; 
+
         public InitialNeuralNetworkBuilder InputLayer(Action<InputLayerBuilder> actions)
         {
             var builder = new InputLayerBuilder();
@@ -49,9 +51,18 @@ namespace NeuralNetworks.Tests.Support.Builders
             return this; 
         }
 
+        public InitialNeuralNetworkBuilder Context(
+            int errorRateDecimalPlaces, 
+            int outputDecimalPlaces, 
+            int synapseWeightDecimalPlaces)
+        {
+            context = new NeuralNetworkContext(errorRateDecimalPlaces, outputDecimalPlaces, synapseWeightDecimalPlaces);
+            return this; 
+        }
+
         public (NeuralNetwork network, List<(int id, Neuron neuron)> allNeurons, List<Synapse> allSynapses) Build()
         {
-            var neuralNetwork = new NeuralNetwork();
+            var neuralNetwork = new NeuralNetwork(context);
             neuralNetwork.AddInputLayer(inputLayer);
             neuralNetwork.AddHiddenLayers(hiddenLayers);
             neuralNetwork.AddOutputLayer(outputLayer);

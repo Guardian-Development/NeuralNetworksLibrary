@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NeuralNetworks.Library
+namespace NeuralNetworks.Library.Extensions
 {
     public static class EnumerableExtensions
     {

@@ -17,7 +17,7 @@ namespace NeuralNetworks.Console
         {
             ConfigureLogging();
 
-            var neuralNetwork = NeuralNetwork.For()
+            var neuralNetwork = NeuralNetwork.For(NeuralNetworkContext.MaximumPrecision)
                 .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
                 .WithHiddenLayer(neuronCount: 5, activationType: ActivationType.TanH)
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)

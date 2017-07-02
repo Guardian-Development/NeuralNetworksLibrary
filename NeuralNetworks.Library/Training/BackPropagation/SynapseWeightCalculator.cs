@@ -4,13 +4,18 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 {
     public class SynapseWeightCalculator
     {
+        private readonly int synapseWeightDecimalPlaces;
         private readonly double learningRate;
         private readonly double momentum;
 
-        private SynapseWeightCalculator(double learningRate, double momentum)
+        private SynapseWeightCalculator(
+            int synapseWeightDecimalPlaces, 
+            double learningRate, 
+            double momentum)
         {
-            this.learningRate = learningRate;
-            this.momentum = momentum;
+            this.synapseWeightDecimalPlaces = synapseWeightDecimalPlaces;
+			this.learningRate = learningRate;
+			this.momentum = momentum;
         }
 
         public void CalculateAndUpdateInputSynapseWeights(Neuron neuron) 
@@ -23,7 +28,12 @@ namespace NeuralNetworks.Library.Training.BackPropagation
             synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
         }
 
-        public static SynapseWeightCalculator For(double learningRate, double momentum)
-            => new SynapseWeightCalculator(learningRate, momentum);
+        public static SynapseWeightCalculator For(
+            NeuralNetworkContext context, 
+            double learningRate, 
+            double momentum)
+        {
+            return new SynapseWeightCalculator(context.SynapseWeightDecimalPlaces, learningRate, momentum);
+        }
     }
 }

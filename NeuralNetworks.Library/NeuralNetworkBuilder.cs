@@ -12,12 +12,15 @@ namespace NeuralNetworks.Library
         private InputLayer inputLayer;
         private readonly List<HiddenLayer> hiddenLayers = new List<HiddenLayer>();
         private OutputLayer outputLayer;
-        private readonly IProvideRandomNumberGeneration randomNumberGenerator;
 
         private Layer PreviousLayer => hiddenLayers.Any() ? (Layer)hiddenLayers.Last() : inputLayer;
 
-        public NeuralNetworkBuilder(IProvideRandomNumberGeneration randomNumberGenerator)
+        private readonly NeuralNetworkContext context;
+		private readonly IProvideRandomNumberGeneration randomNumberGenerator;
+
+        public NeuralNetworkBuilder(NeuralNetworkContext context, IProvideRandomNumberGeneration randomNumberGenerator)
         {
+            this.context = context;
             this.randomNumberGenerator = randomNumberGenerator;
         }
 
@@ -81,7 +84,7 @@ namespace NeuralNetworks.Library
 
         private NeuralNetwork BuildNetwork()
         {
-            return new NeuralNetwork()
+            return new NeuralNetwork(context)
                 .AddInputLayer(inputLayer)
                 .AddHiddenLayers(hiddenLayers)
                 .AddOutputLayer(outputLayer);
