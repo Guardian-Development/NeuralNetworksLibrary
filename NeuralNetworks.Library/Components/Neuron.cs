@@ -3,6 +3,7 @@ using System.Linq;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Components.Activation.Functions;
 using NeuralNetworks.Library.NetworkInitialisation;
+using NeuralNetworks.Library.Extensions;
 
 namespace NeuralNetworks.Library.Components
 {
@@ -20,10 +21,11 @@ namespace NeuralNetworks.Library.Components
             ActivationFunction = activationFunction;
         }
 
-        public virtual double CalculateOutput()
+        public virtual double CalculateOutput(NeuralNetworkContext context)
         {
             var inputValuesWithBias = InputSynapses.Sum(a => a.Weight * a.InputNeuron.Output);
-            return Output = ActivationFunction.Activate(inputValuesWithBias);
+            Output = ActivationFunction.Activate(inputValuesWithBias).RoundToDecimalPlaces(context.OutputDecimalPlaces);
+            return Output; 
         }
 
         public static Neuron For(ActivationType activationType) 

@@ -40,21 +40,9 @@ namespace NeuralNetworks.Library
 
         public double[] PredictionFor(params double[] inputs)
         {
-            ValidateInputs(inputs.Length);
-
-            var i = 0;
-            InputLayer.InputNeurons.ForEach(a => a.Output = inputs[i++]);
-            HiddenLayers.ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateOutput()));
-            return OutputLayer.Neurons.Select(a => a.CalculateOutput()).ToArray();
-        }
-
-        private void ValidateInputs(int inputsLength)
-        {
-            if (inputsLength != InputLayer.InputNeurons.Count)
-            {
-                throw new ArgumentException(
-                    "Input length must be the same length as the Input Layer Neurons");
-            }
+            InputLayer.SetInputLayerOutputs(inputs);
+            HiddenLayers.ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateOutput(Context)));
+            return OutputLayer.Neurons.Select(a => a.CalculateOutput(Context)).ToArray();
         }
 
         public static NeuralNetworkBuilder For(

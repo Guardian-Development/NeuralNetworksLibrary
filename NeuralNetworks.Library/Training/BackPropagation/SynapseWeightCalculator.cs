@@ -1,4 +1,5 @@
 ﻿using NeuralNetworks.Library.Components;
+using NeuralNetworks.Library.Extensions; 
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {
@@ -25,7 +26,9 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         {
             var prevDelta = synapse.WeightDelta;
             synapse.WeightDelta = learningRate * synapse.OutputNeuron.ErrorRate * synapse.InputNeuron.Output;
-            synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
+            var pureSynapseWeight = synapse.Weight + synapse.WeightDelta + momentum * prevDelta;
+
+            synapse.Weight = pureSynapseWeight.RoundToDecimalPlaces(synapseWeightDecimalPlaces); 
         }
 
         public static SynapseWeightCalculator For(

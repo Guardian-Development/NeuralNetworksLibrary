@@ -11,7 +11,7 @@ namespace NeuralNetworks.Library.Components
             Output = constantOutput; 
         }
 
-        public override double CalculateOutput() => Output;
+        public override double CalculateOutput(NeuralNetworkContext context) => Output;
 
         public static BiasNeuron For(ActivationType activationType, double constantOutput) 
             => new BiasNeuron(activationType.ToNeuronActivationProvider(), constantOutput);

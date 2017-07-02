@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -30,12 +31,29 @@ namespace NeuralNetworks.Library.Components
 
     public sealed class InputLayer : Layer
     {
-        public List<Neuron> InputNeurons { get; }
+        private readonly List<Neuron> inputNeurons; 
 
         private InputLayer(List<Neuron> inputNeurons, List<Neuron> neuronsIncludingBias)
             : base(neuronsIncludingBias)
         {
-           InputNeurons = inputNeurons;
+           this.inputNeurons = inputNeurons;
+        }
+
+        public void SetInputLayerOutputs(double[] inputs)
+        {
+            ValidateInputs(inputs.Length);
+
+            int i = 0;
+            inputNeurons.ForEach(a => a.Output = inputs[i++]); 
+        }
+
+        private void ValidateInputs(int inputsLength)
+        {
+            if (inputsLength != inputNeurons.Count)
+            {
+                throw new ArgumentException(
+                    "Input length must be the same length as the Input Layer Neurons");
+            }
         }
 
         public static InputLayer For(List<Neuron> neurons, BiasNeuron biasNeuron)
