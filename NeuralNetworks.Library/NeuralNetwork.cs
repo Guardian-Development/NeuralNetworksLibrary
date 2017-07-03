@@ -41,8 +41,8 @@ namespace NeuralNetworks.Library
         public double[] PredictionFor(params double[] inputs)
         {
             InputLayer.SetInputLayerOutputs(inputs);
-            HiddenLayers.ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateOutput(Context)));
-            return OutputLayer.Neurons.Select(a => a.CalculateOutput(Context)).ToArray();
+            HiddenLayers.ApplyInReverse(layer => layer.Neurons.ForEach(a => a.CalculateOutput()));
+            return OutputLayer.Neurons.Select(a => a.CalculateOutput()).ToArray();
         }
 
         public static NeuralNetworkBuilder For(

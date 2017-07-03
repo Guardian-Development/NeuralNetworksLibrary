@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components;
 using NeuralNetworks.Tests.Support.Assertors;
 
@@ -17,7 +18,9 @@ namespace NeuralNetworks.Tests.Support.Builders
             return this;
         }
 
-        public List<Synapse> BuildConnectingNeurons(List<(int id, Neuron neuron)> neuronsWithId)
+        public List<Synapse> BuildConnectingNeurons(
+            NeuralNetworkContext context, 
+            List<(int id, Neuron neuron)> neuronsWithId)
         {
             var connectedSynapses = new List<Synapse>();
             foreach (var synapseStructure in synapses)
@@ -25,7 +28,7 @@ namespace NeuralNetworks.Tests.Support.Builders
                 var inputNeuron = FindNeuronById(neuronsWithId, synapseStructure.inputNeuronId);
                 var outputNeuron = FindNeuronById(neuronsWithId, synapseStructure.outputNeuronId);
 
-                var synapse = Synapse.For(inputNeuron, outputNeuron, PredictableRandomNumberGenerator.Create());
+                var synapse = Synapse.For(context, inputNeuron, outputNeuron, PredictableRandomNumberGenerator.Create());
                 synapse.Weight = synapseStructure.weight;
 
                 inputNeuron.OutputSynapses.Add(synapse);
@@ -35,7 +38,9 @@ namespace NeuralNetworks.Tests.Support.Builders
             return connectedSynapses;
         }
 
-        public List<SynapseAssertor> BuildWithoutConnectingNeurons(List<(int id, Neuron neuron)> neuronsWithId)
+        public List<SynapseAssertor> BuildWithoutConnectingNeurons(
+            NeuralNetworkContext context,
+			List<(int id, Neuron neuron)> neuronsWithId)
         {
             var nonConnectedSynapses = new List<SynapseAssertor>();
             foreach (var synapseStructure in synapses)
@@ -43,7 +48,7 @@ namespace NeuralNetworks.Tests.Support.Builders
                 var inputNeuron = FindNeuronById(neuronsWithId, synapseStructure.inputNeuronId);
                 var outputNeuron = FindNeuronById(neuronsWithId, synapseStructure.outputNeuronId);
 
-                var synapse = Synapse.For(inputNeuron, outputNeuron, PredictableRandomNumberGenerator.Create());
+                var synapse = Synapse.For(context, inputNeuron, outputNeuron, PredictableRandomNumberGenerator.Create());
                 synapse.Weight = synapseStructure.weight;
                 nonConnectedSynapses.Add(synapse.ToAssertor(
                     synapseStructure.inputNeuronId,

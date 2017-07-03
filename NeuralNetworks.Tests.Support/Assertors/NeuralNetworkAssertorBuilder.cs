@@ -9,7 +9,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
     public sealed class NeuralNetworkAssertorBuilder
     {
         private readonly List<(int id, Neuron neuron)> expectedNeurons = new List<(int id, Neuron neuron)>();
-        private List<SynapseAssertor> synapseAssertors;
+        private List<SynapseAssertor> synapseAssertors = new List<SynapseAssertor>(); //added initalisation after commenting.
 
         public NeuralNetworkAssertorBuilder ExpectedNeurons(params (int id, Action<NeuronBuilder> builder)[] actions)
         {
@@ -17,18 +17,19 @@ namespace NeuralNetworks.Tests.Support.Assertors
             {
                 var builder = new NeuronBuilder();
                 action.builder.Invoke(builder);
-                var neuron = builder.Build();
-                expectedNeurons.Add((action.id, neuron));
+                //var neuron = builder.Build();
+                //expectedNeurons.Add((action.id, neuron));
             }
-            return this;
+
+            throw new NotImplementedException("Need better implementation of assertors.");
         }
 
         public NeuralNetworkAssertorBuilder ExpectedSynapses(Action<SynapseBuilder> actions)
         {
             var builder = new SynapseBuilder();
-            actions.Invoke(builder);
-            synapseAssertors = builder.BuildWithoutConnectingNeurons(expectedNeurons);
-            return this;
+			//actions.Invoke(builder);
+			//synapseAssertors = builder.BuildWithoutConnectingNeurons(expectedNeurons);
+			throw new NotImplementedException("Need better implementation of assertors.");
         }
 
         public NeuralNetworkAssertor Build()

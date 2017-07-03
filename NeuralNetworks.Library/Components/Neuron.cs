@@ -9,46 +9,63 @@ namespace NeuralNetworks.Library.Components
 {
     public class Neuron
     {
-        public List<Synapse> InputSynapses { get; } = new List<Synapse>();
-        public List<Synapse> OutputSynapses { get; } = new List<Synapse>();
-        public double ErrorRate { get; set; }
-        public double Output { get; set; }
+        public IProvideNeuronActivation ActivationFunction { get; }
+		public List<Synapse> InputSynapses { get; } = new List<Synapse>();
+		public List<Synapse> OutputSynapses { get; } = new List<Synapse>();
 
-        internal IProvideNeuronActivation ActivationFunction { get; }
+		public double ErrorRate
+		{
+			get => roundedErrorRate;
+			set => roundedErrorRate = value.RoundToDecimalPlaces(context.ErrorRateDecimalPlaces);
+		}
 
-        protected Neuron(IProvideNeuronActivation activationFunction)
+		public double Output 
         {
-            ActivationFunction = activationFunction;
+            get => roundedOutputValue;
+            set => roundedOutputValue = value.RoundToDecimalPlaces(context.OutputDecimalPlaces); 
         }
 
-        public virtual double CalculateOutput(NeuralNetworkContext context)
+		private double roundedErrorRate;
+        private double roundedOutputValue; 
+		private readonly NeuralNetworkContext context;
+
+        protected Neuron(NeuralNetworkContext context, IProvideNeuronActivation activationFunction)
+        {
+			this.context = context;
+			ActivationFunction = activationFunction;
+        }
+
+        public virtual double CalculateOutput()
         {
             var inputValuesWithBias = InputSynapses.Sum(a => a.Weight * a.InputNeuron.Output);
-            Output = ActivationFunction.Activate(inputValuesWithBias).RoundToDecimalPlaces(context.OutputDecimalPlaces);
+            Output = ActivationFunction.Activate(inputValuesWithBias);
+
             return Output; 
         }
 
-        public static Neuron For(ActivationType activationType) 
-            => new Neuron(activationType.ToNeuronActivationProvider());
+        public static Neuron For(NeuralNetworkContext context, ActivationType activationType) 
+            => new Neuron(context, activationType.ToNeuronActivationProvider());
 
         public static Neuron For(
+            NeuralNetworkContext context,
             ActivationType activationType,
             IProvideRandomNumberGeneration randomNumberGeneration,
             List<Neuron> inputNeurons)
         {
-            var neuron = For(activationType);
-            ConnectNeuronWithInputNeurons(randomNumberGeneration, inputNeurons, neuron);
-            return neuron; 
+            var neuron = For(context, activationType);
+            ConnectNeuronWithInputNeurons(context, randomNumberGeneration, inputNeurons, neuron);
+            return neuron;
         }
 
         private static void ConnectNeuronWithInputNeurons(
+            NeuralNetworkContext context,
             IProvideRandomNumberGeneration randomNumberGeneration,
             List<Neuron> inputNeurons,
             Neuron neuron)
         {
             foreach (var inputNeuron in inputNeurons)
             {
-                var synapse = Synapse.For(inputNeuron, neuron, randomNumberGeneration);
+                var synapse = Synapse.For(context, inputNeuron, neuron, randomNumberGeneration);
                 inputNeuron.OutputSynapses.Add(synapse);
                 neuron.InputSynapses.Add(synapse);
             }

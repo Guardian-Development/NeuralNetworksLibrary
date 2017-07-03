@@ -9,8 +9,6 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 {
     public sealed class BackPropagation : ITrainNeuralNetworks
     {
-        private static ILogger Log => LoggerProvider.For<BackPropagation>();
-
         private readonly NeuralNetwork neuralNetwork;
 		private readonly NeuronErrorGradientCalculator neuronErrorGradientCalculator;
 		private readonly SynapseWeightCalculator synapseWeightCalculator;
@@ -18,8 +16,8 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         private BackPropagation(NeuralNetwork neuralNetwork, double learningRate, double momentum)
         {
             this.neuralNetwork = neuralNetwork;
-            neuronErrorGradientCalculator = NeuronErrorGradientCalculator.For(neuralNetwork.Context); 
-            synapseWeightCalculator = SynapseWeightCalculator.For(neuralNetwork.Context, learningRate, momentum);
+            neuronErrorGradientCalculator = NeuronErrorGradientCalculator.Create(); 
+            synapseWeightCalculator = SynapseWeightCalculator.For(learningRate, momentum);
         }
 
         public double PerformSingleEpochProducingErrorRate(TrainingDataSet trainingDataSet)

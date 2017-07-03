@@ -30,10 +30,10 @@ namespace NeuralNetworks.Library
 
             for (var i = 0; i < neuronCount; i++)
             {
-                neurons.Add(Neuron.For(activationType));
+                neurons.Add(Neuron.For(context, activationType));
             }
 
-            inputLayer = InputLayer.For(neurons, BiasNeuron.For(activationType, biasOutput));
+            inputLayer = InputLayer.For(neurons, BiasNeuron.For(context, activationType, biasOutput));
             return this;
         }
 
@@ -44,12 +44,13 @@ namespace NeuralNetworks.Library
             for (var i = 0; i < neuronCount; i++)
             {
                 neurons.Add(Neuron.For(
+                    context,
                     activationType,
                     randomNumberGenerator,
                     PreviousLayer.Neurons));
             }
 
-            hiddenLayers.Add(HiddenLayer.For(neurons, BiasNeuron.For(activationType, biasOutput)));
+            hiddenLayers.Add(HiddenLayer.For(neurons, BiasNeuron.For(context, activationType, biasOutput)));
             return this;
         }
 
@@ -60,6 +61,7 @@ namespace NeuralNetworks.Library
             for (var i = 0; i < neuronCount; i++)
             {
                 neurons.Add(Neuron.For(
+                    context,
                     activationType,
                     randomNumberGenerator,
                     PreviousLayer.Neurons));

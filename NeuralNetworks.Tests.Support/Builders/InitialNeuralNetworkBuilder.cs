@@ -14,11 +14,20 @@ namespace NeuralNetworks.Tests.Support.Builders
         private List<Synapse> synapses;
         private readonly List<(int id, Neuron neuron)> allNeurons = new List<(int id, Neuron neuron)>();
 
-        private NeuralNetworkContext context; 
+        private NeuralNetworkContext context;
+
+		public InitialNeuralNetworkBuilder Context(
+	        int errorRateDecimalPlaces,
+	        int outputDecimalPlaces,
+	        int synapseWeightDecimalPlaces)
+		{
+			context = new NeuralNetworkContext(errorRateDecimalPlaces, outputDecimalPlaces, synapseWeightDecimalPlaces);
+			return this;
+		}
 
         public InitialNeuralNetworkBuilder InputLayer(Action<InputLayerBuilder> actions)
         {
-            var builder = new InputLayerBuilder();
+            var builder = new InputLayerBuilder(context);
             actions.Invoke(builder);
             allNeurons.AddRange(builder.AllNeurons);
             inputLayer = builder.Build();
@@ -27,7 +36,7 @@ namespace NeuralNetworks.Tests.Support.Builders
 
         public InitialNeuralNetworkBuilder HiddenLayer(Action<HiddenLayerBuilder> actions)
         {
-            var builder = new HiddenLayerBuilder();
+            var builder = new HiddenLayerBuilder(context);
             actions.Invoke(builder);
             allNeurons.AddRange(builder.AllNeurons);
             hiddenLayers.Add(builder.Build());
@@ -36,7 +45,7 @@ namespace NeuralNetworks.Tests.Support.Builders
 
         public InitialNeuralNetworkBuilder OutputLayer(Action<OutputLayerBuilder> actions)
         {
-            var builder = new OutputLayerBuilder();
+            var builder = new OutputLayerBuilder(context);
             actions.Invoke(builder);
             allNeurons.AddRange(builder.AllNeurons);
             outputLayer = builder.Build();
@@ -47,16 +56,7 @@ namespace NeuralNetworks.Tests.Support.Builders
         {
             var builder = new SynapseBuilder();
             actions.Invoke(builder);
-            synapses = builder.BuildConnectingNeurons(allNeurons);
-            return this; 
-        }
-
-        public InitialNeuralNetworkBuilder Context(
-            int errorRateDecimalPlaces, 
-            int outputDecimalPlaces, 
-            int synapseWeightDecimalPlaces)
-        {
-            context = new NeuralNetworkContext(errorRateDecimalPlaces, outputDecimalPlaces, synapseWeightDecimalPlaces);
+            synapses = builder.BuildConnectingNeurons(context, allNeurons);
             return this; 
         }
 

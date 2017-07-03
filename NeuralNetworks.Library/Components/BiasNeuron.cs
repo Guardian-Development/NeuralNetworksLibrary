@@ -5,15 +5,21 @@ namespace NeuralNetworks.Library.Components
 {
     public class BiasNeuron : Neuron
     {
-        public BiasNeuron(IProvideNeuronActivation activationFunction, double constantOutput)
-            : base(activationFunction)
+        public BiasNeuron(
+            NeuralNetworkContext context, 
+            IProvideNeuronActivation activationFunction, 
+            double constantOutput)
+            : base(context, activationFunction)
         {
             Output = constantOutput; 
         }
 
-        public override double CalculateOutput(NeuralNetworkContext context) => Output;
+        public override double CalculateOutput() => Output;
 
-        public static BiasNeuron For(ActivationType activationType, double constantOutput) 
-            => new BiasNeuron(activationType.ToNeuronActivationProvider(), constantOutput);
+        public static BiasNeuron For(
+            NeuralNetworkContext context, 
+            ActivationType activationType, 
+            double constantOutput) 
+            => new BiasNeuron(context, activationType.ToNeuronActivationProvider(), constantOutput);
     }
 }

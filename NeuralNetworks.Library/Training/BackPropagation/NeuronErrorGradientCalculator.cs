@@ -1,40 +1,29 @@
 ﻿using System.Linq;
 using NeuralNetworks.Library.Components;
-using NeuralNetworks.Library.Extensions; 
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {
     public class NeuronErrorGradientCalculator
     {
-        private readonly int errorRateDecimalPlaces;
-
-        private NeuronErrorGradientCalculator(int errorRateDecimalPlaces)
-        {
-            this.errorRateDecimalPlaces = errorRateDecimalPlaces;
-        }
+        private NeuronErrorGradientCalculator()
+        {}
 
         public void SetNeuronErrorGradient(Neuron neuron, double target)
         {
-			var pureErrorRate = CalculateErrorForOutputAgainstTarget(neuron, target) *
-								neuron.ActivationFunction.Derivative(neuron.Output);
-
-            neuron.ErrorRate = pureErrorRate.RoundToDecimalPlaces(errorRateDecimalPlaces); 
+			neuron.ErrorRate = CalculateErrorForOutputAgainstTarget(neuron, target) *
+							   neuron.ActivationFunction.Derivative(neuron.Output);
         }
 
         public void SetNeuronErrorGradient(Neuron neuron)
         {
-			var pureErrorRate = neuron.OutputSynapses.Sum(a => a.OutputNeuron.ErrorRate * a.Weight) *
-							    neuron.ActivationFunction.Derivative(neuron.Output);
-
-            neuron.ErrorRate = pureErrorRate.RoundToDecimalPlaces(errorRateDecimalPlaces); 
+			neuron.ErrorRate = neuron.OutputSynapses.Sum(a => a.OutputNeuron.ErrorRate * a.Weight) *
+							   neuron.ActivationFunction.Derivative(neuron.Output);
         }
 
         public double CalculateErrorForOutputAgainstTarget(Neuron neuron, double target)
-        {
-            return target - neuron.Output;
-        }
+            => target - neuron.Output;
 
-        public static NeuronErrorGradientCalculator For(NeuralNetworkContext context)
-            => new NeuronErrorGradientCalculator(context.ErrorRateDecimalPlaces); 
+        public static NeuronErrorGradientCalculator Create()
+            => new NeuronErrorGradientCalculator();
     }
 }
