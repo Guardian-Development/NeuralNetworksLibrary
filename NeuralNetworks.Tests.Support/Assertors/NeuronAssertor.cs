@@ -1,38 +1,114 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NeuralNetworks.Library.Components;
+﻿using NeuralNetworks.Library.Components;
+using NeuralNetworks.Library.Components.Activation.Functions;
+using System.Collections.Generic;
+using System;
 
 namespace NeuralNetworks.Tests.Support.Assertors
 {
-    public sealed class NeuronAssertor : Assertor<Neuron>
+    public class NeuronAssertor : IAssert<Neuron>
     {
-        private readonly int neuronId;
-        private readonly List<SynapseAssertor> synapseAssertors;
+        public int NeuronId { get; private set; }
 
-        public NeuronAssertor(Neuron expectedItem, int neuronId, List<SynapseAssertor> synapseAssertors)
-            : base(expectedItem)
+        public IAssert<int> NeuronIdAssertor { get; set; }
+            = FieldAssertor<int>.NoAssert; 
+
+        public IAssert<IProvideNeuronActivation> ActivationFunctionAssertor { get; set; } 
+            = FieldAssertor<IProvideNeuronActivation>.NoAssert; 
+
+        public IAssert<IEnumerable<Synapse>> InputSynapsesAssertor { get; set; }
+            = FieldAssertor<IEnumerable<Synapse>>.NoAssert;
+
+		public IAssert<IEnumerable<Synapse>> OutputSynapsesAssertor { get; set; }
+            = FieldAssertor<IEnumerable<Synapse>>.NoAssert;
+
+        public IAssert<double> ErrorRateAssertor { get; set; }
+            = FieldAssertor<double>.NoAssert;
+
+        public IAssert<double> OutputAssertor { get; set; }
+            = FieldAssertor<double>.NoAssert;
+
+        public void Assert(Neuron actualItem)
         {
-            this.neuronId = neuronId;
-            this.synapseAssertors = synapseAssertors;
+            NeuronIdAssertor.Assert(actualItem.Id);
+
+            ActivationFunctionAssertor.Assert(actualItem.ActivationFunction);
+            ErrorRateAssertor.Assert(actualItem.ErrorRate);
+            OutputAssertor.Assert(actualItem.Output);
+
+            InputSynapsesAssertor.Assert(actualItem.InputSynapses);
+            OutputSynapsesAssertor.Assert(actualItem.OutputSynapses);
         }
 
-        public override void Assert(Neuron actualItem)
+        public class Builder : IAssertBuilder<Neuron>
         {
-            actualItem.InputSynapses.ForEach(synapse => synapseAssertors
-                .First(assertor => assertor.OutputNeuronId == neuronId).Assert(synapse));
+            private NeuronAssertor assertor = new NeuronAssertor(); 
 
-            actualItem.OutputSynapses.ForEach(synapse => synapseAssertors
-                .First(assertor => assertor.InputNeuronId == neuronId).Assert(synapse));
+            public Builder Id(int id)
+            {
+                assertor.NeuronIdAssertor = new EqualityAssertor<int>(id);
+                assertor.NeuronId = id;
 
-            Xunit.Assert.Equal(ExpectedItem.ErrorRate, actualItem.ErrorRate);
-            Xunit.Assert.Equal(ExpectedItem.Output, actualItem.Output);
+                return this; 
+            }
+
+            public Builder InputSynapses(params Action<SynapseAssertor.Builder>[] synapseAssertors)
+            {
+				var listAssertor = ListAssertorFor(synapseAssertors);
+                assertor.InputSynapsesAssertor = listAssertor;
+				return this;
+            }
+
+            public Builder OutputSynapses(params Action<SynapseAssertor.Builder>[] synapseAssertors)
+            {
+                var listAssertor = ListAssertorFor(synapseAssertors);
+                assertor.OutputSynapsesAssertor = listAssertor;
+                return this;
+            }
+
+            public Builder ErrorRate(double errorRate)
+            {
+                assertor.ErrorRateAssertor = new EqualityAssertor<double>(errorRate);
+                return this; 
+            }
+
+            public Builder Output(double output)
+            {
+                assertor.OutputAssertor = new EqualityAssertor<double>(output);
+                return this; 
+            }
+
+            public IAssert<Neuron> Build() => assertor;
+
+            private static UnorderedListAssertor<string, Synapse> ListAssertorFor(
+                Action<SynapseAssertor.Builder>[] synapseAssertors)
+            {
+                var listAssertor = new UnorderedListAssertor<string, Synapse>(GetKeyForAssertor);
+                PopulateListAssertor(synapseAssertors, listAssertor);
+                return listAssertor;
+            }
+
+            private static string GetKeyForAssertor(Synapse synapseToAssert)
+                => CreateSynapseKey(synapseToAssert.InputNeuron.Id, synapseToAssert.OutputNeuron.Id); 
+
+            private static string CreateSynapseKey(int inputNeuronId, int outputNeuronId)
+                => $"{inputNeuronId}:{outputNeuronId}";
+
+            private static void PopulateListAssertor(
+                Action<SynapseAssertor.Builder>[] synapseAssertors, 
+                UnorderedListAssertor<string, Synapse> listAssertor)
+            {
+                foreach (Action<SynapseAssertor.Builder> produceAssertor in synapseAssertors)
+                {
+                    var builder = new SynapseAssertor.Builder(); 
+                    produceAssertor(builder);
+
+                    var synapseAssertor = builder.Build() as SynapseAssertor; 
+
+					listAssertor.Assertors.Add(
+                        CreateSynapseKey(synapseAssertor.InputNeuronId, synapseAssertor.OutputNeuronId),
+                        synapseAssertor);
+                }
+            }
         }
-    }
-
-    public static class NeuronAssertorExtensions
-    {
-        public static NeuronAssertor ToAssertor(this (int id, Neuron expectedNeuron) neuronWithId,
-            List<SynapseAssertor> synapseAssertors)
-            => new NeuronAssertor(neuronWithId.expectedNeuron, neuronWithId.id, synapseAssertors);
     }
 }

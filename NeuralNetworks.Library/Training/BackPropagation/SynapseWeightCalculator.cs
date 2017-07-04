@@ -4,7 +4,6 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 {
     public class SynapseWeightCalculator
     {
-        private readonly int synapseWeightDecimalPlaces;
         private readonly double learningRate;
         private readonly double momentum;
 

@@ -2,27 +2,57 @@
 
 namespace NeuralNetworks.Tests.Support.Assertors
 {
-    public sealed class SynapseAssertor : Assertor<Synapse>
+    public class SynapseAssertor : IAssert<Synapse>
     {
-        public int InputNeuronId { get; }
-        public int OutputNeuronId { get; }
+        public int InputNeuronId { get; private set; }
+        public int OutputNeuronId { get; private set; }
 
-        public SynapseAssertor(Synapse expectedItem, int inputNeuronId, int outputNeuronId)
-            : base(expectedItem)
+        public IAssert<int> InputNeuronIdAssertor{ get; set; }
+            = FieldAssertor<int>.NoAssert;
+
+        public IAssert<int> OutputNeuronIdAssertor { get; set; }
+            = FieldAssertor<int>.NoAssert;
+
+		public IAssert<double> WeightAssertor { get; set; }
+            = FieldAssertor<double>.NoAssert;
+
+		public IAssert<double> WeightDeltaAssertor { get; set; }
+            = FieldAssertor<double>.NoAssert;
+
+		public void Assert(Synapse actualItem)
         {
-            InputNeuronId = inputNeuronId;
-            OutputNeuronId = outputNeuronId;
+            InputNeuronIdAssertor.Assert(actualItem.InputNeuron.Id);
+            OutputNeuronIdAssertor.Assert(actualItem.OutputNeuron.Id);
+
+            WeightAssertor.Assert(actualItem.Weight);
+            WeightDeltaAssertor.Assert(actualItem.WeightDelta);
         }
 
-        public override void Assert(Synapse actualItem)
+        public class Builder : IAssertBuilder<Synapse>
         {
-            Xunit.Assert.Equal(ExpectedItem.Weight, actualItem.Weight);
-        }
-    }
+            private readonly SynapseAssertor assertor = new SynapseAssertor();
 
-    public static class SynapseAssertorExtensions
-    {
-        public static SynapseAssertor ToAssertor(this Synapse expectedSynapse, int inputNeuronId, int outputNeuronId)
-            => new SynapseAssertor(expectedSynapse, inputNeuronId, outputNeuronId);
+			public Builder InputNeuronId(int id)
+			{
+				assertor.InputNeuronIdAssertor = new EqualityAssertor<int>(id);
+				assertor.InputNeuronId = id;
+				return this;
+			}
+
+            public Builder OutputNeuronId(int id)
+            {
+                assertor.OutputNeuronIdAssertor = new EqualityAssertor<int>(id);
+                assertor.OutputNeuronId = id;
+				return this;
+            }
+
+            public Builder Weight(double expectedWeight)
+            {
+                assertor.WeightAssertor = new EqualityAssertor<double>(expectedWeight);
+                return this; 
+            }
+
+			public IAssert<Synapse> Build() => assertor;
+		}
     }
 }

@@ -9,6 +9,11 @@ namespace NeuralNetworks.Library.Components
 {
     public class Neuron
     {
+        private static int currentNeuronId = 1;
+        private static int NextNeuronId => currentNeuronId++;
+
+        internal int Id { get; set; } = NextNeuronId; 
+        
         public IProvideNeuronActivation ActivationFunction { get; }
 		public List<Synapse> InputSynapses { get; } = new List<Synapse>();
 		public List<Synapse> OutputSynapses { get; } = new List<Synapse>();

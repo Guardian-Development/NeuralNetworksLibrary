@@ -22,7 +22,9 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             this.learningRate = learningRate;
         }
 
-        public BackPropagationTester WithTargetNeuralNetwork(Action<InitialNeuralNetworkBuilder> actions)
+        public BackPropagationTester WithTargetNeuralNetwork(
+            NeuralNetworkContext context, 
+            Action<InitialNeuralNetworkBuilder> actions)
         {
             var builder = new InitialNeuralNetworkBuilder();
             actions.Invoke(builder);
