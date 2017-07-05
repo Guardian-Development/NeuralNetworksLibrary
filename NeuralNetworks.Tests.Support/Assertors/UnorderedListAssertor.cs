@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq; 
 
 namespace NeuralNetworks.Tests.Support.Assertors
 {
@@ -22,6 +23,10 @@ namespace NeuralNetworks.Tests.Support.Assertors
                 var assertor = AssertorFor(item); 
                 assertor.Assert(item);
             }
+
+            Xunit.Assert.True(
+                Assertors.Count == actualItem.Count(), 
+                $"Expected: {Assertors.Count} Recevied: {actualItem.Count()}");
         }
 
         private IAssert<T> AssertorFor(T itemToAssert)

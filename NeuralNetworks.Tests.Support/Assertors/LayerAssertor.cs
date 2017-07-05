@@ -4,40 +4,44 @@ using NeuralNetworks.Library.Components;
 
 namespace NeuralNetworks.Tests.Support.Assertors
 {
-    public class LayerAssertor : IAssert<Layer>
+    public class LayerAssertor<TLayer> : IAssert<TLayer>
+        where TLayer : Layer
     {
+        public List<int> NeuronIds = new List<int>(); 
+
         public IAssert<IEnumerable<Neuron>> NeuronAssertors { get; set; }
             = FieldAssertor<IEnumerable<Neuron>>.NoAssert; 
 
-        public void Assert(Layer actualItem)
+        public void Assert(TLayer actualItem)
         {
             NeuronAssertors.Assert(actualItem.Neurons);
         }
 
-        public class Builder : IAssertBuilder<Layer>
+        public class Builder : IAssertBuilder<TLayer>
         {
-            private LayerAssertor assertor = new LayerAssertor();
+            private LayerAssertor<TLayer> assertor = new LayerAssertor<TLayer>();
 
             public Builder Neurons(params Action<NeuronAssertor.Builder>[] neuronAssertors)
             {
-                //TODO: build up neurons assertors. 
-                //TODO: implement neural network assertor
+                var listAssertor = ListAssertorFor(neuronAssertors);
+                assertor.NeuronAssertors = listAssertor;
+                return this; 
             }
 
-            public IAssert<Layer> Build() => assertor;
+            public IAssert<TLayer> Build() => assertor;
 
-            private static UnorderedListAssertor<int, Neuron> ListAssertorFor(
-                Action<NeuronAssertor.Builder>[] synapseAssertors)
+            private UnorderedListAssertor<int, Neuron> ListAssertorFor(
+                Action<NeuronAssertor.Builder>[] neuronAssertors)
 			{
                 var listAssertor = new UnorderedListAssertor<int, Neuron>(GetKeyForAssertor);
-				PopulateListAssertor(synapseAssertors, listAssertor);
+				PopulateListAssertor(neuronAssertors, listAssertor);
 				return listAssertor;
 			}
 
             private static int GetKeyForAssertor(Neuron neuronToAssert)
                 => neuronToAssert.Id; 
 
-			private static void PopulateListAssertor(
+			private void PopulateListAssertor(
                 Action<NeuronAssertor.Builder>[] neuronAssertors,
                 UnorderedListAssertor<int, Neuron> listAssertor)
 			{
@@ -46,7 +50,8 @@ namespace NeuralNetworks.Tests.Support.Assertors
                     var builder = new NeuronAssertor.Builder();
 					produceAssertor(builder);
 
-                    var neuronAssertor = builder.Build() as NeuronAssertor;
+                    var neuronAssertor = builder.Build() as NeuronAssertor; 
+                    assertor.NeuronIds.Add(neuronAssertor.NeuronId);
 
 					listAssertor.Assertors.Add(neuronAssertor.NeuronId, neuronAssertor);
 				}

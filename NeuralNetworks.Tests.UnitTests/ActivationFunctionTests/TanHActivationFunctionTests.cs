@@ -1,5 +1,5 @@
 ﻿using NeuralNetworks.Library.Components.Activation.Functions;
-using NeuralNetworks.Tests.Support.Assertors;
+using NeuralNetworks.Tests.Support.Helpers;
 using Xunit;
 
 namespace NeuralNetworks.Tests.UnitTests.ActivationFunctionTests
@@ -12,7 +12,7 @@ namespace NeuralNetworks.Tests.UnitTests.ActivationFunctionTests
         {
             var activationFunction = TanHActivationFunction.Create();
             var activationResult = activationFunction.Activate(activationValue);
-            DoubleAssertionHelpers.AssertEqualWithinPrecision(expectedResult, activationResult);
+            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, activationResult, 15);
         }
 
         [Theory]
@@ -21,7 +21,7 @@ namespace NeuralNetworks.Tests.UnitTests.ActivationFunctionTests
         {
             var activationFunction = TanHActivationFunction.Create();
             var activationResult = activationFunction.Activate(activationValue);
-            DoubleAssertionHelpers.AssertEqualWithinPrecision(expectedResult, activationResult);
+            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, activationResult, 15);
         }
 
         [Theory]
@@ -30,7 +30,7 @@ namespace NeuralNetworks.Tests.UnitTests.ActivationFunctionTests
         {
             var activationFunction = TanHActivationFunction.Create();
             var derivativeResult = activationFunction.Derivative(inputValue);
-            DoubleAssertionHelpers.AssertEqualWithinPrecision(expectedResult, derivativeResult);
+            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, derivativeResult, 15);
         }
 
         [Theory]
@@ -39,7 +39,7 @@ namespace NeuralNetworks.Tests.UnitTests.ActivationFunctionTests
         {
             var activationFunction = TanHActivationFunction.Create();
             var derivativeResult = activationFunction.Derivative(inputValue);
-            DoubleAssertionHelpers.AssertEqualWithinPrecision(expectedResult, derivativeResult);
+            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, derivativeResult, 15);
         }
     }
 }

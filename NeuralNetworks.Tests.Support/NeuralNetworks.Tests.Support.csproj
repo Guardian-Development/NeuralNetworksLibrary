@@ -15,4 +15,8 @@
     <ProjectReference Include="..\NeuralNetworks.Library\NeuralNetworks.Library.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Builders\" />
+    <Folder Include="Helpers\" />
+  </ItemGroup>
 </Project>

@@ -16,4 +16,10 @@
     <ProjectReference Include="..\NeuralNetworks.Tests.Support\NeuralNetworks.Tests.Support.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Assertors\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Training\BackPropagationTests\TrainingEpochState.cs" />
+  </ItemGroup>
 </Project>
