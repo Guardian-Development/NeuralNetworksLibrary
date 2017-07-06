@@ -1,11 +1,11 @@
 ﻿namespace NeuralNetworks.Tests.Support.Assertors
 {
-    public interface IAssert<T>
+    public interface IAssert<in T>
     {
         void Assert(T actualItem);
     }
 
-    public interface IAssertBuilder<T>
+    public interface IAssertBuilder<in T>
     {
         IAssert<T> Build(); 
     }

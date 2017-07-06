@@ -71,7 +71,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
 				Action<LayerAssertor<HiddenLayer>.Builder>[] synapseAssertors,
                 UnorderedListAssertor<string, HiddenLayer> listAssertor)
 			{
-				foreach (Action<LayerAssertor<HiddenLayer>.Builder> produceAssertor in synapseAssertors)
+				foreach (var produceAssertor in synapseAssertors)
 				{
 					var builder = new LayerAssertor<HiddenLayer>.Builder();
 					produceAssertor(builder);

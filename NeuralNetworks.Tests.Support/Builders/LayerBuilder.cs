@@ -9,28 +9,28 @@ namespace NeuralNetworks.Tests.Support.Builders
     public class LayerBuilder<TLayer>
         where TLayer : LayerBuilder<TLayer>
     {
-        protected readonly IDictionary<int, Neuron> allNeuronsInNetwork;
-        protected readonly NeuralNetworkContext context;
+        protected readonly IDictionary<int, Neuron> AllNeuronsInNetwork;
+        protected readonly NeuralNetworkContext Context;
 
-        protected IList<Neuron> neuronsInLayer = new List<Neuron>(); 
+        protected IList<Neuron> NeuronsInLayer = new List<Neuron>(); 
 
         public LayerBuilder(IDictionary<int, Neuron> allNeuronsInNetwork, NeuralNetworkContext context)
         {
-            this.allNeuronsInNetwork = allNeuronsInNetwork;
-			this.context = context;
+            AllNeuronsInNetwork = allNeuronsInNetwork;
+			Context = context;
         }
 
         public TLayer Neurons(params Action<NeuronBuilder>[] actions)
         {
-            foreach(Action<NeuronBuilder> action in actions)
+            foreach(var action in actions)
             {
-                var neuronBuilder = new NeuronBuilder(context);
+                var neuronBuilder = new NeuronBuilder(Context);
                 action.Invoke(neuronBuilder);
 
                 var neuron = neuronBuilder.Build(); 
 
-                neuronsInLayer.Add(neuron);
-                allNeuronsInNetwork.Add(neuron.Id, neuron);
+                NeuronsInLayer.Add(neuron);
+                AllNeuronsInNetwork.Add(neuron.Id, neuron);
             }
 
             return (TLayer)this; 
@@ -47,9 +47,12 @@ namespace NeuralNetworks.Tests.Support.Builders
 
         public InputlayerBuilder Bias(Action<BiasNeuronBuilder> action)
         {
-            var neuronBuilder = new BiasNeuronBuilder(context); 
+            var neuronBuilder = new BiasNeuronBuilder(Context); 
             action.Invoke(neuronBuilder);
             biasNeuron = neuronBuilder.Build();
+
+            NeuronsInLayer.Add(biasNeuron);
+            AllNeuronsInNetwork.Add(biasNeuron.Id, biasNeuron);
 
             return this; 
         }
@@ -57,8 +60,8 @@ namespace NeuralNetworks.Tests.Support.Builders
         public InputLayer Build()
         {
             return biasNeuron == null ? 
-                InputLayer.For(neuronsInLayer.ToList()) : 
-                InputLayer.For(neuronsInLayer.ToList(), biasNeuron);
+                InputLayer.For(NeuronsInLayer.ToList()) : 
+                InputLayer.For(NeuronsInLayer.ToList(), biasNeuron);
         }
     }
 
@@ -72,18 +75,21 @@ namespace NeuralNetworks.Tests.Support.Builders
 
         public HiddenLayerBuilder Bias(Action<BiasNeuronBuilder> action)
         {
-			var neuronBuilder = new BiasNeuronBuilder(context);
+			var neuronBuilder = new BiasNeuronBuilder(Context);
 			action.Invoke(neuronBuilder);
 			biasNeuron = neuronBuilder.Build();
 
-			return this;
+            NeuronsInLayer.Add(biasNeuron);
+            AllNeuronsInNetwork.Add(biasNeuron.Id, biasNeuron);
+
+            return this;
 		}
 
         public HiddenLayer Build()
         {
             return biasNeuron == null ? 
-                HiddenLayer.For(neuronsInLayer.ToList()) : 
-                HiddenLayer.For(neuronsInLayer.ToList(), biasNeuron);
+                HiddenLayer.For(NeuronsInLayer.ToList()) : 
+                HiddenLayer.For(NeuronsInLayer.ToList(), biasNeuron);
         }
     }
 
@@ -94,6 +100,6 @@ namespace NeuralNetworks.Tests.Support.Builders
         {}
 
         public OutputLayer Build()
-            => OutputLayer.For(neuronsInLayer.ToList()); 
+            => OutputLayer.For(NeuronsInLayer.ToList()); 
     }
 }

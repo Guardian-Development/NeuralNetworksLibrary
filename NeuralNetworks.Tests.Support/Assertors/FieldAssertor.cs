@@ -16,10 +16,7 @@
 
         public void Assert(T actualItem)
         {
-            if(assertor != null)
-            {
-                assertor.Assert(actualItem);
-            }
+            assertor?.Assert(actualItem);
         }
 
         public static FieldAssertor<T> Create(IAssert<T> assertor)

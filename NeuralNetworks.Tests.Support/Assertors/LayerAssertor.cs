@@ -19,7 +19,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
 
         public class Builder : IAssertBuilder<TLayer>
         {
-            private LayerAssertor<TLayer> assertor = new LayerAssertor<TLayer>();
+            private readonly LayerAssertor<TLayer> assertor = new LayerAssertor<TLayer>();
 
             public Builder Neurons(params Action<NeuronAssertor.Builder>[] neuronAssertors)
             {
@@ -45,7 +45,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
                 Action<NeuronAssertor.Builder>[] neuronAssertors,
                 UnorderedListAssertor<int, Neuron> listAssertor)
 			{
-                foreach (Action<NeuronAssertor.Builder> produceAssertor in neuronAssertors)
+                foreach (var produceAssertor in neuronAssertors)
 				{
                     var builder = new NeuronAssertor.Builder();
 					produceAssertor(builder);

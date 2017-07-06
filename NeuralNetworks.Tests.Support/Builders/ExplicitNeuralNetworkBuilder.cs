@@ -11,7 +11,7 @@ namespace NeuralNetworks.Tests.Support.Builders
         private readonly IDictionary<int, Neuron> allNeuronsInNetwork = new Dictionary<int, Neuron>();
 
         private InputLayer inputLayer;
-        private List<HiddenLayer> hiddenLayers = new List<HiddenLayer>();
+        private readonly List<HiddenLayer> hiddenLayers = new List<HiddenLayer>();
         private OutputLayer outputLayer; 
 
 		private readonly NeuralNetworkContext context;
@@ -54,7 +54,7 @@ namespace NeuralNetworks.Tests.Support.Builders
 
         public ExplicitNeuralNetworkBuilder Synapses(params Action<SynapseBuilder>[] actions)
         {
-            foreach(Action<SynapseBuilder> action in actions)
+            foreach(var action in actions)
             {
                 var synapseBuilder = new SynapseBuilder(context, allNeuronsInNetwork, randomNumberGenerator);
                 action.Invoke(synapseBuilder);

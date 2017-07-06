@@ -41,7 +41,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
 
         public class Builder : IAssertBuilder<Neuron>
         {
-            private NeuronAssertor assertor = new NeuronAssertor(); 
+            private readonly NeuronAssertor assertor = new NeuronAssertor(); 
 
             public Builder Id(int id)
             {
@@ -97,7 +97,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
                 Action<SynapseAssertor.Builder>[] synapseAssertors, 
                 UnorderedListAssertor<string, Synapse> listAssertor)
             {
-                foreach (Action<SynapseAssertor.Builder> produceAssertor in synapseAssertors)
+                foreach (var produceAssertor in synapseAssertors)
                 {
                     var builder = new SynapseAssertor.Builder(); 
                     produceAssertor(builder);

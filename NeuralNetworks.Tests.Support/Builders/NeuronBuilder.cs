@@ -13,11 +13,11 @@ namespace NeuralNetworks.Tests.Support.Builders
         protected double output;
         protected ActivationType activationType;
 
-        protected readonly NeuralNetworkContext context;
+        protected readonly NeuralNetworkContext Context;
 
         protected AbstractNeuronBuilder(NeuralNetworkContext context)
         {
-            this.context = context;
+            Context = context;
         }
 
         public TBuilder Id(int id)
@@ -55,7 +55,7 @@ namespace NeuralNetworks.Tests.Support.Builders
 
         public override Neuron Build()
         {
-            var neuron = Neuron.For(context, activationType); 
+            var neuron = Neuron.For(Context, activationType); 
 			neuron.Id = id;
 			neuron.Output = output;
 			neuron.ErrorRate = errorRate;
@@ -71,7 +71,7 @@ namespace NeuralNetworks.Tests.Support.Builders
 
         public override BiasNeuron Build()
         {
-            var neuron = BiasNeuron.For(context, activationType, output);
+            var neuron = BiasNeuron.For(Context, activationType, output);
             neuron.Id = id;
             neuron.ErrorRate = errorRate;
             return neuron; 

@@ -18,7 +18,8 @@ namespace NeuralNetworks.Tests.Support.Assertors
 
         public void Assert(IEnumerable<T> actualItem)
         {
-            foreach(T item in actualItem)
+            actualItem = actualItem.ToList(); 
+            foreach(var item in actualItem)
             {
                 var assertor = AssertorFor(item); 
                 assertor.Assert(item);
