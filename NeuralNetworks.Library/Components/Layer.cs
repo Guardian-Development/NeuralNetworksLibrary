@@ -56,6 +56,9 @@ namespace NeuralNetworks.Library.Components
             }
         }
 
+        public static InputLayer For(List<Neuron> neurons)
+            => new InputLayer(neurons, neurons); 
+
         public static InputLayer For(List<Neuron> neurons, BiasNeuron biasNeuron)
         {
             var neuronsIncludingBias = neurons.Append(biasNeuron).ToList(); 
@@ -68,6 +71,9 @@ namespace NeuralNetworks.Library.Components
         public HiddenLayer(List<Neuron> neuronsIncludingBias) 
             : base(neuronsIncludingBias)
         {}
+
+        public static HiddenLayer For(List<Neuron> neurons)
+            => new HiddenLayer(neurons);
 
         public static HiddenLayer For(List<Neuron> neurons, BiasNeuron biasNeuron)
         {
