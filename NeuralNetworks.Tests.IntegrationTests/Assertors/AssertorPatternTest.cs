@@ -23,15 +23,15 @@ namespace NeuralNetworks.Tests.IntegrationTests.Assertors
                 .OutputLayer(l => l.Neurons(
                     n => n.Id(5).ErrorRate(3).Output(3).Activation(ActivationType.Sigmoid),
                     n => n.Id(6).ErrorRate(3).Output(3).Activation(ActivationType.Sigmoid)))
-                .Synapses(ss => ss
-                    .SynapseBetween(inputNeuronId: 1, outputNeuronId: 3, weight: 1)
-                    .SynapseBetween(inputNeuronId: 1, outputNeuronId: 4, weight: 1)
-                    .SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 1)
-                    .SynapseBetween(inputNeuronId: 2, outputNeuronId: 4, weight: 1)
-                    .SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 2)
-                    .SynapseBetween(inputNeuronId: 3, outputNeuronId: 6, weight: 2)
-                    .SynapseBetween(inputNeuronId: 4, outputNeuronId: 5, weight: 2)
-                    .SynapseBetween(inputNeuronId: 4, outputNeuronId: 6, weight: 2))
+                .Synapses(
+                    s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 3, weight: 1),
+                    s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 4, weight: 1),
+                    s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 1),
+                    s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 4, weight: 1),
+                    s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 2),
+                    s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 6, weight: 2),
+                    s => s.SynapseBetween(inputNeuronId: 4, outputNeuronId: 5, weight: 2),
+                    s => s.SynapseBetween(inputNeuronId: 4, outputNeuronId: 6, weight: 2))
                 .Build();
 
 
@@ -46,20 +46,20 @@ namespace NeuralNetworks.Tests.IntegrationTests.Assertors
                 .HiddenLayers(l => l.Neurons(
                     n => n
                         .Id(3).Output(2).ErrorRate(2)
-                        .OutputSynapses(
-                            s => s.OutputNeuronId(5).Weight(2),
-                            s => s.OutputNeuronId(6).Weight(2))
                         .InputSynapses(
                             s => s.InputNeuronId(1).Weight(1),
-                            s => s.InputNeuronId(2).Weight(1)),
+                            s => s.InputNeuronId(2).Weight(1))
+                        .OutputSynapses(
+                            s => s.OutputNeuronId(5).Weight(2),
+                            s => s.OutputNeuronId(6).Weight(2)),
                     n => n
                         .Id(4).Output(2).ErrorRate(2)
-                        .OutputSynapses(
-                            s => s.OutputNeuronId(5).Weight(2),
-                            s => s.OutputNeuronId(6).Weight(2))
                         .InputSynapses(
                             s => s.InputNeuronId(1).Weight(1),
-                            s => s.InputNeuronId(2).Weight(1))))
+                            s => s.InputNeuronId(2).Weight(1))
+                        .OutputSynapses(
+                            s => s.OutputNeuronId(5).Weight(2),
+                            s => s.OutputNeuronId(6).Weight(2))))
                 .OutputLayer(l => l.Neurons(
                     n => n.Id(5).Output(3).ErrorRate(3).InputSynapses(
                         s => s.InputNeuronId(3).Weight(2),

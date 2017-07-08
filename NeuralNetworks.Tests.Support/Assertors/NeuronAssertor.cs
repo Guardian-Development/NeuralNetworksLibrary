@@ -79,7 +79,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
 
             public IAssert<Neuron> Build() => assertor;
 
-            private static UnorderedListAssertor<string, Synapse> ListAssertorFor(
+            private UnorderedListAssertor<string, Synapse> ListAssertorFor(
                 Action<SynapseAssertor.Builder>[] synapseAssertors)
             {
                 var listAssertor = new UnorderedListAssertor<string, Synapse>(GetKeyForAssertor);
@@ -93,7 +93,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
             private static string CreateSynapseKey(int inputNeuronId, int outputNeuronId)
                 => $"{inputNeuronId}:{outputNeuronId}";
 
-            private static void PopulateListAssertor(
+            private void PopulateListAssertor(
                 Action<SynapseAssertor.Builder>[] synapseAssertors, 
                 UnorderedListAssertor<string, Synapse> listAssertor)
             {
@@ -104,8 +104,14 @@ namespace NeuralNetworks.Tests.Support.Assertors
 
                     var synapseAssertor = builder.Build() as SynapseAssertor; 
 
+                    var inputNeuronId = synapseAssertor.InputNeuronId.HasValue ? 
+                        synapseAssertor.InputNeuronId.Value : assertor.NeuronId; 
+
+                    var outputNeuronId = synapseAssertor.OutputNeuronId.HasValue ? 
+                    synapseAssertor.OutputNeuronId.Value : assertor.NeuronId;
+
 					listAssertor.Assertors.Add(
-                        CreateSynapseKey(synapseAssertor.InputNeuronId, synapseAssertor.OutputNeuronId),
+                        CreateSynapseKey(inputNeuronId, outputNeuronId),
                         synapseAssertor);
                 }
             }

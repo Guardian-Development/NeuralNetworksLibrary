@@ -4,8 +4,8 @@ namespace NeuralNetworks.Tests.Support.Assertors
 {
     public class SynapseAssertor : IAssert<Synapse>
     {
-        public int InputNeuronId { get; private set; }
-        public int OutputNeuronId { get; private set; }
+        public int? InputNeuronId { get; private set; }
+        public int? OutputNeuronId { get; private set; }
 
         public IAssert<int> InputNeuronIdAssertor{ get; set; }
             = FieldAssertor<int>.NoAssert;

@@ -32,12 +32,14 @@ namespace NeuralNetworks.Tests.Support.Assertors
 
         private IAssert<T> AssertorFor(T itemToAssert)
         {
-            if(Assertors.TryGetValue(getKeyForAssertor(itemToAssert), out var assertor))
+            var keyForAssertor = getKeyForAssertor(itemToAssert); 
+            if(Assertors.TryGetValue(keyForAssertor, out var assertor))
             {
                 return assertor; 
             }
 
-            throw new InvalidOperationException($"No assertor registered for {itemToAssert}"); 
+            throw new InvalidOperationException(
+                $"No assertor registered under key : {keyForAssertor} for value: {itemToAssert}"); 
         }
     }
 }
