@@ -7,20 +7,21 @@ using NeuralNetworks.Library.Extensions;
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {
-    public sealed class BackPropagation : ITrainNeuralNetworks
+    public sealed class BackPropagation : NeuralNetworkTrainer
     {
         private readonly NeuralNetwork neuralNetwork;
 		private readonly NeuronErrorGradientCalculator neuronErrorGradientCalculator;
 		private readonly SynapseWeightCalculator synapseWeightCalculator;
 
         private BackPropagation(NeuralNetwork neuralNetwork, double learningRate, double momentum)
+            : base(neuralNetwork)
         {
             this.neuralNetwork = neuralNetwork;
             neuronErrorGradientCalculator = NeuronErrorGradientCalculator.Create(); 
             synapseWeightCalculator = SynapseWeightCalculator.For(learningRate, momentum);
         }
 
-        public double PerformSingleEpochProducingErrorRate(TrainingDataSet trainingDataSet)
+        public override double PerformSingleEpochProducingErrorRate(TrainingDataSet trainingDataSet)
         {
             neuralNetwork.PredictionFor(trainingDataSet.Inputs);
             return BackPropagate(trainingDataSet.Outputs);
