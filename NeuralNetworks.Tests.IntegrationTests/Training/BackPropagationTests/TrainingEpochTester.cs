@@ -13,7 +13,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         private double[] inputs; 
         private double[] outputs; 
         private double errorRate; 
-        private NeuralNetworkAssertor neuralNetworkAssertor;
+        private IAssert<NeuralNetwork> neuralNetworkAssertor;
         private readonly TTrainingMethod trainingMethod; 
 
         private TrainingEpochTester(TTrainingMethod trainingMethod)
@@ -33,16 +33,17 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             return this; 
         }
 
-        public TrainingEpochTester<TTrainingMethod> ExpectedErrorRate(double errorRate)
+        public TrainingEpochTester<TTrainingMethod> ErrorRate(double errorRate)
         {
             this.errorRate = errorRate; 
             return this; 
         }
 
-        public TrainingEpochTester<TTrainingMethod> ExpectNeuralNetworkState(Action<NeuralNetworkAssertor> action)
+        public TrainingEpochTester<TTrainingMethod> ExpectNeuralNetworkState(Action<NeuralNetworkAssertor.Builder> action)
         {
-            neuralNetworkAssertor = new NeuralNetworkAssertor(); 
-            action.Invoke(neuralNetworkAssertor);
+            var builder = new NeuralNetworkAssertor.Builder(); 
+            action.Invoke(builder);
+            neuralNetworkAssertor = builder.Build(); 
             return this; 
         }
 

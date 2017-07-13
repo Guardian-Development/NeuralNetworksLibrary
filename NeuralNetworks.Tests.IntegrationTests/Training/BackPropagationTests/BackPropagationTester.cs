@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.NetworkInitialisation;
 using NeuralNetworks.Library.Training.BackPropagation;
+using NeuralNetworks.Tests.Support.Builders;
 
 namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
 {
@@ -32,9 +33,9 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             return this; 
         }
 
-        public BackPropagationTester TargetNeuralNetwork(Action<NeuralNetworkBuilder> action)
+        public BackPropagationTester TargetNeuralNetwork(Action<ExplicitNeuralNetworkBuilder> action)
         {
-            var neuralNetworkBuilder = new NeuralNetworkBuilder(context, randomGenerator); 
+            var neuralNetworkBuilder = ExplicitNeuralNetworkBuilder.CreateForTest(context, randomGenerator); 
             action.Invoke(neuralNetworkBuilder); 
             targetNeuralNetwork = neuralNetworkBuilder.Build(); 
             return this; 
@@ -44,8 +45,9 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         {
             var backPropagationTrainer = BackPropagation.WithConfiguration(targetNeuralNetwork, learningRate, momentum);
             var epochTester = TrainingEpochTester<BackPropagation>.For(backPropagationTrainer);
-            trainingStates.Add(epochTester); 
+            action.Invoke(epochTester); 
 
+            trainingStates.Add(epochTester); 
             return this; 
         }
 
