@@ -25,7 +25,7 @@ namespace NeuralNetworks.Console
 
             TrainingController<BackPropagation>
                 .For(BackPropagation.WithConfiguration(neuralNetwork, learningRate: 0.6, momentum: 0.9))
-                .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.01);
+                .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData(), maximumEpochs: 5000, errorThreshold: 0.01);
 
             MakeExamplePredictions(neuralNetwork);
         }

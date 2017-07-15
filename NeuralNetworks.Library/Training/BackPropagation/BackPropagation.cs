@@ -3,7 +3,8 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Data;
 using NeuralNetworks.Library.Logging;
-using NeuralNetworks.Library.Extensions; 
+using NeuralNetworks.Library.Extensions;
+using NeuralNetworks.Library.Components;
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {
@@ -41,18 +42,25 @@ namespace NeuralNetworks.Library.Training.BackPropagation
                          .ForEach(a => neuronErrorGradientCalculator.SetNeuronErrorGradient(a, targets[i++]));
 
             neuralNetwork.HiddenLayers
-                         .ApplyInReverse(layer => layer.Neurons.ForEach(neuronErrorGradientCalculator.SetNeuronErrorGradient));
+                         .ApplyInReverse(layer => 
+                            layer.Neurons.ForEach(neuronErrorGradientCalculator.SetNeuronErrorGradient));
         }
 
         private void PropagateResultOfNeuronErrors()
         {
             neuralNetwork.OutputLayer.Neurons
+                .Where(NeuronNotProducingCorrectResult)
                 .ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights);
 
             neuralNetwork.HiddenLayers
                 .ApplyInReverse(layer =>
-                    layer.Neurons.ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights));
+                    layer.Neurons
+                        .Where(NeuronNotProducingCorrectResult)
+                        .ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights));
         }
+
+        private bool NeuronNotProducingCorrectResult(Neuron neuron)
+            => neuron.ErrorRate != 0; 
 
         private double CalculateError(params double[] targets)
         {
