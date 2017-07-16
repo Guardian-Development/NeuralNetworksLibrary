@@ -18,6 +18,6 @@ TrainingController<BackPropagation>
 ```
 ## Next Steps
 - Once tested look at code cleanup/what needs to be exposed publically (builder for neural network)
-- Add unit testing around library (would usually come earlier but need to see it work first to get goal in head)
+- Add unit testing around library
 - Add performance tuning 
 - Add documentation
