@@ -1,5 +1,6 @@
 # Neural Networks Library
 ### Neural Network implementation in .NET Core
+https://www.nuget.org/packages/GuradianDevelopment.NeuralNetworks.Library/
 
 ## Description
 A Library that implements Neural Networks. Example initialisation of a Neural Network would be: 
