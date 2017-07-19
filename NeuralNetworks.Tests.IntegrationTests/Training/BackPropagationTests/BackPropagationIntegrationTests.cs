@@ -21,7 +21,6 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         [Fact]
         public void CanTrainNoHiddenLayerSingleInputNeuronSingleOutputNeuronNetworkForSingleEpoch()
         {
-            //TODO: this is currently failing due to weight being incorrect. Need to redo example. 
             BackPropagationTester.For(learningRate: 0.5, momentum: 0)
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
@@ -35,11 +34,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                         .InputLayer(l => l
                             .Neurons(n => 
                                 n.Id(1).ErrorRate(0).Output(0.05)
-                                .OutputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(-0.16250))))
+                                .OutputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15311))))
                         .OutputLayer(l => l
                             .Neurons(n => 
                                 n.Id(2).ErrorRate(0.12407).Output(0.50187)
-                                .InputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(-0.16250))))))
+                                .InputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15311))))))
                 .PerformAllEpochs();
         }
 

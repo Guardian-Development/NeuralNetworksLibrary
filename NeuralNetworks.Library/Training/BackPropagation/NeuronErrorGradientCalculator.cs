@@ -11,13 +11,13 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         public void SetNeuronErrorGradient(Neuron neuron, double target)
         {
 			neuron.ErrorRate = CalculateErrorForOutputAgainstTarget(neuron, target) *
-							   neuron.ActivationFunction.Derivative(neuron.Output);
+							   neuron.ActivationFunction.Derivative(neuron.LatestFedValueFromInputSynapses);
         }
 
         public void SetNeuronErrorGradient(Neuron neuron)
         {
 			neuron.ErrorRate = neuron.OutputSynapses.Sum(a => a.OutputNeuron.ErrorRate * a.Weight) *
-							   neuron.ActivationFunction.Derivative(neuron.Output);
+							   neuron.ActivationFunction.Derivative(neuron.LatestFedValueFromInputSynapses);
         }
 
         public double CalculateErrorForOutputAgainstTarget(Neuron neuron, double target)

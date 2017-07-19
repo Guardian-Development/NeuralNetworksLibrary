@@ -20,7 +20,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         {
             var prevDelta = synapse.WeightDelta;
             synapse.WeightDelta = learningRate * synapse.OutputNeuron.ErrorRate * synapse.InputNeuron.Output;
-            synapse.Weight = (synapse.Weight + synapse.WeightDelta + momentum) * prevDelta;
+            synapse.Weight = synapse.Weight + synapse.WeightDelta + (momentum * prevDelta);
         }
 
         public static SynapseWeightCalculator For(double learningRate, double momentum)

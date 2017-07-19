@@ -30,6 +30,8 @@ namespace NeuralNetworks.Library.Components
             set => roundedOutputValue = value.RoundToDecimalPlaces(context.OutputDecimalPlaces); 
         }
 
+        public double LatestFedValueFromInputSynapses { get; private set; }
+
 		private double roundedErrorRate;
         private double roundedOutputValue; 
 		private readonly NeuralNetworkContext context;
@@ -42,8 +44,8 @@ namespace NeuralNetworks.Library.Components
 
         public virtual double CalculateOutput()
         {
-            var inputValuesWithBias = InputSynapses.Sum(a => a.Weight * a.InputNeuron.Output);
-            Output = ActivationFunction.Activate(inputValuesWithBias);
+            LatestFedValueFromInputSynapses = InputSynapses.Sum(a => a.Weight * a.InputNeuron.Output);
+            Output = ActivationFunction.Activate(LatestFedValueFromInputSynapses);
 
             return Output; 
         }
