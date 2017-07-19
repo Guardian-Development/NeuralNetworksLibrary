@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PackOnBuild>false</PackOnBuild>
     <PackageId>GuardianDevelopment.NeuralNetworks.Library</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
     <Authors>GuardianDevelopment</Authors>
     <Owners>GuardianDevelopment</Owners>
     <PackageProjectUrl>https://github.com/Guardian-Development/NeuralNetworksLibrary</PackageProjectUrl>
@@ -16,6 +16,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.2" />
-    <PackageReference Include="NuGet.Build.Packaging" Version="0.1.248" />
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.1.248" developmentDependency="true"/>
   </ItemGroup>
 </Project>
