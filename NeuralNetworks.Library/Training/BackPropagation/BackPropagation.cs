@@ -37,9 +37,9 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
         private void SetNeuronErrorRates(double[] targets)
         {
-            var i = 0;
             neuralNetwork.OutputLayer.Neurons
-                         .ForEach(a => neuronErrorGradientCalculator.SetNeuronErrorGradient(a, targets[i++]));
+                         .ForEach((neuron, i) => 
+                            neuronErrorGradientCalculator.SetNeuronErrorGradient(neuron, targets[i]));
 
             neuralNetwork.HiddenLayers
                          .ApplyInReverse(layer => 

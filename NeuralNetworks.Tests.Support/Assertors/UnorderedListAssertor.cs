@@ -6,7 +6,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
 {
     public class UnorderedListAssertor<TKey, T> : IAssert<IEnumerable<T>>
     {
-        public IDictionary<TKey, IAssert<T>> Assertors { get; set; }
+        public IDictionary<TKey, IAssert<T>> Assertors { get; }
             = new Dictionary<TKey, IAssert<T>>();
 
         private readonly Func<T, TKey> getKeyForAssertor;

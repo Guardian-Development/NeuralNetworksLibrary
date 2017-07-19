@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Logging;
+using NeuralNetworks.Library.NetworkInitialisation;
 
 namespace NeuralNetworks.Tests.Support
 {
@@ -8,6 +9,8 @@ namespace NeuralNetworks.Tests.Support
     {
         private LoggerFactory Logger { get; } = new LoggerFactory();
         protected ILogger LogFor(Type type) => Logger.CreateLogger(type); 
+        protected IProvideRandomNumberGeneration PredictableGenerator => 
+            PredictableRandomNumberGenerator.Create(); 
 
         protected NeuralNetworkTest()
         {

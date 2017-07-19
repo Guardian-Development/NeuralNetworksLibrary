@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NeuralNetworks.Library.Extensions
 {
@@ -23,6 +24,17 @@ namespace NeuralNetworks.Library.Extensions
             foreach(var entity in source)
             {
                 action.Invoke(entity); 
+            }
+        }
+
+        public static void ForEach<TEntity>(
+            this IList<TEntity> source,
+            Action<TEntity, int> action)
+        {
+            for(int i = 0; i < source.Count(); i++)
+            {
+                var entity = source[i];
+                action.Invoke(entity, i); 
             }
         }
     }

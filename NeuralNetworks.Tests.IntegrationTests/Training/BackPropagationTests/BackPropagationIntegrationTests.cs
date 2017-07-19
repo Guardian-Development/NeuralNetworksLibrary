@@ -15,9 +15,6 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 outputDecimalPlaces: 5, 
                 synapseWeightDecimalPlaces: 5); 
 
-        private IProvideRandomNumberGeneration PredictableGenerator => 
-            PredictableRandomNumberGenerator.Create(); 
-
         [Fact]
         public void CanTrainNoHiddenLayerSingleInputNeuronSingleOutputNeuronNetworkForSingleEpoch()
         {
