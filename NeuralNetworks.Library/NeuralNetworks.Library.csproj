@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PackOnBuild>false</PackOnBuild>
-    <PackageId>GuradianDevelopment.NeuralNetworks.Library</PackageId>
+    <PackageId>GuardianDevelopment.NeuralNetworks.Library</PackageId>
     <PackageVersion>1.0.1</PackageVersion>
     <Authors>GuardianDevelopment</Authors>
     <Owners>GuardianDevelopment</Owners>
