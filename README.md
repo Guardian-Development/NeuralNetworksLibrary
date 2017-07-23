@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/Guardian-Development/NeuralNetworksLibrary.svg?branch=master)](https://travis-ci.org/Guardian-Development/NeuralNetworksLibrary)
 
 ### Neural Network implementation in .NET Core
-https://www.nuget.org/packages/GuradianDevelopment.NeuralNetworks.Library/
+https://preview.nuget.org/packages/GuardianDevelopment.NeuralNetworks.Library/
 
 ## Description
 A Library that implements Neural Networks. Example initialisation of a Neural Network would be: 
