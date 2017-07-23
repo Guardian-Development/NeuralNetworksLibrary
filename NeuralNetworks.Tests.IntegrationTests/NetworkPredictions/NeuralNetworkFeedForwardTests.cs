@@ -268,12 +268,6 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
         }
 
         [Fact]
-        public void CanFeedForwardCorrectlySingleInputNeuronsMultipleHiddenLayersSingleOutputNeuron()
-        {
-
-        }
-
-        [Fact]
         public void CanFeedForwardCorrectlyMultipleInputNeuronsMultipleHiddenLayersMultipleOutputNeurons()
         {
 
