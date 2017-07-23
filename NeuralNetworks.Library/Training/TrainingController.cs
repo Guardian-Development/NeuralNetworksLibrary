@@ -28,7 +28,7 @@ namespace NeuralNetworks.Library.Training
             while (error > errorThreshold && numEpochs < maximumEpochs)
             {
                 var errors = trainingDataSet
-                    .Select(dataSet => neuralNetworkTrainer.PerformSingleEpochProducingErrorRate(dataSet))
+                    .Select(neuralNetworkTrainer.PerformSingleEpochProducingErrorRate)
                     .ToList();
 
                 error = errors.Average();
@@ -46,6 +46,7 @@ namespace NeuralNetworks.Library.Training
 
             while (numEpochs < maximumEpochs)
             {
+                trainingDataSet.ForEach
                 foreach (var dataSet in trainingDataSet)
                 {
                     neuralNetworkTrainer.PerformSingleEpochProducingErrorRate(dataSet);
@@ -66,7 +67,7 @@ namespace NeuralNetworks.Library.Training
             while (error > minimumErrorThreshold)
             {
                 var errors = trainingDataSet
-                    .Select(dataSet => neuralNetworkTrainer.PerformSingleEpochProducingErrorRate(dataSet))
+                    .Select(neuralNetworkTrainer.PerformSingleEpochProducingErrorRate)
                     .ToList();
 
                 error = errors.Average();
