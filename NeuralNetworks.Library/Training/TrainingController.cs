@@ -46,7 +46,6 @@ namespace NeuralNetworks.Library.Training
 
             while (numEpochs < maximumEpochs)
             {
-                trainingDataSet.ForEach
                 foreach (var dataSet in trainingDataSet)
                 {
                     neuralNetworkTrainer.PerformSingleEpochProducingErrorRate(dataSet);
