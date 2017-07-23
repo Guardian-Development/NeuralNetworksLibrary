@@ -237,7 +237,34 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
         [Fact]
         public void CanFeedForwardCorrectlyMultipleInputNeuronsMultipleHiddenLayersSingleOutputNeuron()
         {
-
+            FeedForwardTester()
+                .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
+                .TargetNeuralNetwork(nn => nn
+                    .InputLayer(l => l
+                        .Neurons(
+                            n => n.Id(1).ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid),
+                            n => n.Id(2).ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
+                    .HiddenLayer(l => l
+                        .Neurons(
+                            n => n.Id(3).ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid),
+                            n => n.Id(4).ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
+                    .HiddenLayer(l => l
+                        .Neurons(
+                            n => n.Id(5).ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
+                    .OutputLayer(l => l
+                        .Neurons(
+                            n => n.Id(6).ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
+                    .Synapses(
+                        s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 3, weight: 0.67),
+                        s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 4, weight: 0.71),
+                        s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.9812),
+                        s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 4, weight: 0.45),
+                        s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 0.99),
+                        s => s.SynapseBetween(inputNeuronId: 4, outputNeuronId: 5, weight: 0.127),
+                        s => s.SynapseBetween(inputNeuronId: 5, outputNeuronId: 6, weight: 0.7101)))
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.12345, 0.9812 },
+                    expectedOutput: new [] { 0.62054 });
         }
 
         [Fact]
