@@ -1,4 +1,7 @@
 # Neural Networks Library
+https://travis-ci.org/Guardian-Development/NeuralNetworksLibrary.svg?branch=master
+[![Build Status](https://travis-ci.org/Guardian-Development/NeuralNetworksLibrary.svg?branch=master)](https://travis-ci.org/Guardian-Development/NeuralNetworksLibrary)
+
 ### Neural Network implementation in .NET Core
 https://www.nuget.org/packages/GuradianDevelopment.NeuralNetworks.Library/
 
