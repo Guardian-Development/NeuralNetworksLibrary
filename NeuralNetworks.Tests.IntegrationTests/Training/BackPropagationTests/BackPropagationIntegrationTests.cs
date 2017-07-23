@@ -15,7 +15,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 outputDecimalPlaces: 5, 
                 synapseWeightDecimalPlaces: 5); 
 
-        [Fact]
+        [Fact(Skip="Not implemented fully")]
         public void CanTrainNoHiddenLayerSingleInputNeuronSingleOutputNeuronNetworkForSingleEpoch()
         {
             BackPropagationTester.For(learningRate: 0.5, momentum: 0)
@@ -39,27 +39,27 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 .PerformAllEpochs();
         }
 
-        [Fact]
+        [Fact(Skip="Not implemented")]
         public void CanTrainNoHiddenLayerNetworkForMultipleEpochs()
         {
         }
 
-        [Fact]
+        [Fact(Skip="Not implemented")]
         public void CanTrainSingleHiddenLayerNetworkForSingleEpoch()
         {
         }
 
-        [Fact]
+        [Fact(Skip="Not implemented")]
         public void CanTrainSingleHiddenLayerNetworkForMultipleEpochs()
         {
         }
 
-        [Fact]
+        [Fact(Skip="Not implemented")]
         public void CanTrainMultipleHiddenLayerNetworkForSingleEpoch()
         {
         }
 
-        [Fact]
+        [Fact(Skip="Not implemented")]
         public void CanTrainMultipleHiddenLayerNetworkForMultipleEpochs()
         {
         }

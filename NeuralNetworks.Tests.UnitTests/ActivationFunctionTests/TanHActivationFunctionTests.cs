@@ -7,39 +7,39 @@ namespace NeuralNetworks.Tests.UnitTests.ActivationFunctionTests
     public sealed class TanHActivationFunctionTests
     {
         [Theory]
-        [InlineData(0.3775, 0.36053439339729690393031538636976)]
+        [InlineData(0.3775, 0.3605343934)]
         public void ActivateProducesCorrectResultPositiveValue(double activationValue, double expectedResult)
         {
             var activationFunction = TanHActivationFunction.Create();
             var activationResult = activationFunction.Activate(activationValue);
-            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, activationResult, 15);
+            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, activationResult, 10);
         }
 
         [Theory]
-        [InlineData(-0.1, -0.09966799462495581711830508367835)]
+        [InlineData(-0.1, -0.0996679946)]
         public void ActivateProducesCorrectResultNegativeValue(double activationValue, double expectedResult)
         {
             var activationFunction = TanHActivationFunction.Create();
             var activationResult = activationFunction.Activate(activationValue);
-            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, activationResult, 15);
+            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, activationResult, 10);
         }
 
         [Theory]
-        [InlineData(0.36, 0.88082727063587941532668799659177)]
+        [InlineData(0.36, 0.8808272706)]
         public void DerivativeProducesCorrectResultPositiveValue(double inputValue, double expectedResult)
         {
             var activationFunction = TanHActivationFunction.Create();
             var derivativeResult = activationFunction.Derivative(inputValue);
-            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, derivativeResult, 15);
+            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, derivativeResult, 10);
         }
 
         [Theory]
-        [InlineData(-0.41, 0.84908897672574999550376869771353)]
+        [InlineData(-0.41, 0.8490889767)]
         public void DerviativeProducesCorrectResultNegativeValue(double inputValue, double expectedResult)
         {
             var activationFunction = TanHActivationFunction.Create();
             var derivativeResult = activationFunction.Derivative(inputValue);
-            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, derivativeResult, 15);
+            DoubleAssertionHelpers.AssertWithPrecision(expectedResult, derivativeResult, 10);
         }
     }
 }
