@@ -36,28 +36,35 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Er
             return this; 
         }
 
-        public void CalculateErrorRateForInputOrHiddenLayerNeuron(int neuronId, double expectedErrorRate)
+        public BackPropagationErrorRateTester ActivateNeuronWithId(int neuronId)
+        {
+            var targetNeuron = FindNeuronWithId(neuronId);
+            targetNeuron.CalculateOutput();
+            return this;
+        }
+
+        public void CalculateErrorRateForInputOrHiddenLayerNeuron(int neuronId, double errorRate)
         {
             PerformErrorRateCalculation(
                 neuronId, 
-                expectedErrorRate,
+                errorRate,
                 (neuron, calculator) => calculator.SetNeuronErrorGradient(neuron));
         }
 
-        public void CalculateErrorRateForOutputLayerNeuron(int neuronId, double expectedOutput, double expectedErrorRate)
+        public void CalculateErrorRateForOutputLayerNeuron(int neuronId, double expectedOutput, double errorRate)
         {
             PerformErrorRateCalculation(
                 neuronId, 
-                expectedOutput, 
+                errorRate, 
                 (neuron, calculator) => calculator.SetNeuronErrorGradient(neuron, expectedOutput));
         }
 
         private void PerformErrorRateCalculation(
             int neuronId, 
-            double expectedErrorRate, 
+            double errorRate, 
             Action<Neuron, NeuronErrorGradientCalculator> errorRateCalculation)
         {
-            var expectedErrorRateAssertor = new EqualityAssertor<double>(expectedErrorRate); 
+            var expectedErrorRateAssertor = new EqualityAssertor<double>(errorRate); 
             var errorCalculator = NeuronErrorGradientCalculator.Create();
             var targetNeuron = FindNeuronWithId(neuronId);
 
