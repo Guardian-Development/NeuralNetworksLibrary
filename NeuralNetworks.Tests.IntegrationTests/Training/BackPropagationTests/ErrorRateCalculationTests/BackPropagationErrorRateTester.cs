@@ -43,7 +43,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Er
             return this;
         }
 
-        public void CalculateErrorRateForInputOrHiddenLayerNeuron(int neuronId, double errorRate)
+        public void CalculateErrorRateForHiddenLayerNeuron(int neuronId, double errorRate)
         {
             PerformErrorRateCalculation(
                 neuronId, 
