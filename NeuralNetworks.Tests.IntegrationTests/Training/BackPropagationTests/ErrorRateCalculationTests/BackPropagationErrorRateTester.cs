@@ -4,37 +4,18 @@ using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.NetworkInitialisation;
 using NeuralNetworks.Library.Training.BackPropagation;
+using NeuralNetworks.Tests.Support;
 using NeuralNetworks.Tests.Support.Assertors;
 using NeuralNetworks.Tests.Support.Builders;
 using Xunit;
 
 namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.ErrorRateCalculationsTests
 {
-    public sealed class BackPropagationErrorRateTester
+    public sealed class BackPropagationErrorRateTester : NeuralNetworkTester<BackPropagationErrorRateTester>
     {
-        private NeuralNetworkContext context; 
-        private IProvideRandomNumberGeneration randomGenerator; 
-        private NeuralNetwork targetNeuralNetwork; 
 
         private BackPropagationErrorRateTester()
         {}
-
-        public BackPropagationErrorRateTester NeuralNetworkEnvironment(
-            NeuralNetworkContext context, 
-            IProvideRandomNumberGeneration randomGenerator)
-        {
-            this.context = context; 
-            this.randomGenerator = randomGenerator;
-            return this; 
-        }
-
-        public BackPropagationErrorRateTester TargetNeuralNetwork(Action<ExplicitNeuralNetworkBuilder> action)
-        {
-            var neuralNetworkBuilder = ExplicitNeuralNetworkBuilder.CreateForTest(context, randomGenerator); 
-            action.Invoke(neuralNetworkBuilder); 
-            targetNeuralNetwork = neuralNetworkBuilder.Build(); 
-            return this; 
-        }
 
         public BackPropagationErrorRateTester ActivateNeuronWithId(int neuronId)
         {
@@ -70,19 +51,6 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Er
 
             errorRateCalculation(targetNeuron, errorCalculator); 
             expectedErrorRateAssertor.Assert(targetNeuron.ErrorRate);
-        }
-
-        private Neuron FindNeuronWithId(int neuronId)
-        {
-            var inputlayerNeurons = targetNeuralNetwork.InputLayer.Neurons; 
-            var hiddenLayerNeurons = targetNeuralNetwork.HiddenLayers.SelectMany(l => l.Neurons); 
-            var outputLayerNeurons = targetNeuralNetwork.OutputLayer.Neurons; 
-
-            var allNeurons = inputlayerNeurons.Concat(hiddenLayerNeurons).Concat(outputLayerNeurons);
-            var targetNeuron = allNeurons.Where(n => n.Id == neuronId).First(); 
-
-            Assert.NotNull(targetNeuron); 
-            return targetNeuron;
         }
 
         public static BackPropagationErrorRateTester Create()
