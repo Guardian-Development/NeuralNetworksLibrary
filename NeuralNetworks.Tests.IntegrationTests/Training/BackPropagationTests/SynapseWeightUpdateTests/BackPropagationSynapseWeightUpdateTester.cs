@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.NetworkInitialisation;
 using NeuralNetworks.Library.Training.BackPropagation;
 using NeuralNetworks.Tests.Support;
+using NeuralNetworks.Tests.Support.Assertors;
 using NeuralNetworks.Tests.Support.Builders;
 
 namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.SynapseWeightUpdateTests
@@ -21,7 +23,15 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
             int synapseOutputNeuronId, 
             double expectedWeight)
         {
-            throw new NotImplementedException();
+            var inputNeuron = FindNeuronWithId(synapseInputNeuronId); 
+            var synapse = inputNeuron.OutputSynapses.First(s => s.OutputNeuron.Id == synapseOutputNeuronId);
+            var synapseAssertor = new SynapseAssertor.Builder()
+                    .InputNeuronId(synapseInputNeuronId)
+                    .OutputNeuronId(synapseOutputNeuronId)
+                    .Weight(expectedWeight)
+                    .Build(); 
+            
+            synapseAssertor.Assert(synapse); 
         }
 
         public static BackPropagationSynapseWeightUpdateTester Create(double learningRate, double momentum)

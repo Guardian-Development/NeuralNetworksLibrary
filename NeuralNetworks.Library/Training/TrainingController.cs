@@ -12,7 +12,7 @@ namespace NeuralNetworks.Library.Training
         private static ILogger Log => LoggerProvider.For<TrainingController<TNeuralNetworkTrainer>>();
         private readonly TNeuralNetworkTrainer neuralNetworkTrainer;
 
-        private TrainingController(TNeuralNetworkTrainer neuralNetworkTrainer)
+        internal TrainingController(TNeuralNetworkTrainer neuralNetworkTrainer)
         {
             this.neuralNetworkTrainer = neuralNetworkTrainer;
         }
@@ -73,8 +73,14 @@ namespace NeuralNetworks.Library.Training
                 Log.LogInformation($"Current Error Rate: {error}");
             }
         }
+    }
 
-        public static TrainingController<TNeuralNetworkTrainer> For(TNeuralNetworkTrainer trainer)
-            => new TrainingController<TNeuralNetworkTrainer>(trainer);
+    public static class TrainingController
+    {
+       public static TrainingController<TNeuralNetworkTrainer> For<TNeuralNetworkTrainer>(TNeuralNetworkTrainer trainer)
+            where TNeuralNetworkTrainer : ITrainNeuralNetworks
+        {
+            return new TrainingController<TNeuralNetworkTrainer>(trainer);
+        }
     }
 }

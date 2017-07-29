@@ -21,7 +21,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
                 .Build();
 
-            TrainingController<BackPropagation>
+            TrainingController
                 .For(BackPropagation.WithConfiguration(neuralNetwork, learningRate: 0.4, momentum: 0.9))
                 .TrainForEpochsOrErrorThresholdMet(XorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.01);
 
