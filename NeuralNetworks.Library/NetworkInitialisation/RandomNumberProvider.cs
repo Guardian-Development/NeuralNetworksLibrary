@@ -2,7 +2,7 @@
 
 namespace NeuralNetworks.Library.NetworkInitialisation
 {
-    public class RandomNumberProvider : IProvideRandomNumberGeneration
+    public sealed class RandomNumberProvider : IProvideRandomNumberGeneration
     {
         private readonly Random randomNumberGenerator; 
 

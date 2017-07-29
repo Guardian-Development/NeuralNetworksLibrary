@@ -2,7 +2,7 @@
 
 namespace NeuralNetworks.Library.Components.Activation.Functions
 {
-    public class TanHActivationFunction : IProvideNeuronActivation
+    public sealed class TanHActivationFunction : IProvideNeuronActivation
     {
         private TanHActivationFunction() {}
 

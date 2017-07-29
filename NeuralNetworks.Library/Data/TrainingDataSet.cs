@@ -1,6 +1,6 @@
 ﻿namespace NeuralNetworks.Library.Data
 {
-    public class TrainingDataSet
+    public sealed class TrainingDataSet
     {
         public double[] Inputs { get; }
         public double[] Outputs { get; }

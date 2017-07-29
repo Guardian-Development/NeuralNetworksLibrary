@@ -6,7 +6,7 @@ using NeuralNetworks.Library.Logging;
 
 namespace NeuralNetworks.Library.Training
 {
-    public class TrainingController<TNeuralNetworkTrainer>
+    public sealed class TrainingController<TNeuralNetworkTrainer>
         where TNeuralNetworkTrainer : ITrainNeuralNetworks
     {
         private static ILogger Log => LoggerProvider.For<TrainingController<TNeuralNetworkTrainer>>();

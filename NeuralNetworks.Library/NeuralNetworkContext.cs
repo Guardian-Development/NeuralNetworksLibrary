@@ -1,6 +1,6 @@
 ﻿namespace NeuralNetworks.Library
 {
-    public class NeuralNetworkContext
+    public sealed class NeuralNetworkContext
     {
         public int ErrorRateDecimalPlaces { get; }
         public int OutputDecimalPlaces { get; }

@@ -3,7 +3,7 @@ using NeuralNetworks.Library.Components.Activation.Functions;
 
 namespace NeuralNetworks.Library.Components
 {
-    public class BiasNeuron : Neuron
+    public sealed class BiasNeuron : Neuron
     {
         public BiasNeuron(
             NeuralNetworkContext context, 

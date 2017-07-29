@@ -2,7 +2,7 @@
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {
-    public class SynapseWeightCalculator
+    public sealed class SynapseWeightCalculator
     {
         private readonly double learningRate;
         private readonly double momentum;
