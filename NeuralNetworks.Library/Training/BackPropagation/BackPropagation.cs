@@ -70,7 +70,10 @@ namespace NeuralNetworks.Library.Training.BackPropagation
                     neuronErrorGradientCalculator.CalculateErrorForOutputAgainstTarget(neuron, targets[i++])));
         }
 
-        public static BackPropagation WithConfiguration(NeuralNetwork network, double learningRate, double momentum)
+        public static BackPropagation WithConfiguration(
+            NeuralNetwork network, 
+            double learningRate = 1, 
+            double momentum = 0)
             => new BackPropagation(network, learningRate, momentum);
     }
 }
