@@ -52,6 +52,12 @@ namespace NeuralNetworks.Tests.Support.Assertors
                 return this; 
             }
 
+            public Builder WeightDelta(double expectedWeightDelta, int precisionToAssertTo)
+            {
+                assertor.WeightDeltaAssertor = new RoundedDoubleAssertor(expectedWeightDelta, precisionToAssertTo); 
+                return this; 
+            }
+
 			public IAssert<Synapse> Build() => assertor;
 		}
     }
