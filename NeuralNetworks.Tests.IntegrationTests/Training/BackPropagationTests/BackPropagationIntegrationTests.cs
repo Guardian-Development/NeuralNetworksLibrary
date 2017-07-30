@@ -16,7 +16,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 synapseWeightDecimalPlaces: 5); 
 
         [Fact(Skip="Not implemented fully")]
-        public void CanTrainNoHiddenLayerSingleInputNeuronSingleOutputNeuronNetworkForSingleEpoch()
+        public void CanTrainNoHiddenLayerNetworkForSingleEpoch()
         {
             BackPropagationTester.For(learningRate: 0.5, momentum: 0)
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
