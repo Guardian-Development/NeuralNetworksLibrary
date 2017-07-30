@@ -8,8 +8,8 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
 {
     public sealed class BackPropagationSynapseWeightUpdateTests : NeuralNetworkTest
     {
-        public BackPropagationSynapseWeightUpdateTester SynapseWeightUpdateTester(double learningRate, double momentum)
-            => BackPropagationSynapseWeightUpdateTester.Create(learningRate, momentum);
+        public BackPropagationSynapseWeightUpdateTester SynapseWeightUpdateTester()
+            => BackPropagationSynapseWeightUpdateTester.Create(learningRate: 1, momentum: 0);
             
         private NeuralNetworkContext TestContext => 
             new NeuralNetworkContext(
@@ -20,7 +20,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
         [Fact]
         public void CanUpdateSynapseWeightCorrectlyInputLayerNeuronToHiddenLayerNeuron()
         {
-             SynapseWeightUpdateTester(learningRate: 1, momentum: 0)
+             SynapseWeightUpdateTester()
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
@@ -42,7 +42,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
         [Fact]
         public void CanUpdateSynapseWeightCorrectlyInputLayerNeuronToOutputLayerNeuron()
         {
-            SynapseWeightUpdateTester(learningRate: 1, momentum: 0)
+            SynapseWeightUpdateTester()
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
@@ -60,7 +60,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
         [Fact]
         public void CanUpdateSynapseWeightCorrectlyHiddenLayerNeuronToHiddenLayerNeuron()
         {
-             SynapseWeightUpdateTester(learningRate: 1, momentum: 0)
+             SynapseWeightUpdateTester()
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
@@ -85,7 +85,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
         [Fact]
         public void CanUpdateSynapseWeightCorrectlyHiddenLayerNeuronToOutputLayerNeuron()
         {
-            SynapseWeightUpdateTester(learningRate: 1, momentum: 0)
+            SynapseWeightUpdateTester()
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
