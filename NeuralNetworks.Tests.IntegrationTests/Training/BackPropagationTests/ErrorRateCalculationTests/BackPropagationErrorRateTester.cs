@@ -9,51 +9,51 @@ using NeuralNetworks.Tests.Support.Assertors;
 using NeuralNetworks.Tests.Support.Builders;
 using Xunit;
 
-namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.ErrorRateCalculationsTests
+namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.ErrorGradientCalculationsTests
 {
-    public sealed class BackPropagationErrorRateTester : NeuralNetworkTester<BackPropagationErrorRateTester>
+    public sealed class BackPropagationErrorGradientTester : NeuralNetworkTester<BackPropagationErrorGradientTester>
     {
 
-        private BackPropagationErrorRateTester()
+        private BackPropagationErrorGradientTester()
         {}
 
-        public BackPropagationErrorRateTester ActivateNeuronWithId(int neuronId)
+        public BackPropagationErrorGradientTester ActivateNeuronWithId(int neuronId)
         {
             var targetNeuron = FindNeuronWithId(neuronId);
             targetNeuron.CalculateOutput();
             return this;
         }
 
-        public void CalculateErrorRateForHiddenLayerNeuron(int neuronId, double errorRate)
+        public void CalculateErrorGradientForHiddenLayerNeuron(int neuronId, double errorGradient)
         {
-            PerformErrorRateCalculation(
+            PerformErrorGradientCalculation(
                 neuronId, 
-                errorRate,
+                errorGradient,
                 (neuron, calculator) => calculator.SetNeuronErrorGradient(neuron));
         }
 
-        public void CalculateErrorRateForOutputLayerNeuron(int neuronId, double expectedOutput, double errorRate)
+        public void CalculateErrorGradientForOutputLayerNeuron(int neuronId, double expectedOutput, double errorGradient)
         {
-            PerformErrorRateCalculation(
+            PerformErrorGradientCalculation(
                 neuronId, 
-                errorRate, 
+                errorGradient, 
                 (neuron, calculator) => calculator.SetNeuronErrorGradient(neuron, expectedOutput));
         }
 
-        private void PerformErrorRateCalculation(
+        private void PerformErrorGradientCalculation(
             int neuronId, 
-            double errorRate, 
-            Action<Neuron, NeuronErrorGradientCalculator> errorRateCalculation)
+            double errorGradient, 
+            Action<Neuron, NeuronErrorGradientCalculator> errorGradientCalculation)
         {
-            var expectedErrorRateAssertor = new EqualityAssertor<double>(errorRate); 
+            var expectedErrorGradientAssertor = new EqualityAssertor<double>(errorGradient); 
             var errorCalculator = NeuronErrorGradientCalculator.Create();
             var targetNeuron = FindNeuronWithId(neuronId);
 
-            errorRateCalculation(targetNeuron, errorCalculator); 
-            expectedErrorRateAssertor.Assert(targetNeuron.ErrorRate);
+            errorGradientCalculation(targetNeuron, errorCalculator); 
+            expectedErrorGradientAssertor.Assert(targetNeuron.ErrorGradient);
         }
 
-        public static BackPropagationErrorRateTester Create()
-            => new BackPropagationErrorRateTester(); 
+        public static BackPropagationErrorGradientTester Create()
+            => new BackPropagationErrorGradientTester(); 
     }
 }

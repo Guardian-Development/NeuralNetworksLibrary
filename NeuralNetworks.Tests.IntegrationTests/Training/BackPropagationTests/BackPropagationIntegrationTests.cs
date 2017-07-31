@@ -11,7 +11,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
     {
         private NeuralNetworkContext TestContext => 
             new NeuralNetworkContext(
-                errorRateDecimalPlaces: 5, 
+                errorGradientDecimalPlaces: 5, 
                 outputDecimalPlaces: 5, 
                 synapseWeightDecimalPlaces: 5); 
 
@@ -22,19 +22,19 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
-                        .Neurons(n => n.Id(1).ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(1).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
                     .OutputLayer(l => l
-                        .Neurons(n => n.Id(2).ErrorRate(0).Output(0).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(2).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
                     .Synapses(s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.15)))
                 .QueueTrainingEpoch(e => e.Inputs(0.05).ExpectedOutputs(1).ErrorRate(0.12407)
                     .ExpectNeuralNetworkState(nn => nn
                         .InputLayer(l => l
                             .Neurons(n => 
-                                n.Id(1).ErrorRate(0).Output(0.05)
+                                n.Id(1).ErrorGradient(0).Output(0.05)
                                 .OutputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15311))))
                         .OutputLayer(l => l
                             .Neurons(n => 
-                                n.Id(2).ErrorRate(0.12407).Output(0.50187)
+                                n.Id(2).ErrorGradient(0.12407).Output(0.50187)
                                 .InputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15311))))))
                 .PerformAllEpochs();
         }

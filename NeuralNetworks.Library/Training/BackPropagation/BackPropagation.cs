@@ -30,12 +30,12 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
         private double BackPropagate(params double[] targets)
         {
-            SetNeuronErrorRates(targets);
+            SetNeuronErrorGradients(targets);
             PropagateResultOfNeuronErrors();
             return CalculateError(targets);
         }
 
-        private void SetNeuronErrorRates(double[] targets)
+        private void SetNeuronErrorGradients(double[] targets)
         {
             neuralNetwork.OutputLayer.Neurons
                          .ForEach((neuron, i) => 
@@ -60,7 +60,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         }
 
         private bool NeuronNotProducingCorrectResult(Neuron neuron)
-            => neuron.ErrorRate != 0; 
+            => neuron.ErrorGradient != 0; 
 
         private double CalculateError(params double[] targets)
         {

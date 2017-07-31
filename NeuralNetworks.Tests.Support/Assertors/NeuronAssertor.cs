@@ -21,7 +21,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
 		public IAssert<IEnumerable<Synapse>> OutputSynapsesAssertor { get; set; }
             = FieldAssertor<IEnumerable<Synapse>>.NoAssert;
 
-        public IAssert<double> ErrorRateAssertor { get; set; }
+        public IAssert<double> ErrorGradientAssertor { get; set; }
             = FieldAssertor<double>.NoAssert;
 
         public IAssert<double> OutputAssertor { get; set; }
@@ -32,7 +32,7 @@ namespace NeuralNetworks.Tests.Support.Assertors
             NeuronIdAssertor.Assert(actualItem.Id);
 
             ActivationFunctionAssertor.Assert(actualItem.ActivationFunction);
-            ErrorRateAssertor.Assert(actualItem.ErrorRate);
+            ErrorGradientAssertor.Assert(actualItem.ErrorGradient);
             OutputAssertor.Assert(actualItem.Output);
 
             InputSynapsesAssertor.Assert(actualItem.InputSynapses);
@@ -65,9 +65,9 @@ namespace NeuralNetworks.Tests.Support.Assertors
                 return this;
             }
 
-            public Builder ErrorRate(double errorRate)
+            public Builder ErrorGradient(double errorGradient)
             {
-                assertor.ErrorRateAssertor = new EqualityAssertor<double>(errorRate);
+                assertor.ErrorGradientAssertor = new EqualityAssertor<double>(errorGradient);
                 return this; 
             }
 

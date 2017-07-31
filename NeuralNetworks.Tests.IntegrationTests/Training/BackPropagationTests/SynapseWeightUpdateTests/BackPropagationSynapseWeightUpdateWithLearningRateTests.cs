@@ -12,7 +12,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
             
         private NeuralNetworkContext TestContext => 
             new NeuralNetworkContext(
-                errorRateDecimalPlaces: 5, 
+                errorGradientDecimalPlaces: 5, 
                 outputDecimalPlaces: 5, 
                 synapseWeightDecimalPlaces: 5);
 
@@ -23,11 +23,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
-                        .Neurons(n => n.Id(1).ErrorRate(0.8912).Output(0.9911).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(1).ErrorGradient(0.8912).Output(0.9911).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n => n.Id(2).ErrorRate(0.6912).Output(0.1934).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(2).ErrorGradient(0.6912).Output(0.1934).Activation(ActivationType.Sigmoid)))
                     .OutputLayer(l => l 
-                        .Neurons(n => n.Id(3).ErrorRate(0.98).Output(0.77).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(3).ErrorGradient(0.98).Output(0.77).Activation(ActivationType.Sigmoid)))
                     .Synapses(
                         s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.712),
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.99)))
@@ -41,11 +41,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
-                        .Neurons(n => n.Id(1).ErrorRate(0.8912).Output(0.9911).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(1).ErrorGradient(0.8912).Output(0.9911).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n => n.Id(2).ErrorRate(0.6912).Output(0.1934).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(2).ErrorGradient(0.6912).Output(0.1934).Activation(ActivationType.Sigmoid)))
                     .OutputLayer(l => l 
-                        .Neurons(n => n.Id(3).ErrorRate(0.98).Output(0.77).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(3).ErrorGradient(0.98).Output(0.77).Activation(ActivationType.Sigmoid)))
                     .Synapses(
                         s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.712),
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.99)))
@@ -63,9 +63,9 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
-                        .Neurons(n => n.Id(1).ErrorRate(0.23).Output(0.14).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(1).ErrorGradient(0.23).Output(0.14).Activation(ActivationType.Sigmoid)))
                     .OutputLayer(l => l
-                        .Neurons(n => n.Id(2).ErrorRate(0.92).Output(0.45).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(2).ErrorGradient(0.92).Output(0.45).Activation(ActivationType.Sigmoid)))
                     .Synapses(s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.1)))
                 .UpdateSynapseExpectingWeight(
                     synapseInputNeuronId: 1,
@@ -77,9 +77,9 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
-                        .Neurons(n => n.Id(1).ErrorRate(0.23).Output(0.14).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(1).ErrorGradient(0.23).Output(0.14).Activation(ActivationType.Sigmoid)))
                     .OutputLayer(l => l
-                        .Neurons(n => n.Id(2).ErrorRate(0.92).Output(0.45).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(2).ErrorGradient(0.92).Output(0.45).Activation(ActivationType.Sigmoid)))
                     .Synapses(s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.1)))
                 .UpdateSynapseExpectingWeight(
                     synapseInputNeuronId: 1,
@@ -95,13 +95,13 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
-                        .Neurons(n => n.Id(1).ErrorRate(0.2123).Output(0.333).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(1).ErrorGradient(0.2123).Output(0.333).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n => n.Id(2).ErrorRate(0.1).Output(0.7451).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(2).ErrorGradient(0.1).Output(0.7451).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n =>  n.Id(3).ErrorRate(0.7812).Output(0.8989).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n =>  n.Id(3).ErrorGradient(0.7812).Output(0.8989).Activation(ActivationType.Sigmoid)))
                     .OutputLayer(l => l 
-                        .Neurons(n => n.Id(4).ErrorRate(0.0012).Output(0.0122).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(4).ErrorGradient(0.0012).Output(0.0122).Activation(ActivationType.Sigmoid)))
                     .Synapses(
                         s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.23),
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.89123),
@@ -116,13 +116,13 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
-                        .Neurons(n => n.Id(1).ErrorRate(0.2123).Output(0.333).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(1).ErrorGradient(0.2123).Output(0.333).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n => n.Id(2).ErrorRate(0.1).Output(0.7451).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(2).ErrorGradient(0.1).Output(0.7451).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n =>  n.Id(3).ErrorRate(0.7812).Output(0.8989).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n =>  n.Id(3).ErrorGradient(0.7812).Output(0.8989).Activation(ActivationType.Sigmoid)))
                     .OutputLayer(l => l 
-                        .Neurons(n => n.Id(4).ErrorRate(0.0012).Output(0.0122).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(4).ErrorGradient(0.0012).Output(0.0122).Activation(ActivationType.Sigmoid)))
                     .Synapses(
                         s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.23),
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.89123),
@@ -141,13 +141,13 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
-                        .Neurons(n => n.Id(1).ErrorRate(0.2123).Output(0.333).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(1).ErrorGradient(0.2123).Output(0.333).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n => n.Id(2).ErrorRate(0.1).Output(0.7451).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(2).ErrorGradient(0.1).Output(0.7451).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n =>  n.Id(3).ErrorRate(0.61234).Output(0.7812).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n =>  n.Id(3).ErrorGradient(0.61234).Output(0.7812).Activation(ActivationType.Sigmoid)))
                     .OutputLayer(l => l 
-                        .Neurons(n => n.Id(4).ErrorRate(0.0012).Output(0.0122).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(4).ErrorGradient(0.0012).Output(0.0122).Activation(ActivationType.Sigmoid)))
                     .Synapses(
                         s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.23),
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.89123),
@@ -162,13 +162,13 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
-                        .Neurons(n => n.Id(1).ErrorRate(0.2123).Output(0.333).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(1).ErrorGradient(0.2123).Output(0.333).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n => n.Id(2).ErrorRate(0.1).Output(0.7451).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(2).ErrorGradient(0.1).Output(0.7451).Activation(ActivationType.Sigmoid)))
                     .HiddenLayer(l => l
-                        .Neurons(n =>  n.Id(3).ErrorRate(0.61234).Output(0.7812).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n =>  n.Id(3).ErrorGradient(0.61234).Output(0.7812).Activation(ActivationType.Sigmoid)))
                     .OutputLayer(l => l 
-                        .Neurons(n => n.Id(4).ErrorRate(0.0012).Output(0.0122).Activation(ActivationType.Sigmoid)))
+                        .Neurons(n => n.Id(4).ErrorGradient(0.0012).Output(0.0122).Activation(ActivationType.Sigmoid)))
                     .Synapses(
                         s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.23),
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.89123),

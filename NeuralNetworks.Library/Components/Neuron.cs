@@ -18,10 +18,10 @@ namespace NeuralNetworks.Library.Components
 		public List<Synapse> InputSynapses { get; } = new List<Synapse>();
 		public List<Synapse> OutputSynapses { get; } = new List<Synapse>();
 
-		public double ErrorRate
+		public double ErrorGradient
 		{
-			get => roundedErrorRate;
-			set => roundedErrorRate = value.RoundToDecimalPlaces(context.ErrorRateDecimalPlaces);
+			get => roundedErrorGradient;
+			set => roundedErrorGradient = value.RoundToDecimalPlaces(context.ErrorGradientDecimalPlaces);
 		}
 
 		public double Output 
@@ -32,7 +32,7 @@ namespace NeuralNetworks.Library.Components
 
         public double LatestFedValueFromInputSynapses { get; private set; }
 
-		private double roundedErrorRate;
+		private double roundedErrorGradient;
         private double roundedOutputValue; 
 		private readonly NeuralNetworkContext context;
 

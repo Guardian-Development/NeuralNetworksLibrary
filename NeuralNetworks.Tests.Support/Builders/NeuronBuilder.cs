@@ -9,7 +9,7 @@ namespace NeuralNetworks.Tests.Support.Builders
         where TNeuron : Neuron
     {
         protected int id;
-        protected double errorRate;
+        protected double errorGradient;
         protected double output;
         protected ActivationType activationType;
 
@@ -26,9 +26,9 @@ namespace NeuralNetworks.Tests.Support.Builders
             return (TBuilder)this; 
         }
 
-        public TBuilder ErrorRate(double errorRate)
+        public TBuilder ErrorGradient(double errorGradient)
         {
-            this.errorRate = errorRate;
+            this.errorGradient = errorGradient;
             return (TBuilder)this; 
         }
 
@@ -58,7 +58,7 @@ namespace NeuralNetworks.Tests.Support.Builders
             var neuron = Neuron.For(Context, activationType); 
 			neuron.Id = id;
 			neuron.Output = output;
-			neuron.ErrorRate = errorRate;
+			neuron.ErrorGradient = errorGradient;
 			return neuron;
 		}
     }
@@ -73,7 +73,7 @@ namespace NeuralNetworks.Tests.Support.Builders
         {
             var neuron = BiasNeuron.For(Context, activationType, output);
             neuron.Id = id;
-            neuron.ErrorRate = errorRate;
+            neuron.ErrorGradient = errorGradient;
             return neuron; 
         }
     }
