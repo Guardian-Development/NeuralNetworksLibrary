@@ -11,6 +11,7 @@ namespace NeuralNetworks.Tests.Support.Builders
         private int inputNeuronId;
         private int outputNeuronId;
         private double weight; 
+        private double weightDelta; 
 
         private readonly IDictionary<int, Neuron> allNeuronsInNetwork;
         private readonly IProvideRandomNumberGeneration randomGenerator;
@@ -34,12 +35,19 @@ namespace NeuralNetworks.Tests.Support.Builders
             return this; 
         }
 
+        public SynapseBuilder WithWeightDelta(double weightDelta)
+        {
+            this.weightDelta = weightDelta; 
+            return this; 
+        }
+
         public Synapse Build()
         {
             GetNeuronsById(out var inputNeuron, out var outputNeuron);
             var synapse = Synapse.For(context, inputNeuron, outputNeuron, randomGenerator);
             ConnectNeuronsInSynapse(synapse);
             synapse.Weight = weight;
+            synapse.WeightDelta = weightDelta; 
 
             return synapse; 
         }
