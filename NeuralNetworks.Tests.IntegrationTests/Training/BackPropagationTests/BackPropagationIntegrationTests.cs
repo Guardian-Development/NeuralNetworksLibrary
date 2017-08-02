@@ -15,10 +15,10 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 outputDecimalPlaces: 5, 
                 synapseWeightDecimalPlaces: 5); 
 
-        [Fact(Skip="Not implemented fully")]
+        [Fact]
         public void CanTrainNoHiddenLayerNetworkForSingleEpoch()
         {
-            BackPropagationTester.For(learningRate: 0.5, momentum: 0)
+            BackPropagationTester.For(learningRate: 1.2, momentum: 0.2)
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
@@ -26,16 +26,14 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                     .OutputLayer(l => l
                         .Neurons(n => n.Id(2).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
                     .Synapses(s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.15)))
-                .QueueTrainingEpoch(e => e.Inputs(0.05).ExpectedOutputs(1).ErrorRate(0.12407)
+                .QueueTrainingEpoch(e => e.Inputs(0.05).ExpectedOutputs(0.8712).ErrorRate(0.36933)
                     .ExpectNeuralNetworkState(nn => nn
                         .InputLayer(l => l
-                            .Neurons(n => 
-                                n.Id(1).ErrorGradient(0).Output(0.05)
-                                .OutputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15311))))
+                            .Neurons(n => n.Id(1).ErrorGradient(0).Output(0.05)
+                                .OutputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15554))))
                         .OutputLayer(l => l
-                            .Neurons(n => 
-                                n.Id(2).ErrorGradient(0.12407).Output(0.50187)
-                                .InputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15311))))))
+                            .Neurons(n => n.Id(2).ErrorGradient(0.09233).Output(0.50187)
+                                .InputSynapses(s => s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15554))))))
                 .PerformAllEpochs();
         }
 

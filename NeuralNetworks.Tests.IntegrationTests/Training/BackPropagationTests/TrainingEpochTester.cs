@@ -57,7 +57,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
         private void AssertResultOfTrainingEpoch(double actualErrorRate)
         {
             neuralNetworkAssertor.Assert(trainingMethod.NetworkUnderTraining); 
-            Xunit.Assert.Equal(actualErrorRate, errorRate);
+
+            var doubleAssertor = new RoundedDoubleAssertor(
+                errorRate, 
+                trainingMethod.NetworkUnderTraining.Context.ErrorGradientDecimalPlaces);
+
+            doubleAssertor.Assert(actualErrorRate); 
         }
 
         public static TrainingEpochTester<TTrainingMethod> For(TTrainingMethod trainingMethod)
