@@ -35,13 +35,13 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                                 n => n.Id(1).ErrorGradient(0).Output(0.05)
                                     .OutputSynapses(s => 
                                         s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15554)
-                                                .WeightDelta(0.0053398, WeightDeltaAssertionPrecision))))
+                                                .WeightDelta(0.0055398, WeightDeltaAssertionPrecision))))
                         .OutputLayer(l => l
                             .Neurons(
                                 n => n.Id(2).ErrorGradient(0.09233).Output(0.50187)
                                     .InputSynapses(
                                         s => s.InputNeuronId(1).OutputNeuronId(2).Weight(0.15554)
-                                                .WeightDelta(0.0053398, WeightDeltaAssertionPrecision))))))
+                                                .WeightDelta(0.0055398, WeightDeltaAssertionPrecision))))))
                 .PerformAllEpochs();
         }
 
