@@ -32,7 +32,7 @@ namespace NeuralNetworks.Library.Training
                     .ToList();
 
                 error = errors.Average();
-                Log.LogInformation($"Error Rate: {error}. Epoch: {numEpochs}");
+                Log.LogDebug($"Error Rate: {error}. Epoch: {numEpochs}");
 
                 numEpochs++;
             }
@@ -51,7 +51,7 @@ namespace NeuralNetworks.Library.Training
                     neuralNetworkTrainer.PerformSingleEpochProducingErrorRate(dataSet);
                 }
 
-                Log.LogInformation($"Epochs performed: {numEpochs}");
+                Log.LogDebug($"Epochs performed: {numEpochs}");
 
                 numEpochs++;
             }
@@ -70,7 +70,7 @@ namespace NeuralNetworks.Library.Training
                     .ToList();
 
                 error = errors.Average();
-                Log.LogInformation($"Current Error Rate: {error}");
+                Log.LogDebug($"Current Error Rate: {error}");
             }
         }
     }
