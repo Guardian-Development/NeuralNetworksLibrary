@@ -210,10 +210,10 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                 .PerformAllEpochs();
         }
 
-        [Fact(Skip="Not implemented")]
+        [Fact]
         public void CanTrainSingleHiddenLayerNetworkForMultipleEpochs()
         {
-             BackPropagationTester.For(learningRate: 2.1, momentum: 0.32)
+            BackPropagationTester.For(learningRate: 1.021, momentum: 0.416)
                 .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
                 .TargetNeuralNetwork(nn => nn
                     .InputLayer(l => l
@@ -223,74 +223,129 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                     .HiddenLayer(l => l
                         .Neurons(
                             n => n.Id(3).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
-                    .HiddenLayer(l => l
+                    .OutputLayer(l => l
                         .Neurons(
                             n => n.Id(4).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid),
                             n => n.Id(5).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
-                    .OutputLayer(l => l
-                        .Neurons(
-                            n => n.Id(6).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
                     .Synapses(
-                        s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 3, weight: 0.712),
-                        s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.682),
-                        s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 4, weight: 0.991),
-                        s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 0.78123),
-                        s => s.SynapseBetween(inputNeuronId: 4, outputNeuronId: 6, weight: 0.5564),
-                        s => s.SynapseBetween(inputNeuronId: 5, outputNeuronId: 6, weight: 0.121)))
-                .QueueTrainingEpoch(e => e.Inputs(0.7123, 0.912).ExpectedOutputs(0.991, 0.891).ErrorRate(0)
+                        s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 3, weight: 0.156),
+                        s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.212),
+                        s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 4, weight: 0.89123),
+                        s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 0.98)))
+                .QueueTrainingEpoch(e => e.Inputs(0.1432, 0.4513).ExpectedOutputs(0.23, 0.167).ErrorRate(0.84572)
                     .ExpectNeuralNetworkState(nn => nn
                         .InputLayer(l => l
                             .Neurons(
-                                n => n.Id(1).ErrorGradient(0).Output(0)
+                                n => n.Id(1).ErrorGradient(0).Output(0.1432)
                                     .OutputSynapses(
-                                        s => s.InputNeuronId(1).OutputNeuronId(3).Weight(0)
-                                            .WeightDelta(0, WeightDeltaAssertionPrecision)), 
-                                n => n.Id(2).ErrorGradient(0).Output(0)
+                                        s => s.InputNeuronId(1).OutputNeuronId(3).Weight(0.1492)
+                                            .WeightDelta(-0.006803021, WeightDeltaAssertionPrecision)), 
+                                n => n.Id(2).ErrorGradient(0).Output(0.4513)
                                     .OutputSynapses(
-                                        s => s.InputNeuronId(2).OutputNeuronId(3).Weight(0)
-                                            .WeightDelta(0, WeightDeltaAssertionPrecision))))
-                        .HiddenLayers(
-                            l => l.Neurons(
-                                    n => n.Id(3).ErrorGradient(0).Output(0)
-                                        .InputSynapses(
-                                            s => s.InputNeuronId(1).OutputNeuronId(3).Weight(0)
-                                                .WeightDelta(0, WeightDeltaAssertionPrecision),
-                                            s => s.InputNeuronId(2).OutputNeuronId(3).Weight(0)
-                                                .WeightDelta(0, WeightDeltaAssertionPrecision))
-                                        .OutputSynapses(
-                                            s => s.InputNeuronId(3).OutputNeuronId(4).Weight(0)
-                                                .WeightDelta(0, WeightDeltaAssertionPrecision),
-                                            s => s.InputNeuronId(3).OutputNeuronId(5).Weight(0)
-                                                .WeightDelta(0, WeightDeltaAssertionPrecision))),
-                            l => l.Neurons(
-                                    n => n.Id(4).ErrorGradient(0).Output(0)
-                                        .InputSynapses(
-                                            s => s.InputNeuronId(3).OutputNeuronId(4).Weight(0)
-                                                .WeightDelta(0, WeightDeltaAssertionPrecision))
-                                        .OutputSynapses(
-                                            s => s.InputNeuronId(4).OutputNeuronId(6).Weight(0)
-                                                .WeightDelta(0, WeightDeltaAssertionPrecision)),
-                                     n => n.Id(5).ErrorGradient(-0.01921).Output(0.55891)
-                                        .InputSynapses(
-                                            s => s.InputNeuronId(3).OutputNeuronId(5).Weight(0)
-                                                .WeightDelta(0, WeightDeltaAssertionPrecision))
-                                        .OutputSynapses(
-                                            s => s.InputNeuronId(5).OutputNeuronId(6).Weight(0)
-                                                .WeightDelta(0, WeightDeltaAssertionPrecision)))) 
+                                        s => s.InputNeuronId(2).OutputNeuronId(3).Weight(0.19056)
+                                            .WeightDelta(-0.021439968, WeightDeltaAssertionPrecision))))
+                        .HiddenLayers(l => l
+                            .Neurons(
+                                n => n.Id(3).ErrorGradient(-0.04653).Output(0.52947)
+                                    .InputSynapses(
+                                        s => s.InputNeuronId(1).OutputNeuronId(3).Weight(0.1492)
+                                            .WeightDelta(-0.006803021, WeightDeltaAssertionPrecision),
+                                        s => s.InputNeuronId(2).OutputNeuronId(3).Weight(0.19056)
+                                            .WeightDelta(-0.021439968, WeightDeltaAssertionPrecision))
+                                    .OutputSynapses(
+                                        s => s.InputNeuronId(3).OutputNeuronId(4).Weight(0.84189)
+                                            .WeightDelta(-0.049344952, WeightDeltaAssertionPrecision),
+                                        s => s.InputNeuronId(3).OutputNeuronId(5).Weight(0.92185)
+                                            .WeightDelta(-0.058151145, WeightDeltaAssertionPrecision)))) 
                         .OutputLayer(l => l
                             .Neurons(
-                                n => n.Id(6).ErrorGradient(0).Output(0)
+                                n => n.Id(4).ErrorGradient(-0.09128).Output(0.61583)
                                     .InputSynapses(
-                                        s => s.InputNeuronId(4).OutputNeuronId(6).Weight(0)
-                                            .WeightDelta(0, WeightDeltaAssertionPrecision),
-                                         s => s.InputNeuronId(5).OutputNeuronId(6).Weight(0)
-                                            .WeightDelta(0, WeightDeltaAssertionPrecision))))))
-                .PerformAllEpochs(); 
+                                        s => s.InputNeuronId(3).OutputNeuronId(4).Weight(0.84189)
+                                            .WeightDelta(-0.049344952, WeightDeltaAssertionPrecision)),
+                                n => n.Id(5).ErrorGradient(-0.10757).Output(0.62689)
+                                    .InputSynapses(
+                                        s => s.InputNeuronId(3).OutputNeuronId(5).Weight(0.92185)
+                                            .WeightDelta(-0.058151145, WeightDeltaAssertionPrecision))))))
+                .PerformAllEpochs();
         }
 
         [Fact(Skip="Not implemented")]
         public void CanTrainMultipleHiddenLayerNetworkForSingleEpoch()
         {
+            // BackPropagationTester.For(learningRate: 2.1, momentum: 0.32)
+            //     .NeuralNetworkEnvironment(TestContext, PredictableGenerator)
+            //     .TargetNeuralNetwork(nn => nn
+            //         .InputLayer(l => l
+            //             .Neurons(
+            //                 n => n.Id(1).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid),
+            //                 n => n.Id(2).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
+            //         .HiddenLayer(l => l
+            //             .Neurons(
+            //                 n => n.Id(3).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
+            //         .HiddenLayer(l => l
+            //             .Neurons(
+            //                 n => n.Id(4).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid),
+            //                 n => n.Id(5).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
+            //         .OutputLayer(l => l
+            //             .Neurons(
+            //                 n => n.Id(6).ErrorGradient(0).Output(0).Activation(ActivationType.Sigmoid)))
+            //         .Synapses(
+            //             s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 3, weight: 0.712),
+            //             s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.682),
+            //             s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 4, weight: 0.991),
+            //             s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 5, weight: 0.78123),
+            //             s => s.SynapseBetween(inputNeuronId: 4, outputNeuronId: 6, weight: 0.5564),
+            //             s => s.SynapseBetween(inputNeuronId: 5, outputNeuronId: 6, weight: 0.121)))
+            //     .QueueTrainingEpoch(e => e.Inputs(0.7123, 0.912).ExpectedOutputs(0.991, 0.891).ErrorRate(0)
+            //         .ExpectNeuralNetworkState(nn => nn
+            //             .InputLayer(l => l
+            //                 .Neurons(
+            //                     n => n.Id(1).ErrorGradient(0).Output(0)
+            //                         .OutputSynapses(
+            //                             s => s.InputNeuronId(1).OutputNeuronId(3).Weight(0)
+            //                                 .WeightDelta(0, WeightDeltaAssertionPrecision)), 
+            //                     n => n.Id(2).ErrorGradient(0).Output(0)
+            //                         .OutputSynapses(
+            //                             s => s.InputNeuronId(2).OutputNeuronId(3).Weight(0)
+            //                                 .WeightDelta(0, WeightDeltaAssertionPrecision))))
+            //             .HiddenLayers(
+            //                 l => l.Neurons(
+            //                         n => n.Id(3).ErrorGradient(0).Output(0)
+            //                             .InputSynapses(
+            //                                 s => s.InputNeuronId(1).OutputNeuronId(3).Weight(0)
+            //                                     .WeightDelta(0, WeightDeltaAssertionPrecision),
+            //                                 s => s.InputNeuronId(2).OutputNeuronId(3).Weight(0)
+            //                                     .WeightDelta(0, WeightDeltaAssertionPrecision))
+            //                             .OutputSynapses(
+            //                                 s => s.InputNeuronId(3).OutputNeuronId(4).Weight(0)
+            //                                     .WeightDelta(0, WeightDeltaAssertionPrecision),
+            //                                 s => s.InputNeuronId(3).OutputNeuronId(5).Weight(0)
+            //                                     .WeightDelta(0, WeightDeltaAssertionPrecision))),
+            //                 l => l.Neurons(
+            //                         n => n.Id(4).ErrorGradient(0).Output(0)
+            //                             .InputSynapses(
+            //                                 s => s.InputNeuronId(3).OutputNeuronId(4).Weight(0)
+            //                                     .WeightDelta(0, WeightDeltaAssertionPrecision))
+            //                             .OutputSynapses(
+            //                                 s => s.InputNeuronId(4).OutputNeuronId(6).Weight(0)
+            //                                     .WeightDelta(0, WeightDeltaAssertionPrecision)),
+            //                          n => n.Id(5).ErrorGradient(-0.01921).Output(0.55891)
+            //                             .InputSynapses(
+            //                                 s => s.InputNeuronId(3).OutputNeuronId(5).Weight(0)
+            //                                     .WeightDelta(0, WeightDeltaAssertionPrecision))
+            //                             .OutputSynapses(
+            //                                 s => s.InputNeuronId(5).OutputNeuronId(6).Weight(0)
+            //                                     .WeightDelta(0, WeightDeltaAssertionPrecision)))) 
+            //             .OutputLayer(l => l
+            //                 .Neurons(
+            //                     n => n.Id(6).ErrorGradient(0).Output(0)
+            //                         .InputSynapses(
+            //                             s => s.InputNeuronId(4).OutputNeuronId(6).Weight(0)
+            //                                 .WeightDelta(0, WeightDeltaAssertionPrecision),
+            //                              s => s.InputNeuronId(5).OutputNeuronId(6).Weight(0)
+            //                                 .WeightDelta(0, WeightDeltaAssertionPrecision))))))
+            //     .PerformAllEpochs();
         }
 
         [Fact(Skip="Not implemented")]
