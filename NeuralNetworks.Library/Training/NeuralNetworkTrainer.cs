@@ -1,4 +1,3 @@
-using System;
 using NeuralNetworks.Library.Data;
 
 namespace NeuralNetworks.Library.Training

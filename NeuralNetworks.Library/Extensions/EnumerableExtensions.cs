@@ -31,7 +31,7 @@ namespace NeuralNetworks.Library.Extensions
             this IList<TEntity> source,
             Action<TEntity, int> action)
         {
-            for(int i = 0; i < source.Count(); i++)
+            for(var i = 0; i < source.Count(); i++)
             {
                 var entity = source[i];
                 action.Invoke(entity, i); 

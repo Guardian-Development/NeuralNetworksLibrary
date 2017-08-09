@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.NetworkInitialisation;
-using NeuralNetworks.Library.Extensions; 
 
 namespace NeuralNetworks.Library
 {

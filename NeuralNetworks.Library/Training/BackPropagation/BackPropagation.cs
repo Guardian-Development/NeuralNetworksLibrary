@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Data;
-using NeuralNetworks.Library.Logging;
 using NeuralNetworks.Library.Extensions;
 using NeuralNetworks.Library.Components;
 
