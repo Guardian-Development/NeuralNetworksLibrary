@@ -23,7 +23,7 @@ namespace NeuralNetworks.Console
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
                 .Build();
 
-            TrainingController<BackPropagation>
+            TrainingController
                 .For(BackPropagation.WithConfiguration(neuralNetwork, learningRate: 0.6, momentum: 0.9))
                 .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData(), maximumEpochs: 5000, errorThreshold: 0.001);
 
