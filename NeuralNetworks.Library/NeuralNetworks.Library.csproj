@@ -8,9 +8,9 @@
     <Authors>GuardianDevelopment</Authors>
     <Owners>GuardianDevelopment</Owners>
     <PackageProjectUrl>https://github.com/Guardian-Development/NeuralNetworksLibrary</PackageProjectUrl>
-    <Summary>A Neural Networks Library for the .NET Core runtime.</Summary>
+    <Summary>A Neural Networks Library for netstandard2.0 and dotnet core.</Summary>
     <Title>Neural Networks Library</Title>
-    <Description>A Neural Networks Library for the .NET Core runtime.</Description>
+    <Description>A Neural Networks Library for netstandard2.0 and dotnet core.</Description>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
 
