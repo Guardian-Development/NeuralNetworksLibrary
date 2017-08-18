@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Data;
@@ -22,7 +23,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
                 .Build();
 
             TrainingController
-                .For(BackPropagation.WithConfiguration(neuralNetwork, learningRate: 0.4, momentum: 0.9))
+                .For(BackPropagation.WithMultiThreadedConfiguration(
+                    neuralNetwork,  
+                    new ParallelOptions(),
+                    learningRate: 0.4, 
+                    momentum: 0.9))
                 .TrainForEpochsOrErrorThresholdMet(XorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.01);
 
             Assert.True(neuralNetwork.PredictionFor(0.0, 1.0)[0] >= 0.5, "Prediction incorrect for (0, 1)");

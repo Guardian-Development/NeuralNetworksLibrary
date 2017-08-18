@@ -43,7 +43,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
 
         public BackPropagationTester QueueTrainingEpoch(Action<TrainingEpochTester<BackPropagation>> action)
         {
-            var backPropagationTrainer = BackPropagation.WithConfiguration(targetNeuralNetwork, learningRate, momentum);
+            var backPropagationTrainer = BackPropagation.WithSingleThreadedConfiguration(targetNeuralNetwork, learningRate, momentum);
             var epochTester = TrainingEpochTester<BackPropagation>.For(backPropagationTrainer);
             action.Invoke(epochTester); 
 
