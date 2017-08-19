@@ -51,8 +51,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
                          .ApplyInReverse(layer => 
                             layer.Neurons.ParallelForEach(
                                 neuron => neuronErrorGradientCalculator.SetNeuronErrorGradient(neuron),
-                                parallelOptions)
-                         ); 
+                                parallelOptions)); 
         }
 
         private void PropagateResultOfNeuronErrors()
@@ -78,10 +77,12 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
         private double CalculateError(params double[] targets)
         {
-            var i = 0;
-            return neuralNetwork.OutputLayer.Neurons.Sum(
-                neuron => Math.Abs(
-                    neuronErrorGradientCalculator.CalculateErrorForOutputAgainstTarget(neuron, targets[i++])));
+            return neuralNetwork.OutputLayer.Neurons
+                .ParallelZip(
+                    targets, 
+                    (neuron, target) => Math.Abs(neuronErrorGradientCalculator.CalculateErrorForOutputAgainstTarget(neuron, target)),
+                    parallelOptions)
+                .ParallelSum(parallelOptions);
         }
 
         public static BackPropagation WithSingleThreadedConfiguration(
