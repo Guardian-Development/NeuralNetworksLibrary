@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components;
 using NeuralNetworks.Library.NetworkInitialisation;
@@ -14,6 +15,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
 {
     public sealed class BackPropagationSynapseWeightUpdateTester : NeuralNetworkTester<BackPropagationSynapseWeightUpdateTester>
     {
+        private static ParallelOptions UnrestrictedThreading = new ParallelOptions(); 
         private readonly SynapseWeightCalculator synapseWeightCalculator; 
 
         private BackPropagationSynapseWeightUpdateTester(double learningRate, double momentum)
@@ -29,7 +31,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
         {
             var neuron = FindNeuronWithId(synapseOutputNeuronId);
             var synapse = FindSynapseFor(neuron, synapseInputNeuronId); 
-            synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights(neuron); 
+            synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights(neuron, UnrestrictedThreading); 
 
             var synapseAssertor = new SynapseAssertor.Builder()
                     .InputNeuronId(synapseInputNeuronId)

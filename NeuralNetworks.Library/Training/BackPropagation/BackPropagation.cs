@@ -45,24 +45,32 @@ namespace NeuralNetworks.Library.Training.BackPropagation
             neuralNetwork.OutputLayer.Neurons
                          .ParallelForEach((neuron, i) => 
                             neuronErrorGradientCalculator.SetNeuronErrorGradient(neuron, targets[i]),
-                            new ParallelOptions());
+                            parallelOptions);
 
             neuralNetwork.HiddenLayers
                          .ApplyInReverse(layer => 
-                            layer.Neurons.ForEach(neuronErrorGradientCalculator.SetNeuronErrorGradient));
+                            layer.Neurons.ParallelForEach(
+                                neuron => neuronErrorGradientCalculator.SetNeuronErrorGradient(neuron),
+                                parallelOptions)
+                         ); 
         }
 
         private void PropagateResultOfNeuronErrors()
         {
             neuralNetwork.OutputLayer.Neurons
                 .Where(NeuronNotProducingCorrectResult)
-                .ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights);
+                .ParallelForEach(
+                    neuron => synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights(neuron, parallelOptions),
+                    parallelOptions);
 
             neuralNetwork.HiddenLayers
-                .ApplyInReverse(layer =>
+                .ParallelForEach(layer =>
                     layer.Neurons
                         .Where(NeuronNotProducingCorrectResult)
-                        .ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights));
+                        .ParallelForEach(
+                            neuron => synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights(neuron, parallelOptions),
+                            parallelOptions),
+                    parallelOptions);
         }
 
         private bool NeuronNotProducingCorrectResult(Neuron neuron)

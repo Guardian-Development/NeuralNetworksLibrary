@@ -48,7 +48,8 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
                 new[] {0.0}, new[] {1.0}, new[] {1.0}, new[] {0.0}
             };
 
-            return inputs.Select((input, i) => TrainingDataSet.For(input, outputs[i])).ToList();
+            return inputs.Zip(outputs, (input, output) => TrainingDataSet.For(input, output))
+                         .ToList(); 
         }
     }
 }

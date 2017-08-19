@@ -1,4 +1,6 @@
-﻿using NeuralNetworks.Library.Components;
+﻿using System.Threading.Tasks;
+using NeuralNetworks.Library.Components;
+using NeuralNetworks.Library.Extensions;
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {
@@ -13,8 +15,10 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 			this.momentum = momentum;
         }
 
-        public void CalculateAndUpdateInputSynapseWeights(Neuron neuron) 
-            => neuron.InputSynapses.ForEach(UpdateSynapseWeight);
+        public void CalculateAndUpdateInputSynapseWeights(Neuron neuron, ParallelOptions parallelOptions) 
+            => neuron.InputSynapses.ParallelForEach(
+                synapse => UpdateSynapseWeight(synapse),
+                parallelOptions);
 
         private void UpdateSynapseWeight(Synapse synapse)
         {

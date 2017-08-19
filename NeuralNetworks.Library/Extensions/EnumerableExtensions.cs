@@ -18,27 +18,6 @@ namespace NeuralNetworks.Library.Extensions
             }
         }
 
-        public static void ForEach<TEntity>(
-            this IEnumerable<TEntity> source, 
-            Action<TEntity> action)
-        {
-            foreach(var entity in source)
-            {
-                action.Invoke(entity); 
-            }
-        }
-
-        public static void ForEach<TEntity>(
-            this IList<TEntity> source,
-            Action<TEntity, int> action)
-        {
-            for(var i = 0; i < source.Count(); i++)
-            {
-                var entity = source[i];
-                action.Invoke(entity, i); 
-            }
-        }
-
         public static void ParallelForEach<TEntity>(
             this IList<TEntity> source, 
             Action<TEntity, int> action,
@@ -47,11 +26,23 @@ namespace NeuralNetworks.Library.Extensions
             Parallel.For(
                 fromInclusive: 0, 
                 toExclusive: source.Count, 
+                parallelOptions: parallelOptions, 
                 body: (index, loopState) => 
                 {
                     var entity = source[index]; 
                     action.Invoke(entity, index); 
                 });
+        }
+
+        public static void ParallelForEach<TEntity>(
+            this IEnumerable<TEntity> source,
+            Action<TEntity> action, 
+            ParallelOptions parallelOptions)
+        {
+            Parallel.ForEach<TEntity>(
+                source, 
+                parallelOptions,
+                action);
         }
     }
 }
