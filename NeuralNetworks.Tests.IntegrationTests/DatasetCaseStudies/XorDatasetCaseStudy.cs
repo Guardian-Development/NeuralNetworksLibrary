@@ -13,8 +13,10 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
 {
     public sealed class XorDatasetCaseStudy : NeuralNetworkTest
     {
+        private ParallelOptions UnrestrictedParallelisation => new ParallelOptions(); 
+
         [Fact]
-        public void CanSuccessfullySolveXorProblem()
+        public async void CanSuccessfullySolveXorProblem()
         {
             var neuralNetwork = NeuralNetwork.For(NeuralNetworkContext.MaximumPrecision)
                 .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
@@ -22,10 +24,10 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
                 .Build();
 
-            TrainingController
+            await TrainingController
                 .For(BackPropagation.WithMultiThreadedConfiguration(
                     neuralNetwork,  
-                    new ParallelOptions(),
+                    UnrestrictedParallelisation,
                     learningRate: 0.4, 
                     momentum: 0.9))
                 .TrainForEpochsOrErrorThresholdMet(XorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.01);

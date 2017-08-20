@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Data;
 using NeuralNetworks.Library.Logging;
@@ -17,61 +19,70 @@ namespace NeuralNetworks.Library.Training
             this.neuralNetworkTrainer = neuralNetworkTrainer;
         }
 
-        public void TrainForEpochsOrErrorThresholdMet(
+        public async Task TrainForEpochsOrErrorThresholdMet(
             IList<TrainingDataSet> trainingDataSet,
             int maximumEpochs,
-            double errorThreshold)
+            double errorThreshold,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            var error = 1.0;
-            var numEpochs = 0;
+            await Task.Run(() => {
+                var error = 1.0;
+                var numEpochs = 0;
 
-            while (error > errorThreshold && numEpochs < maximumEpochs)
-            {
-                var errors = trainingDataSet
-                    .Select(neuralNetworkTrainer.PerformSingleEpochProducingErrorRate)
-                    .ToList();
-
-                error = errors.Average();
-                Log.LogDebug($"Error Rate: {error}. Epoch: {numEpochs}");
-
-                numEpochs++;
-            }
-        }
-
-        public void TrainForEpochs(
-            IList<TrainingDataSet> trainingDataSet,
-            int maximumEpochs)
-        {
-            var numEpochs = 0;
-
-            while (numEpochs < maximumEpochs)
-            {
-                foreach (var dataSet in trainingDataSet)
+                while (error > errorThreshold && numEpochs < maximumEpochs)
                 {
-                    neuralNetworkTrainer.PerformSingleEpochProducingErrorRate(dataSet);
+                    var errors = trainingDataSet
+                        .Select(neuralNetworkTrainer.PerformSingleEpochProducingErrorRate)
+                        .ToList();
+
+                    error = errors.Average();
+                    Log.LogDebug($"Error Rate: {error}. Epoch: {numEpochs}");
+
+                    numEpochs++;
                 }
-
-                Log.LogDebug($"Epochs performed: {numEpochs}");
-
-                numEpochs++;
-            }
+            }, cancellationToken); 
         }
 
-        public void TrainForErrorThreshold(
+        public async Task TrainForEpochs(
             IList<TrainingDataSet> trainingDataSet,
-            double minimumErrorThreshold)
+            int maximumEpochs,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            var error = 1.0;
+            await Task.Run(() => {
+                var numEpochs = 0;
 
-            while (error > minimumErrorThreshold)
-            {
-                var errors = trainingDataSet
-                    .Select(neuralNetworkTrainer.PerformSingleEpochProducingErrorRate)
-                    .ToList();
+                while (numEpochs < maximumEpochs)
+                {
+                    foreach (var dataSet in trainingDataSet)
+                    {
+                        neuralNetworkTrainer.PerformSingleEpochProducingErrorRate(dataSet);
+                    }
 
-                error = errors.Average();
-                Log.LogDebug($"Current Error Rate: {error}");
-            }
+                    Log.LogDebug($"Epochs performed: {numEpochs}");
+
+                    numEpochs++;
+                }
+            }, cancellationToken);
+        }
+
+        public async Task TrainForErrorThreshold(
+            IList<TrainingDataSet> trainingDataSet,
+            double minimumErrorThreshold,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await Task.Run(() => {
+                var error = minimumErrorThreshold + 1;
+
+                while (error > minimumErrorThreshold)
+                {
+                    var errors = trainingDataSet
+                        .Select(neuralNetworkTrainer.PerformSingleEpochProducingErrorRate)
+                        .ToList();
+
+                    error = errors.Average();
+                    Log.LogDebug($"Current Error Rate: {error}");
+                }
+            }, cancellationToken); 
         }
     }
 
