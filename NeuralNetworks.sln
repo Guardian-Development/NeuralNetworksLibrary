@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
@@ -20,10 +20,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworks.Tests.Suppor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworks.Tests.UnitTests", "NeuralNetworks.Tests.UnitTests\NeuralNetworks.Tests.UnitTests.csproj", "{E5E9362B-75E4-46F3-BD3D-0B9303DE9FBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworks.Tests.PerformanceTests", "NeuralNetworks.Tests.PerformanceTests\NeuralNetworks.Tests.PerformanceTests.csproj", "{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6B2CBBD2-5CAB-48E1-99F6-15FF23035CBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -46,6 +52,18 @@ Global
 		{E5E9362B-75E4-46F3-BD3D-0B9303DE9FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5E9362B-75E4-46F3-BD3D-0B9303DE9FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5E9362B-75E4-46F3-BD3D-0B9303DE9FBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Debug|x64.ActiveCfg = Debug|x64
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Debug|x64.Build.0 = Debug|x64
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Debug|x86.ActiveCfg = Debug|x86
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Debug|x86.Build.0 = Debug|x86
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Release|x64.ActiveCfg = Release|x64
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Release|x64.Build.0 = Release|x64
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Release|x86.ActiveCfg = Release|x86
+		{D996F6A4-CE86-44C7-A34A-2F4AE6BF9104}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
