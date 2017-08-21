@@ -28,11 +28,11 @@ namespace NeuralNetworks.Tests.PerformanceTests
         private double[] InputValues => new [] { 0.98, 0.23, 0.44, 0.44, 0.12 }; 
 
         [Benchmark]
-        public double[] PredictSingleThreaded() => 
+        public double[] FeedForwardPredictionSingleThreaded() => 
             neuralNetworkUnderTest.PredictionFor(InputValues, ParallelOptionsExtensions.SingleThreadedOptions()); 
 
         [Benchmark]
-        public double[] PredictMultiThreaded() => 
+        public double[] FeedForwardPredictionMultiThreaded() => 
             neuralNetworkUnderTest.PredictionFor(InputValues, ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions()); 
     }
 }
