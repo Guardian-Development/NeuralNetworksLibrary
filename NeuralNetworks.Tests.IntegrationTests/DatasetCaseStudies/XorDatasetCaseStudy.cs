@@ -25,12 +25,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
                 .Build();
 
             await TrainingController
-                .For(BackPropagation.WithMultiThreadedConfiguration(
-                    neuralNetwork,  
-                    UnrestrictedParallelisation,
-                    learningRate: 0.4, 
-                    momentum: 0.9))
-                .TrainForEpochsOrErrorThresholdMet(XorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.01);
+                    .For(BackPropagation.WithConfiguration(
+                        neuralNetwork,  
+                        UnrestrictedParallelisation,
+                        learningRate: 0.4, 
+                        momentum: 0.9))
+                    .TrainForEpochsOrErrorThresholdMet(XorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.01);
 
             Assert.True(neuralNetwork.PredictionFor(new [] { 0.0, 1.0 }, UnrestrictedParallelisation)[0] >= 0.5,
                 "Prediction incorrect for (0, 1)");

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Tests.Support;
+using NeuralNetworks.Library.Extensions;
 using Xunit;
 
 namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
@@ -16,17 +17,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
             new NeuralNetworkContext(
                 errorGradientDecimalPlaces: 5, 
                 outputDecimalPlaces: 5, 
-                synapseWeightDecimalPlaces: 5); 
-
-        private ParallelOptions SingleThreadedParallelisation => 
-            new ParallelOptions {
-                MaxDegreeOfParallelism = 1
-             }; 
-
-        private ParallelOptions MultiThreadedParallelisation => 
-            new ParallelOptions {
-                MaxDegreeOfParallelism = 10
-            };
+                synapseWeightDecimalPlaces: 5);
         
         [Fact]
         public void CanFeedForwardCorrectlyInComplexMultiLayerNeuralNetwork()
@@ -128,11 +119,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.9912, 0.81234, 0.0001, 0.45231, 0.67128 },
                     expectedOutput: new [] { 0.87728, 0.72048, 0.75779, 0.92166 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.9912, 0.81234, 0.0001, 0.45231, 0.67128 },
                     expectedOutput: new [] { 0.87728, 0.72048, 0.75779, 0.92166 },
-                    parallelOptions: MultiThreadedParallelisation);
+                    parallelOptions: ParallelOptionsExtensions.MultiThreadedOptions(10));
         }
 
         [Fact]
@@ -149,11 +140,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.1 },
                     expectedOutput: new [] { 0.50375 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.1 },
                     expectedOutput: new [] { 0.50375 },
-                    parallelOptions: MultiThreadedParallelisation);
+                    parallelOptions: ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions());
         }
 
         [Fact]
@@ -174,11 +165,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.4, 0.56 },
                     expectedOutput: new [] { 0.60099 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.4, 0.56 },
                     expectedOutput: new [] { 0.60099 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.MultiThreadedOptions(15)); 
         }
 
         [Fact]
@@ -200,11 +191,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.39845 },
                     expectedOutput: new [] { 0.54471, 0.53183 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.39845 },
                     expectedOutput: new [] { 0.54471, 0.53183 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.MultiThreadedOptions(30)); 
         }
 
         [Fact]
@@ -232,11 +223,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.987, 0.32178 },
                     expectedOutput: new [] { 0.56326, 0.73976, 0.65901 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.987, 0.32178 },
                     expectedOutput: new [] { 0.56326, 0.73976, 0.65901 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions()); 
         }
 
         [Fact]
@@ -260,11 +251,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.439 },
                     expectedOutput: new [] { 0.59453 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.439 },
                     expectedOutput: new [] { 0.59453 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions()); 
         }
 
         [Fact]
@@ -290,11 +281,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.333, 0.12567 },
                     expectedOutput: new [] { 0.62964 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.333, 0.12567 },
                     expectedOutput: new [] { 0.62964 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions()); 
         }
 
         [Fact]
@@ -321,11 +312,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.9912348 },
                     expectedOutput: new [] { 0.61748 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.9912348 },
                     expectedOutput: new [] { 0.61748 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.MultiThreadedOptions(10)); 
         }
 
         [Fact]
@@ -351,11 +342,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.000102 },
                     expectedOutput: new [] { 0.5125, 0.577 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.000102 },
                     expectedOutput: new [] { 0.5125, 0.577 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.MultiThreadedOptions(50)); 
         }
 
         [Fact]
@@ -390,11 +381,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.98124 },
                     expectedOutput: new [] { 0.50055 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.98124 },
                     expectedOutput: new [] { 0.50055 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.MultiThreadedOptions(10)); 
         }
 
         [Fact]
@@ -428,11 +419,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.12345, 0.9812 },
                     expectedOutput: new [] { 0.62054 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.12345, 0.9812 },
                     expectedOutput: new [] { 0.62054 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions()); 
         }
 
         [Fact]
@@ -474,11 +465,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 .InputAndExpectOutput(
                     inputs: new [] { 0.9145, 0.7812 },
                     expectedOutput: new [] { 0.59985, 0.591, 0.591 },
-                    parallelOptions: SingleThreadedParallelisation)
+                    parallelOptions: ParallelOptionsExtensions.SingleThreadedOptions())
                 .InputAndExpectOutput(
                     inputs: new [] { 0.9145, 0.7812 },
                     expectedOutput: new [] { 0.59985, 0.591, 0.591 },
-                    parallelOptions: MultiThreadedParallelisation); 
+                    parallelOptions: ParallelOptionsExtensions.MultiThreadedOptions(10)); 
         }
     }
 }

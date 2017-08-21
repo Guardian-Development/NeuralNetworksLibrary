@@ -85,23 +85,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
                 .ParallelSum(parallelOptions);
         }
 
-        public static BackPropagation WithSingleThreadedConfiguration(
-            NeuralNetwork network, 
-            double learningRate = 1, 
-            double momentum = 0)
-        {
-            var singleThreadedOptions = new ParallelOptions{
-                MaxDegreeOfParallelism = 1
-            }; 
-
-            return BackPropagation.WithMultiThreadedConfiguration(
-                network, 
-                singleThreadedOptions, 
-                learningRate, 
-                momentum); 
-        }
-
-        public static BackPropagation WithMultiThreadedConfiguration(
+        public static BackPropagation WithConfiguration(
             NeuralNetwork network, 
             ParallelOptions parallelOptions,
             double learningRate = 1, 

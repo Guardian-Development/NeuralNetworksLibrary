@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.NetworkInitialisation;
 using NeuralNetworks.Library.Training.BackPropagation;
@@ -22,9 +23,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
             this.learningRate = learningRate;
         }
 
-        public BackPropagationTester QueueTrainingEpoch(Action<TrainingEpochTester<BackPropagation>> action)
+        public BackPropagationTester QueueTrainingEpoch(
+            Action<TrainingEpochTester<BackPropagation>> action,
+            ParallelOptions parallelOptions)
         {
-            var backPropagationTrainer = BackPropagation.WithSingleThreadedConfiguration(targetNeuralNetwork, learningRate, momentum);
+            var backPropagationTrainer = BackPropagation.WithConfiguration(targetNeuralNetwork, parallelOptions, learningRate, momentum);
             var epochTester = TrainingEpochTester<BackPropagation>.For(backPropagationTrainer);
             action.Invoke(epochTester); 
 
