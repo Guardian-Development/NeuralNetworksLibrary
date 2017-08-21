@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Data;
+using NeuralNetworks.Library.Extensions;
 using NeuralNetworks.Library.Training;
 using NeuralNetworks.Library.Training.BackPropagation;
 using NeuralNetworks.Tests.Support;
@@ -99,8 +100,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
                 new[] {0.0}, new[] {1.0}, new[] {1.0}, new[] {0.0}
             };
 
-            return inputs.Zip(outputs, (input, output) => TrainingDataSet.For(input, output))
-                         .ToList(); 
+            return TrainingDataSetExtensions.BuildTrainingDataForAllInputs(inputs, outputs).ToList(); 
         }
     }
 }

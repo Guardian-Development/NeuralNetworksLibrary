@@ -14,7 +14,7 @@ namespace NeuralNetworks.Library.Logging
         public static ILoggerFactory InitialiseLoggingForNeuralNetworksLibrary(this ILoggerFactory factory)
         {
             Logger = factory;
-            Log.LogInformation("Configured logging for the Neural Networks library");
+            Log.LogDebug("Configured logging for the Neural Networks library");
             return Logger; 
         }
     }
