@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Tests.Support;
@@ -8,7 +9,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
 {
     public sealed class NeuralNetworkFeedForwardTests : NeuralNetworkTest
     {
-        public Func<NeuralNetworkPredictionsTester> FeedForwardTester 
+        private Func<NeuralNetworkPredictionsTester> FeedForwardTester 
             => NeuralNetworkPredictionsTester.Create;
             
         private NeuralNetworkContext TestContext => 
@@ -16,6 +17,16 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                 errorGradientDecimalPlaces: 5, 
                 outputDecimalPlaces: 5, 
                 synapseWeightDecimalPlaces: 5); 
+
+        private ParallelOptions SingleThreadedParallelisation => 
+            new ParallelOptions {
+                MaxDegreeOfParallelism = 1
+             }; 
+
+        private ParallelOptions MultiThreadedParallelisation => 
+            new ParallelOptions {
+                MaxDegreeOfParallelism = 10
+            };
         
         [Fact]
         public void CanFeedForwardCorrectlyInComplexMultiLayerNeuralNetwork()
@@ -116,7 +127,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 16, outputNeuronId: 20, weight: 0.7777)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.9912, 0.81234, 0.0001, 0.45231, 0.67128 },
-                    expectedOutput: new [] { 0.87728, 0.72048, 0.75779, 0.92166 });
+                    expectedOutput: new [] { 0.87728, 0.72048, 0.75779, 0.92166 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.9912, 0.81234, 0.0001, 0.45231, 0.67128 },
+                    expectedOutput: new [] { 0.87728, 0.72048, 0.75779, 0.92166 },
+                    parallelOptions: MultiThreadedParallelisation);
         }
 
         [Fact]
@@ -132,7 +148,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                     .Synapses(s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 2, weight: 0.15)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.1 },
-                    expectedOutput: new [] { 0.50375 });
+                    expectedOutput: new [] { 0.50375 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.1 },
+                    expectedOutput: new [] { 0.50375 },
+                    parallelOptions: MultiThreadedParallelisation);
         }
 
         [Fact]
@@ -152,7 +173,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.11)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.4, 0.56 },
-                    expectedOutput: new [] { 0.60099 });
+                    expectedOutput: new [] { 0.60099 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.4, 0.56 },
+                    expectedOutput: new [] { 0.60099 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
 
         [Fact]
@@ -173,7 +199,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 1, outputNeuronId: 3, weight: 0.32)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.39845 },
-                    expectedOutput: new [] { 0.54471, 0.53183 });
+                    expectedOutput: new [] { 0.54471, 0.53183 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.39845 },
+                    expectedOutput: new [] { 0.54471, 0.53183 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
 
         [Fact]
@@ -200,7 +231,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 5, weight: 0.33)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.987, 0.32178 },
-                    expectedOutput: new [] { 0.56326, 0.73976, 0.65901 });
+                    expectedOutput: new [] { 0.56326, 0.73976, 0.65901 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.987, 0.32178 },
+                    expectedOutput: new [] { 0.56326, 0.73976, 0.65901 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
 
         [Fact]
@@ -223,7 +259,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 3, weight: 0.76543)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.439 },
-                    expectedOutput: new [] { 0.59453 });
+                    expectedOutput: new [] { 0.59453 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.439 },
+                    expectedOutput: new [] { 0.59453 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
 
         [Fact]
@@ -248,7 +289,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 4, weight: 0.89333)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.333, 0.12567 },
-                    expectedOutput: new [] { 0.62964 });
+                    expectedOutput: new [] { 0.62964 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.333, 0.12567 },
+                    expectedOutput: new [] { 0.62964 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
 
         [Fact]
@@ -274,7 +320,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 3, outputNeuronId: 4, weight: 0.6523)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.9912348 },
-                    expectedOutput: new [] { 0.61748 });
+                    expectedOutput: new [] { 0.61748 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.9912348 },
+                    expectedOutput: new [] { 0.61748 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
 
         [Fact]
@@ -299,7 +350,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 2, outputNeuronId: 4, weight: 0.6209)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.000102 },
-                    expectedOutput: new [] { 0.5125, 0.577 });
+                    expectedOutput: new [] { 0.5125, 0.577 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.000102 },
+                    expectedOutput: new [] { 0.5125, 0.577 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
 
         [Fact]
@@ -333,7 +389,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 5, outputNeuronId: 6, weight: 0.0034)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.98124 },
-                    expectedOutput: new [] { 0.50055 });
+                    expectedOutput: new [] { 0.50055 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.98124 },
+                    expectedOutput: new [] { 0.50055 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
 
         [Fact]
@@ -366,7 +427,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 5, outputNeuronId: 6, weight: 0.7101)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.12345, 0.9812 },
-                    expectedOutput: new [] { 0.62054 });
+                    expectedOutput: new [] { 0.62054 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.12345, 0.9812 },
+                    expectedOutput: new [] { 0.62054 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
 
         [Fact]
@@ -407,7 +473,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
                         s => s.SynapseBetween(inputNeuronId: 6, outputNeuronId: 9, weight: 0.7101)))
                 .InputAndExpectOutput(
                     inputs: new [] { 0.9145, 0.7812 },
-                    expectedOutput: new [] { 0.59985, 0.591, 0.591 });
+                    expectedOutput: new [] { 0.59985, 0.591, 0.591 },
+                    parallelOptions: SingleThreadedParallelisation)
+                .InputAndExpectOutput(
+                    inputs: new [] { 0.9145, 0.7812 },
+                    expectedOutput: new [] { 0.59985, 0.591, 0.591 },
+                    parallelOptions: MultiThreadedParallelisation); 
         }
     }
 }

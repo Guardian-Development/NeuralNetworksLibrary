@@ -13,7 +13,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
 {
     public sealed class XorDatasetCaseStudy : NeuralNetworkTest
     {
-        private ParallelOptions UnrestrictedParallelisation => new ParallelOptions(); 
+        private ParallelOptions UnrestrictedParallelisation => new ParallelOptions();
 
         [Fact]
         public async void CanSuccessfullySolveXorProblem()
@@ -32,10 +32,14 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
                     momentum: 0.9))
                 .TrainForEpochsOrErrorThresholdMet(XorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.01);
 
-            Assert.True(neuralNetwork.PredictionFor(0.0, 1.0)[0] >= 0.5, "Prediction incorrect for (0, 1)");
-            Assert.True(neuralNetwork.PredictionFor(1.0, 0.0)[0] >= 0.5, "Prediction incorrect for (1, 0)");
-            Assert.True(neuralNetwork.PredictionFor(0.0, 0.0)[0] < 0.5, "Prediction incorrect for (0, 0)");
-            Assert.True(neuralNetwork.PredictionFor(1.0, 1.0)[0] < 0.5, "Prediction incorrect for (1, 1)");
+            Assert.True(neuralNetwork.PredictionFor(new [] { 0.0, 1.0 }, UnrestrictedParallelisation)[0] >= 0.5,
+                "Prediction incorrect for (0, 1)");
+            Assert.True(neuralNetwork.PredictionFor(new [] { 1.0, 0.0 }, UnrestrictedParallelisation)[0] >= 0.5, 
+                "Prediction incorrect for (1, 0)");
+            Assert.True(neuralNetwork.PredictionFor(new[] { 0.0, 0.0 }, UnrestrictedParallelisation)[0] < 0.5, 
+                "Prediction incorrect for (0, 0)");
+            Assert.True(neuralNetwork.PredictionFor(new[] { 1.0, 1.0 }, UnrestrictedParallelisation)[0] < 0.5, 
+                "Prediction incorrect for (1, 1)");
         }
 
         private static List<TrainingDataSet> XorTrainingData()

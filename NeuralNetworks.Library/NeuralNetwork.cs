@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NeuralNetworks.Library.Components;
+using NeuralNetworks.Library.Extensions;
 using NeuralNetworks.Library.NetworkInitialisation;
 
 namespace NeuralNetworks.Library
@@ -37,10 +39,10 @@ namespace NeuralNetworks.Library
             return this;
         }
 
-        public double[] PredictionFor(params double[] inputs)
+        public double[] PredictionFor(double[] inputs, ParallelOptions parallelOptions)
         {
             InputLayer.SetInputLayerOutputs(inputs);
-            HiddenLayers.ForEach(layer => layer.Neurons.ForEach(a => a.CalculateOutput()));
+            HiddenLayers.ForEach(layer => layer.Neurons.ParallelForEach(a => a.CalculateOutput(), parallelOptions));
             return OutputLayer.Neurons.Select(a => a.CalculateOutput()).ToArray();
         }
 

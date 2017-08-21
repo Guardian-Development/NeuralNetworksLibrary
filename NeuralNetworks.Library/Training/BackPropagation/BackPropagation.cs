@@ -29,7 +29,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
         public override double PerformSingleEpochProducingErrorRate(TrainingDataSet trainingDataSet)
         {
-            neuralNetwork.PredictionFor(trainingDataSet.Inputs);
+            neuralNetwork.PredictionFor(trainingDataSet.Inputs, parallelOptions);
             return BackPropagate(trainingDataSet.Outputs);
         }
 
