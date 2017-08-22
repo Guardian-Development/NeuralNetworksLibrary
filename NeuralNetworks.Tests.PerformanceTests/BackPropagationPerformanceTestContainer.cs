@@ -12,13 +12,13 @@ namespace NeuralNetworks.Tests.PerformanceTests
 {
     public class BackPropagationPerformanceComparisonContainer
     {
-        private readonly NeuralNetwork neuralNetworkUnderTest;
-
+        private readonly TrainingController<BackPropagation> singleThreadedController; 
+        private readonly TrainingController<BackPropagation> multiThreadedController; 
         private readonly IList<TrainingDataSet> trainingData;
 
         public BackPropagationPerformanceComparisonContainer()
         {
-            neuralNetworkUnderTest = 
+            var neuralNetworkUnderTest = 
                 NeuralNetwork
                     .For(NeuralNetworkContext.MaximumPrecision)
                     .WithInputLayer(neuronCount: 5, activationType: ActivationType.Sigmoid)
@@ -31,25 +31,22 @@ namespace NeuralNetworks.Tests.PerformanceTests
 
             trainingData = new[] { 
                 TrainingDataSet.For(new [] {0.78, 0.99, 0.67, 0.72, 0.22}, new [] { 0.12, 0.14 })}; 
+
+            multiThreadedController = TrainingController.For(
+                BackPropagation
+                    .WithConfiguration(neuralNetworkUnderTest, ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions()));
+
+            singleThreadedController = TrainingController.For(
+                BackPropagation
+                    .WithConfiguration(neuralNetworkUnderTest, ParallelOptionsExtensions.SingleThreadedOptions()));
         }
 
         [Benchmark]
         public void BackPropagationTrainingMultiThreadedTenThousandEpochs()
-        {
-            TrainingController.For(
-                BackPropagation
-                    .WithConfiguration(neuralNetworkUnderTest, ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions()))
-                    .TrainForEpochs(trainingData, maximumEpochs: 10000).GetAwaiter().GetResult(); 
-        }
+            => multiThreadedController.TrainForEpochs(trainingData, maximumEpochs: 10000).GetAwaiter().GetResult();
 
         [Benchmark]
         public void BackPropagationTrainingSingleThreadedTenThousandEpochs()
-        {
-            TrainingController.For(
-                BackPropagation
-                    .WithConfiguration(neuralNetworkUnderTest, ParallelOptionsExtensions.SingleThreadedOptions()))
-                    .TrainForEpochs(trainingData, maximumEpochs: 10000).GetAwaiter().GetResult();
-        }
-
+            => singleThreadedController.TrainForEpochs(trainingData, maximumEpochs: 10000).GetAwaiter().GetResult();
     }
 }
