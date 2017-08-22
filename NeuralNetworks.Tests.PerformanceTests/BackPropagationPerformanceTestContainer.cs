@@ -42,11 +42,11 @@ namespace NeuralNetworks.Tests.PerformanceTests
         }
 
         [Benchmark]
-        public void BackPropagationTrainingMultiThreadedTenThousandEpochs()
-            => multiThreadedController.TrainForEpochs(trainingData, maximumEpochs: 10000).GetAwaiter().GetResult();
+        public void BackPropagationTrainingMultiThreadedOneHundredThousandEpochs()
+            => multiThreadedController.TrainForEpochs(trainingData, maximumEpochs: 100000).GetAwaiter().GetResult();
 
         [Benchmark]
-        public void BackPropagationTrainingSingleThreadedTenThousandEpochs()
-            => singleThreadedController.TrainForEpochs(trainingData, maximumEpochs: 10000).GetAwaiter().GetResult();
+        public void BackPropagationTrainingSingleThreadedOneHundredThousandEpochs()
+            => singleThreadedController.TrainForEpochs(trainingData, maximumEpochs: 100000).GetAwaiter().GetResult();
     }
 }
