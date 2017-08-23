@@ -11,11 +11,8 @@ namespace NeuralNetworks.Tests.PerformanceTests
     {
         public static void Main(string[] args)
         {
-            var switcher = new BenchmarkSwitcher(new[] {
-                typeof(FeedForwardPerformanceComparisonContainer),
-                typeof(BackPropagationPerformanceComparisonContainer)
-            });
-            switcher.Run(args);
+            BenchmarkRunner.Run(typeof(FeedForwardPerformanceComparisonContainer)); 
+            BenchmarkRunner.Run(typeof(BackPropagationPerformanceComparisonContainer));
         }
     }
 }

@@ -1,10 +1,15 @@
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes.Exporters;
+using BenchmarkDotNet.Attributes.Jobs;
+using BenchmarkDotNet.Engines;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Extensions;
 
 namespace NeuralNetworks.Tests.PerformanceTests
 {
+    [MarkdownExporter]
+    [SimpleJob(RunStrategy.Monitoring, launchCount: 10, warmupCount: 5, targetCount: 20)]
     public class FeedForwardPerformanceComparisonContainer
     {
         private readonly NeuralNetwork neuralNetworkUnderTest;

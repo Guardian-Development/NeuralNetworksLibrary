@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes.Exporters;
+using BenchmarkDotNet.Attributes.Jobs;
+using BenchmarkDotNet.Engines;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Data;
@@ -10,6 +13,8 @@ using NeuralNetworks.Library.Training.BackPropagation;
 
 namespace NeuralNetworks.Tests.PerformanceTests
 {
+    [MarkdownExporter]
+    [SimpleJob(RunStrategy.Monitoring, launchCount: 10, warmupCount: 5, targetCount: 20)]
     public class BackPropagationPerformanceComparisonContainer
     {
         private readonly TrainingController<BackPropagation> singleThreadedController; 
