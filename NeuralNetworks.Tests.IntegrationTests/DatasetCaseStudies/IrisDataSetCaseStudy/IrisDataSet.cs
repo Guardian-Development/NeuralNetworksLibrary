@@ -15,10 +15,12 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.IrisDatasetCa
         public static List<IrisDataRow> RowsToBeUsedForPredictions => 
             AllRows
                 .Intersect(RowsToBeUsedForTraining)
+                .Select(IrisDataRowNormaliser.NormaliseDataRow)
                 .ToList(); 
 
         public static TrainingDataSet[] TrainingData => 
             RowsToBeUsedForTraining
+                .Select(IrisDataRowNormaliser.NormaliseDataRow)
                 .Select(IrisDataRow.TrainingDataFromRow)
                 .ToArray();
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
@@ -13,40 +14,55 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.IrisDatasetCa
 {
     public sealed class IrisDatasetCaseStudy : NeuralNetworkTest
     {
-        [Fact(Skip = "Not completed")]
+        [Fact]
         public async void CanSuccessfullySolveIrisProblemTrainingForEpochsOrErrorThresholdMet()
         {
             var neuralNetwork = NeuralNetwork.For(NeuralNetworkContext.MaximumPrecision)
                 .WithInputLayer(neuronCount: 4, activationType: ActivationType.Sigmoid)
-                .WithHiddenLayer(neuronCount: 7, activationType: ActivationType.Sigmoid)
-                .WithHiddenLayer(neuronCount: 3, activationType: ActivationType.Sigmoid)
+                .WithHiddenLayer(neuronCount: 8, activationType: ActivationType.Sigmoid)
+                .WithHiddenLayer(neuronCount: 5, activationType: ActivationType.Sigmoid)
                 .WithOutputLayer(neuronCount: 3, activationType: ActivationType.TanH)
                 .Build();
 
+            /*
+            l: 1.15 m: 0.15 
+             */
             await TrainingController
                     .For(BackPropagation.WithConfiguration(
                         neuralNetwork,  
                         ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
                         learningRate: 1.15, 
-                        momentum: 0.9))
-                    .TrainForEpochsOrErrorThresholdMet(IrisDataSet.TrainingData, maximumEpochs: 20000, errorThreshold: 0.01);
+                        momentum: 0.21))
+                    .TrainForEpochsOrErrorThresholdMet(IrisDataSet.TrainingData, maximumEpochs: 1000, errorThreshold: 0.01);
 
             AssertPredictionsForTrainedNeuralNetwork(neuralNetwork);
         }
 
         private void AssertPredictionsForTrainedNeuralNetwork(NeuralNetwork neuralNetwork)
         {
+            var predictedCorrectly = new List<IrisDataRow>(); 
+            var predictedIncorrectly = new List<IrisDataRow>(); 
+
             IrisDataSet.RowsToBeUsedForPredictions.ForEach(row => 
             {
                 var predictions = neuralNetwork.PredictionFor(
                     row.PredictionDataPoints, 
                     ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions());
                 
-                var prediction = Array.IndexOf(predictions, predictions.Max()); 
+                var prediction = Array.IndexOf(predictions, predictions.Max()) + 1; 
 
-                Assert.True(prediction == row.Species, 
-                    Invariant($"Row with Id: {row.Id}. Predicted: {prediction}. Actual: {row.Species}")); 
+                if(prediction == row.Species) 
+                {
+                    predictedCorrectly.Add(row); 
+                }
+                else 
+                {
+                    predictedIncorrectly.Add(row); 
+                }
             }); 
+
+            Assert.True(predictedIncorrectly.Count == 0, 
+                    Invariant($"Predicted Incorrectly Count: {predictedIncorrectly.Count}. Predicted Correctly Count: {predictedCorrectly.Count}")); 
         }
     }
 }
