@@ -10,7 +10,7 @@ using NeuralNetworks.Library.Training.BackPropagation;
 using NeuralNetworks.Tests.Support;
 using Xunit;
 
-namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies
+namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.XorDatasetCaseStudy
 {
     public sealed class XorDatasetCaseStudy : NeuralNetworkTest
     {

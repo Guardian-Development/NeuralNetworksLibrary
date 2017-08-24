@@ -24,16 +24,55 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.IrisDatasetCa
                 .WithOutputLayer(neuronCount: 3, activationType: ActivationType.TanH)
                 .Build();
 
-            /*
-            l: 1.15 m: 0.15 
-             */
             await TrainingController
                     .For(BackPropagation.WithConfiguration(
                         neuralNetwork,  
                         ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
                         learningRate: 1.15, 
-                        momentum: 0.21))
-                    .TrainForEpochsOrErrorThresholdMet(IrisDataSet.TrainingData, maximumEpochs: 1000, errorThreshold: 0.01);
+                        momentum: 0.4))
+                    .TrainForEpochsOrErrorThresholdMet(IrisDataSet.TrainingData, maximumEpochs: 1500, errorThreshold: 0.01);
+
+            AssertPredictionsForTrainedNeuralNetwork(neuralNetwork);
+        }
+
+        [Fact]
+        public async void CanSuccessfullySolveIrisProblemTrainingForEpochs()
+        {
+            var neuralNetwork = NeuralNetwork.For(NeuralNetworkContext.MaximumPrecision)
+                .WithInputLayer(neuronCount: 4, activationType: ActivationType.Sigmoid)
+                .WithHiddenLayer(neuronCount: 8, activationType: ActivationType.Sigmoid)
+                .WithHiddenLayer(neuronCount: 5, activationType: ActivationType.Sigmoid)
+                .WithOutputLayer(neuronCount: 3, activationType: ActivationType.TanH)
+                .Build();
+
+            await TrainingController
+                    .For(BackPropagation.WithConfiguration(
+                        neuralNetwork,  
+                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
+                        learningRate: 1.15, 
+                        momentum: 0.4))
+                    .TrainForEpochs(IrisDataSet.TrainingData, maximumEpochs: 750);
+
+            AssertPredictionsForTrainedNeuralNetwork(neuralNetwork);
+        }
+
+        [Fact]
+        public async void CanSuccessfullySolveXorProblemTrainingForErrorThreshold()
+        {
+            var neuralNetwork = NeuralNetwork.For(NeuralNetworkContext.MaximumPrecision)
+                .WithInputLayer(neuronCount: 4, activationType: ActivationType.Sigmoid)
+                .WithHiddenLayer(neuronCount: 8, activationType: ActivationType.Sigmoid)
+                .WithHiddenLayer(neuronCount: 5, activationType: ActivationType.Sigmoid)
+                .WithOutputLayer(neuronCount: 3, activationType: ActivationType.TanH)
+                .Build();
+
+            await TrainingController
+                    .For(BackPropagation.WithConfiguration(
+                        neuralNetwork,  
+                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
+                        learningRate: 1.15, 
+                        momentum: 0.4))
+                    .TrainForErrorThreshold(IrisDataSet.TrainingData, minimumErrorThreshold: 0.08);
 
             AssertPredictionsForTrainedNeuralNetwork(neuralNetwork);
         }

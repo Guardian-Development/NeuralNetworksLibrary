@@ -20,7 +20,7 @@ namespace NeuralNetworks.Tests.Support
         private void ConfigureLoggingForTest()
         {
             Logger
-                .AddConsole(LogLevel.Debug)
+                .AddConsole(LogLevel.Information)
                 .InitialiseLoggingForNeuralNetworksLibrary();
         }
     }
