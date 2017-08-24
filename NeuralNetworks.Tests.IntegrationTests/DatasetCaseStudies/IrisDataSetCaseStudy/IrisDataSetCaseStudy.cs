@@ -51,7 +51,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.IrisDatasetCa
                         ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
                         learningRate: 1.15, 
                         momentum: 0.4))
-                    .TrainForEpochs(IrisDataSet.TrainingData, maximumEpochs: 750);
+                    .TrainForEpochs(IrisDataSet.TrainingData, maximumEpochs: 1000);
 
             AssertPredictionsForTrainedNeuralNetwork(neuralNetwork);
         }
