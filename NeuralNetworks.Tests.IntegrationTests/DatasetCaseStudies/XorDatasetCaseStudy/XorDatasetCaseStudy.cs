@@ -27,7 +27,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.XorDatasetCas
             await TrainingController
                     .For(BackPropagation.WithConfiguration(
                         neuralNetwork,  
-                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
+                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions,
                         learningRate: 0.4, 
                         momentum: 0.9))
                     .TrainForEpochsOrErrorThresholdMet(XorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.01);
@@ -47,7 +47,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.XorDatasetCas
             await TrainingController
                     .For(BackPropagation.WithConfiguration(
                         neuralNetwork,  
-                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
+                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions,
                         learningRate: 0.4, 
                         momentum: 0.9))
                     .TrainForEpochs(XorTrainingData(), maximumEpochs: 5000);
@@ -67,7 +67,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.XorDatasetCas
             await TrainingController
                     .For(BackPropagation.WithConfiguration(
                         neuralNetwork,  
-                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
+                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions,
                         learningRate: 0.4, 
                         momentum: 0.9))
                     .TrainForErrorThreshold(XorTrainingData(), minimumErrorThreshold: 0.01);
@@ -78,16 +78,16 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.XorDatasetCas
         private void AssertPredictionsForTrainedNeuralNetwork(NeuralNetwork neuralNetwork)
         {
             Assert.True(neuralNetwork.PredictionFor(new [] { 0.0, 1.0 }, 
-                ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions())[0] >= 0.5,
+                ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions)[0] >= 0.5,
                     "Prediction incorrect for (0, 1)");
             Assert.True(neuralNetwork.PredictionFor(new [] { 1.0, 0.0 }, 
-                ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions())[0] >= 0.5, 
+                ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions)[0] >= 0.5, 
                     "Prediction incorrect for (1, 0)");
             Assert.True(neuralNetwork.PredictionFor(new[] { 0.0, 0.0 }, 
-                ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions())[0] < 0.5, 
+                ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions)[0] < 0.5, 
                     "Prediction incorrect for (0, 0)");
             Assert.True(neuralNetwork.PredictionFor(new[] { 1.0, 1.0 }, 
-                ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions())[0] < 0.5, 
+                ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions)[0] < 0.5, 
                     "Prediction incorrect for (1, 1)");
         }
 

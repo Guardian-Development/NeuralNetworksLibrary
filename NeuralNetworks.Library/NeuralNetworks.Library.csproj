@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackOnBuild>false</PackOnBuild>
     <PackageId>GuardianDevelopment.NeuralNetworks.Library</PackageId>
-    <PackageVersion>1.0.2</PackageVersion>
+    <PackageVersion>2.0.0.0</PackageVersion>
     <Authors>GuardianDevelopment</Authors>
     <Owners>GuardianDevelopment</Owners>
     <PackageProjectUrl>https://github.com/Guardian-Development/NeuralNetworksLibrary</PackageProjectUrl>

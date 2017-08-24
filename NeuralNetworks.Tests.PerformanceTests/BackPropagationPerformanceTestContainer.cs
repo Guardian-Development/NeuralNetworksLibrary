@@ -39,11 +39,11 @@ namespace NeuralNetworks.Tests.PerformanceTests
 
             multiThreadedController = TrainingController.For(
                 BackPropagation
-                    .WithConfiguration(neuralNetworkUnderTest, ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions()));
+                    .WithConfiguration(neuralNetworkUnderTest, ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions));
 
             singleThreadedController = TrainingController.For(
                 BackPropagation
-                    .WithConfiguration(neuralNetworkUnderTest, ParallelOptionsExtensions.SingleThreadedOptions()));
+                    .WithConfiguration(neuralNetworkUnderTest, ParallelOptionsExtensions.SingleThreadedOptions));
         }
 
         [Benchmark]

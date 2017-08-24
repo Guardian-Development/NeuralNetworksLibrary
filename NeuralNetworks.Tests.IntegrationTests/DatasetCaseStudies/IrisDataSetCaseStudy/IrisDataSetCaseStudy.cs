@@ -27,7 +27,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.IrisDatasetCa
             await TrainingController
                     .For(BackPropagation.WithConfiguration(
                         neuralNetwork,  
-                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
+                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions,
                         learningRate: 1.15, 
                         momentum: 0.4))
                     .TrainForEpochsOrErrorThresholdMet(IrisDataSet.TrainingData, maximumEpochs: 1500, errorThreshold: 0.01);
@@ -48,7 +48,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.IrisDatasetCa
             await TrainingController
                     .For(BackPropagation.WithConfiguration(
                         neuralNetwork,  
-                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
+                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions,
                         learningRate: 1.15, 
                         momentum: 0.4))
                     .TrainForEpochs(IrisDataSet.TrainingData, maximumEpochs: 1000);
@@ -69,7 +69,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.IrisDatasetCa
             await TrainingController
                     .For(BackPropagation.WithConfiguration(
                         neuralNetwork,  
-                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions(),
+                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions,
                         learningRate: 1.15, 
                         momentum: 0.4))
                     .TrainForErrorThreshold(IrisDataSet.TrainingData, minimumErrorThreshold: 0.08);
@@ -86,7 +86,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.IrisDatasetCa
             {
                 var predictions = neuralNetwork.PredictionFor(
                     row.PredictionDataPoints, 
-                    ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions());
+                    ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions);
                 
                 var prediction = Array.IndexOf(predictions, predictions.Max()) + 1; 
 

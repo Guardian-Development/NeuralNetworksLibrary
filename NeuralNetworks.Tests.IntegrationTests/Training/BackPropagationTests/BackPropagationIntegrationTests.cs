@@ -108,7 +108,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                                             .WeightDelta(-0.15683304, WeightDeltaAssertionPrecision),
                                         s => s.InputNeuronId(2).OutputNeuronId(5).Weight(0.19295)
                                             .WeightDelta(-0.19704664, WeightDeltaAssertionPrecision))))),
-                    ParallelOptionsExtensions.SingleThreadedOptions())
+                    ParallelOptionsExtensions.SingleThreadedOptions)
                 .QueueTrainingEpoch(e => e.Inputs(0.78, 0.98).ExpectedOutputs(0.78, 0.94, 0.12).ErrorRate(0.96014)
                     .ExpectNeuralNetworkState(nn => nn
                         .InputLayer(l => l
@@ -271,7 +271,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                                     .InputSynapses(
                                         s => s.InputNeuronId(3).OutputNeuronId(5).Weight(0.92185)
                                             .WeightDelta(-0.058151145, WeightDeltaAssertionPrecision))))),
-                    ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions())
+                    ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions)
                 .QueueTrainingEpoch(e => e.Inputs(0.1432, 0.4513).ExpectedOutputs(0.23, 0.167).ErrorRate(0.83118)
                     .ExpectNeuralNetworkState(nn => nn
                         .InputLayer(l => l
@@ -386,7 +386,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                                             .WeightDelta(0.112076637, WeightDeltaAssertionPrecision),
                                          s => s.InputNeuronId(5).OutputNeuronId(6).Weight(0.22722)
                                             .WeightDelta(0.106219658, WeightDeltaAssertionPrecision))))),                      
-                    ParallelOptionsExtensions.SingleThreadedOptions())
+                    ParallelOptionsExtensions.SingleThreadedOptions)
                 .PerformAllEpochs();
         }
 
@@ -465,7 +465,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                                             .WeightDelta(0.112076637, WeightDeltaAssertionPrecision),
                                         s => s.InputNeuronId(5).OutputNeuronId(6).Weight(0.22722)
                                             .WeightDelta(0.106219658, WeightDeltaAssertionPrecision))))),
-                    ParallelOptionsExtensions.SingleThreadedOptions())
+                    ParallelOptionsExtensions.SingleThreadedOptions)
                 .QueueTrainingEpoch(e => e.Inputs(0.7122, 0.911).ExpectedOutputs(0.99).ErrorRate(0.34388)
                     .ExpectNeuralNetworkState(nn => nn
                         .InputLayer(l => l
@@ -514,7 +514,7 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests
                                             .WeightDelta(0.098294662, WeightDeltaAssertionPrecision),
                                         s => s.InputNeuronId(5).OutputNeuronId(6).Weight(0.40658)
                                             .WeightDelta(0.092899862, WeightDeltaAssertionPrecision))))),
-                    ParallelOptionsExtensions.SingleThreadedOptions())
+                    ParallelOptionsExtensions.SingleThreadedOptions)
                 .PerformAllEpochs();
         }
     }

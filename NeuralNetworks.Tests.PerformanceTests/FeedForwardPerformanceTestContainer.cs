@@ -34,10 +34,10 @@ namespace NeuralNetworks.Tests.PerformanceTests
 
         [Benchmark]
         public double[] FeedForwardPredictionSingleThreaded() => 
-            neuralNetworkUnderTest.PredictionFor(InputValues, ParallelOptionsExtensions.SingleThreadedOptions()); 
+            neuralNetworkUnderTest.PredictionFor(InputValues, ParallelOptionsExtensions.SingleThreadedOptions); 
 
         [Benchmark]
         public double[] FeedForwardPredictionMultiThreaded() => 
-            neuralNetworkUnderTest.PredictionFor(InputValues, ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions()); 
+            neuralNetworkUnderTest.PredictionFor(InputValues, ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions); 
     }
 }
