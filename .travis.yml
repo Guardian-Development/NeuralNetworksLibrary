@@ -5,5 +5,5 @@ dist: trusty
 script:
  - dotnet restore
  - dotnet build 
- - dotnet test ./NeuralNetworks.Tests.UnitTests/NeuralNetworks.Tests.UnitTests.csproj
- - dotnet test ./NeuralNetworks.Tests.IntegrationTests/NeuralNetworks.Tests.IntegrationTests.csproj
+ - dotnet test ./NeuralNetworks.Tests.UnitTests/NeuralNetworks.Tests.UnitTests.csproj -c Release
+ - dotnet test ./NeuralNetworks.Tests.IntegrationTests/NeuralNetworks.Tests.IntegrationTests.csproj -c Release
