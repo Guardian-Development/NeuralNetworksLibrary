@@ -6,4 +6,4 @@ script:
  - dotnet restore
  - dotnet build -c Release
  - dotnet test ./NeuralNetworks.Tests.UnitTests/NeuralNetworks.Tests.UnitTests.csproj -c Release
- - dotnet test ./NeuralNetworks.Tests.IntegrationTests/NeuralNetworks.Tests.IntegrationTests.csproj -c Release
+ - travis_wait dotnet test ./NeuralNetworks.Tests.IntegrationTests/NeuralNetworks.Tests.IntegrationTests.csproj -c Release
