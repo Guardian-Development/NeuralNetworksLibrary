@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace NeuralNetworks.Examples.FraudDetection.Pages
+namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
 {
     public class ErrorModel : PageModel
     {

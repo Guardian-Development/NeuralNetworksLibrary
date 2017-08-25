@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace NeuralNetworks.Examples.FraudDetection
+namespace NeuralNetworks.Examples.FraudDetection.Web
 {
     public class Program
     {

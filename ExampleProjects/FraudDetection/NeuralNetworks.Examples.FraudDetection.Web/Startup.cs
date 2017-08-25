@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace NeuralNetworks.Examples.FraudDetection
+namespace NeuralNetworks.Examples.FraudDetection.Web
 {
     public class Startup
     {
