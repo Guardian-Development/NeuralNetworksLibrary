@@ -3,6 +3,7 @@ using System.Linq;
 using NeuralNetworks.Library.Data;
 using NeuralNetworks.Library.Extensions;
 using NeuralNetworks.Library.Components;
+using System.Threading.Tasks;
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {
@@ -11,18 +12,24 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         private readonly NeuralNetwork neuralNetwork;
 		private readonly NeuronErrorGradientCalculator neuronErrorGradientCalculator;
 		private readonly SynapseWeightCalculator synapseWeightCalculator;
+        private readonly ParallelOptions parallelOptions; 
 
-        private BackPropagation(NeuralNetwork neuralNetwork, double learningRate, double momentum)
+        private BackPropagation(
+            NeuralNetwork neuralNetwork, 
+            NeuronErrorGradientCalculator neuronErrorGradientCalculator, 
+            SynapseWeightCalculator synapseWeightCalculator,
+            ParallelOptions parallelOptions)
             : base(neuralNetwork)
         {
             this.neuralNetwork = neuralNetwork;
-            neuronErrorGradientCalculator = NeuronErrorGradientCalculator.Create(); 
-            synapseWeightCalculator = SynapseWeightCalculator.For(learningRate, momentum);
+            this.neuronErrorGradientCalculator = neuronErrorGradientCalculator;
+            this.synapseWeightCalculator = synapseWeightCalculator; 
+            this.parallelOptions = parallelOptions; 
         }
 
         public override double PerformSingleEpochProducingErrorRate(TrainingDataSet trainingDataSet)
         {
-            neuralNetwork.PredictionFor(trainingDataSet.Inputs);
+            neuralNetwork.PredictionFor(trainingDataSet.Inputs, parallelOptions);
             return BackPropagate(trainingDataSet.Outputs);
         }
 
@@ -36,25 +43,33 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         private void SetNeuronErrorGradients(double[] targets)
         {
             neuralNetwork.OutputLayer.Neurons
-                         .ForEach((neuron, i) => 
-                            neuronErrorGradientCalculator.SetNeuronErrorGradient(neuron, targets[i]));
+                         .ParallelForEach((neuron, i) => 
+                            neuronErrorGradientCalculator.SetNeuronErrorGradient(neuron, targets[i]),
+                            parallelOptions);
 
             neuralNetwork.HiddenLayers
                          .ApplyInReverse(layer => 
-                            layer.Neurons.ForEach(neuronErrorGradientCalculator.SetNeuronErrorGradient));
+                            layer.Neurons.ParallelForEach(
+                                neuron => neuronErrorGradientCalculator.SetNeuronErrorGradient(neuron),
+                                parallelOptions)); 
         }
 
         private void PropagateResultOfNeuronErrors()
         {
             neuralNetwork.OutputLayer.Neurons
                 .Where(NeuronNotProducingCorrectResult)
-                .ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights);
+                .ParallelForEach(
+                    neuron => synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights(neuron, parallelOptions),
+                    parallelOptions);
 
             neuralNetwork.HiddenLayers
-                .ApplyInReverse(layer =>
+                .ParallelForEach(layer =>
                     layer.Neurons
                         .Where(NeuronNotProducingCorrectResult)
-                        .ForEach(synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights));
+                        .ParallelForEach(
+                            neuron => synapseWeightCalculator.CalculateAndUpdateInputSynapseWeights(neuron, parallelOptions),
+                            parallelOptions),
+                    parallelOptions);
         }
 
         private bool NeuronNotProducingCorrectResult(Neuron neuron)
@@ -62,16 +77,26 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
         private double CalculateError(params double[] targets)
         {
-            var i = 0;
-            return neuralNetwork.OutputLayer.Neurons.Sum(
-                neuron => Math.Abs(
-                    neuronErrorGradientCalculator.CalculateErrorForOutputAgainstTarget(neuron, targets[i++])));
+            return neuralNetwork.OutputLayer.Neurons
+                .ParallelZip(
+                    targets, 
+                    (neuron, target) => Math.Abs(neuronErrorGradientCalculator.CalculateErrorForOutputAgainstTarget(neuron, target)),
+                    parallelOptions)
+                .ParallelSum(parallelOptions);
         }
 
         public static BackPropagation WithConfiguration(
             NeuralNetwork network, 
+            ParallelOptions parallelOptions,
             double learningRate = 1, 
             double momentum = 0)
-            => new BackPropagation(network, learningRate, momentum);
+        {
+            return new BackPropagation(
+                network,
+                NeuronErrorGradientCalculator.Create(),
+                SynapseWeightCalculator.For(learningRate, momentum),
+                parallelOptions
+            ); 
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System;
-using System.Linq; 
+using System.Linq;
+using System.Threading.Tasks;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.NetworkInitialisation;
 using NeuralNetworks.Tests.Support;
@@ -13,11 +14,16 @@ namespace NeuralNetworks.Tests.IntegrationTests.NetworkPredictions
         private NeuralNetworkPredictionsTester()
         {}
 
-        public void InputAndExpectOutput(double[] inputs, double[] expectedOutput)
+        public NeuralNetworkPredictionsTester InputAndExpectOutput(
+            double[] inputs, 
+            double[] expectedOutput, 
+            ParallelOptions parallelOptions)
         {
             var expectedOutputAssertor = ExpectedOutputAssertorFor(expectedOutput); 
-            var networkOutput = targetNeuralNetwork.PredictionFor(inputs); 
+            var networkOutput = targetNeuralNetwork.PredictionFor(inputs, parallelOptions); 
             expectedOutputAssertor.Assert(networkOutput); 
+            
+            return this; 
         }
 
         private IAssert<double[]> ExpectedOutputAssertorFor(double[] expectedOutput)
