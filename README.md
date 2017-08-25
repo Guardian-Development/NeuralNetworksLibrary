@@ -31,7 +31,7 @@ We will be looking to create a Neural Network that when given values correspondi
 |        1       | 1 | 0 |
 
 ### Step 1: Choosing the shape of your Neural Network
-When deciding on your Neural Network there are a few factors consider. 
+When deciding on your Neural Network there are a few factors to consider. 
 1. The shape of your input data. (In this example the shape is 2, as there are 2 data points we are inputting)
 2. How many hidden layers you require. (In this example we require only 1 hidden layer, as we have a very simple relationship between input data and the output required, this type of network is also known as a Perceptron)
 3. The shape of your output data. (In this example the shape is 1, as there is 1 data point we are predicting which can be 1 or 0)
@@ -46,10 +46,10 @@ var neuralNetwork = NeuralNetwork.For(NeuralNetworkContext.MaximumPrecision)
                 .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
                 .Build();
 ```
-The Neural Network Context allows the setting of the precision of the storage of specific calculations within the Network. Maximum Precision as the name implies allows the greatest degree of precision. 
+The Neural Network Context allows the setting of the precision of the storage of the results of specific calculations within the Network. Maximum Precision, as the name implies, allows the greatest degree of precision. 
 
 ### Step 2: Training your Neural Network 
-Once you have a Neural Network initialised you are in a good position to train your network. Network training requires you to have access to data that shows, with a set of inputs what the desired output looks like. This concept is encapsulated in the TrainingDataSet class that allows you to tell a class that trains Neural Networks how to adjust the network to produce the desired outputs. 
+Once you have a Neural Network initialised you are in a good position to train your network. Network training requires you to have access to data that shows, with a set of inputs what the desired output looks like. This concept is encapsulated in the TrainingDataSet class. This allows you to tell a class that trains Neural Networks how to adjust the network to produce the desired outputs. 
 
 #### Creating Training Data 
 For our simple XOR problem the training data set is very simple and can be defined as shown: 
@@ -106,8 +106,8 @@ Once you have a trained Network you are in a position to make accurate predictio
 ```csharp
 var prediction = neuralNetwork.PredictionFor(new [] { 0.0, 1.0 }, ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions); 
 ```
-You specify the Parallel Options the Network should use when Multi Threading.
-ParallelOptionsExtensions are an extension around this allowing you to create ParallelOptions configurations easily if you wish. 
+You specify the Parallel Options the network should use when Multi Threading.
+ParallelOptionsExtensions are an extension around this allowing you to create ParallelOptions configurations easily, if you wish. 
 
 ### Result
 You have now created, trained and made predictions from a Neural Network. If you wish to see further examples of using the Network you can find some example solutions to known data sets here: 
