@@ -8,7 +8,9 @@ namespace NeuralNetworks.Tests.Support
     public class NeuralNetworkTest
     {
         private LoggerFactory Logger { get; } = new LoggerFactory();
+
         protected ILogger LogFor(Type type) => Logger.CreateLogger(type); 
+        
         protected IProvideRandomNumberGeneration PredictableGenerator => 
             PredictableRandomNumberGenerator.Create(); 
 
