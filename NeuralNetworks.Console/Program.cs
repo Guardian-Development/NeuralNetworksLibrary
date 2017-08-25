@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Library.Data;
+using NeuralNetworks.Library.Extensions;
 using NeuralNetworks.Library.Logging;
 using NeuralNetworks.Library.Training;
 using NeuralNetworks.Library.Training.BackPropagation;
@@ -24,8 +26,14 @@ namespace NeuralNetworks.Console
                 .Build();
 
             TrainingController
-                .For(BackPropagation.WithConfiguration(neuralNetwork, learningRate: 0.6, momentum: 0.9))
-                .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData(), maximumEpochs: 5000, errorThreshold: 0.001);
+                .For(BackPropagation.WithConfiguration(
+                        neuralNetwork, 
+                        ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions,
+                        learningRate: 0.6, 
+                        momentum: 0.9))
+                .TrainForEpochsOrErrorThresholdMet(GetXorTrainingData(), maximumEpochs: 5000, errorThreshold: 0.001)
+                .GetAwaiter()
+                .GetResult();
 
             MakeExamplePredictions(neuralNetwork);
         }
@@ -42,13 +50,13 @@ namespace NeuralNetworks.Console
         private static void MakeExamplePredictions(NeuralNetwork neuralNetwork)
         {
             System.Console.WriteLine(
-                $"PREDICTION (0, 1): {neuralNetwork.PredictionFor(0.0, 1.0)[0]}, EXPECTED: 1");
+                $"PREDICTION (0, 1): {neuralNetwork.PredictionFor(new[] {0.0, 1.0}, ParallelOptionsExtensions.SingleThreadedOptions)[0]}, EXPECTED: 1");
             System.Console.WriteLine(
-                $"PREDICTION (1, 0): {neuralNetwork.PredictionFor(1.0, 0.0)[0]}, EXPECTED: 1");
+                $"PREDICTION (1, 0): {neuralNetwork.PredictionFor(new[] {1.0, 0.0}, ParallelOptionsExtensions.SingleThreadedOptions)[0]}, EXPECTED: 1");
             System.Console.WriteLine(
-                $"PREDICTION (0, 0): {neuralNetwork.PredictionFor(0.0, 0.0)[0]}, EXPECTED: 0");
+                $"PREDICTION (0, 0): {neuralNetwork.PredictionFor(new[] {0.0, 0.0}, ParallelOptionsExtensions.SingleThreadedOptions)[0]}, EXPECTED: 0");
             System.Console.WriteLine(
-                $"PREDICTION (1, 1): {neuralNetwork.PredictionFor(1.0, 1.0)[0]}, EXPECTED: 0");
+                $"PREDICTION (1, 1): {neuralNetwork.PredictionFor(new[] {1.0, 1.0}, ParallelOptionsExtensions.SingleThreadedOptions)[0]}, EXPECTED: 0");
 
             if (Debugger.IsAttached) System.Console.ReadLine();
         }
