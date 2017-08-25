@@ -20,7 +20,7 @@ await TrainingController
 ```
 
 ## How To Use 
-The below steps show how to use a the Neural Network Library for solving a simple problem, the XOR problem. 
+The below steps show how to use the Neural Network Library for solving a simple problem, the XOR problem. 
 
 ### The Problem Overview 
 We will be looking to create a Neural Network that when given values corresponding to the inputs to the XOR operation they produce the correct output. The XOR problem can be defined for our use case as "when given 2 inputs of 0 or 1, if the inputs are not equal then return 1, else return 0." 
@@ -73,7 +73,7 @@ private static List<TrainingDataSet> XorTrainingData()
 
 You can see that this is a direct representation of the table I displayed above. In more complex examples you won't have access to the entire range of data inputs and their respective outputs. 
 
-It is important to note that the inputs and outputs should be the same Shape as the Networks input layer and output layer. 
+It is important to note that the inputs and outputs should be the same shape as the Networks input layer and output layer. 
 
 #### Creating the Training Controller
 The Neural Network Library currently supports only the Back Propagation algorithm for training a Neural Network. However, it is open for extension and therefore you must wrap your training method in a controller which can then handle training the network. This can be done like so: 
