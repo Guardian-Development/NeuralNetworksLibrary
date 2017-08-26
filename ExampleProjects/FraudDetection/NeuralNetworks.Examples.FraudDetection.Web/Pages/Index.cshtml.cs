@@ -11,7 +11,6 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
     {
         public void OnGet()
         {
-
         }
     }
 }
