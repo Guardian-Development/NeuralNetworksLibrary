@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NeuralNetworks.Examples.FraudDetection.Web.Extensions;
 
 namespace NeuralNetworks.Examples.FraudDetection.Web
 {
     public class Startup
     {
+        private const string FraudDataSetConfigurationSection = "DataSetConfiguration"; 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -22,6 +24,10 @@ namespace NeuralNetworks.Examples.FraudDetection.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            var dataSetConfiguration = services.BindApplicationSettings<DataSetConfiguration>(
+                Configuration.GetSection(FraudDataSetConfigurationSection)); 
+            services.AddSingleton(dataSetConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,6 +10,13 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
 {
     public class PerformTrainingModel : PageModel
     {
+        private readonly DataSetConfiguration dataSetConfiguration;
+
+        public PerformTrainingModel(DataSetConfiguration dataSetConfiguration)
+        {
+            this.dataSetConfiguration = dataSetConfiguration;
+        }
+
         public void OnGet()
         {
         }
