@@ -1,4 +1,4 @@
-namespace NeuralNetworks.Examples.FraudDetection.Web
+namespace NeuralNetworks.Examples.FraudDetection.Services
 {
     public sealed class DataSetConfiguration
     {
