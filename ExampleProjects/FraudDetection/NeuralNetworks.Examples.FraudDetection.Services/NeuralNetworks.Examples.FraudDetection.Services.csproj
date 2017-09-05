@@ -4,8 +4,4 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\NeuralNetworks.Examples.FraudDetection.DataProcessing\NeuralNetworks.Examples.FraudDetection.DataProcessing.fsproj" />
-  </ItemGroup>
-
 </Project>

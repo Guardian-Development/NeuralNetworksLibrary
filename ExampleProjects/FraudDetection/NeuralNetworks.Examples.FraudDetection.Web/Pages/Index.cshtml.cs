@@ -10,11 +10,8 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
 {
     public class IndexModel : PageModel
     {
-        public string TestFullStack { get; private set; }
-
         public void OnGet()
         {
-            TestFullStack = Class1.TestFSharp(); 
         }
     }
 }
