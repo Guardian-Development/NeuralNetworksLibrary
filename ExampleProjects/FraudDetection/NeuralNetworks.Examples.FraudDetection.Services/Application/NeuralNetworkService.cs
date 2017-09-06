@@ -19,8 +19,8 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
 
         public async Task BeginTraining(int epochAmount)
         {
-            await TrainingController.For(neuralNetworkConfiguration.NeuralNetworkTrainer)
-                                    .TrainForEpochs(networkTrainingDataProvider.TrainingData, epochAmount); 
+            await neuralNetworkConfiguration.NeuralNetworkTrainer
+                                            .TrainForEpochs(networkTrainingDataProvider.TrainingData, epochAmount); 
         }
     }
 }
