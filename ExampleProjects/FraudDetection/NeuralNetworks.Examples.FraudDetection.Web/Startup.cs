@@ -9,12 +9,14 @@ using Microsoft.Extensions.DependencyInjection;
 using NeuralNetworks.Examples.FraudDetection.Web.Extensions;
 using NeuralNetworks.Examples.FraudDetection.Services.Application;
 using NeuralNetworks.Examples.FraudDetection.Services;
+using NeuralNetworks.Examples.FraudDetection.Services.Configuration;
 
 namespace NeuralNetworks.Examples.FraudDetection.Web
 {
     public class Startup
     {
-        private const string FraudDataSetConfigurationSection = "DataSetConfiguration"; 
+        private const string DataSourceConfigurationSection = "DataSourceConfiguration"; 
+        private const string NeuralNetworkTrainingConfigurationSection = "NeuralNetworkTrainingConfiguration"; 
         
         public Startup(IConfiguration configuration)
         {
@@ -23,19 +25,22 @@ namespace NeuralNetworks.Examples.FraudDetection.Web
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
 
-             var dataSetConfiguration = services.BindApplicationSettings<DataSetConfiguration>(
-                Configuration.GetSection(FraudDataSetConfigurationSection)); 
-
-            services.ConfigureServiceLayer(dataSetConfiguration);
-            services.AddSingleton(typeof(NeuralNetworkService)); 
+            var dataSourceConfiguration = services.BindApplicationSettings<DataSourceConfiguration>(
+                Configuration.GetSection(DataSourceConfigurationSection)); 
+            
+            var neuralNetworkTrainingConfiguration = services.BindApplicationSettings<NeuralNetworkTrainingConfiguration>(
+                Configuration.GetSection(NeuralNetworkTrainingConfigurationSection));
+                
+            services.AddSingleton(dataSourceConfiguration)
+                    .AddSingleton(neuralNetworkTrainingConfiguration)
+                    .ConfigureServiceLayer()
+                    .AddTransient(typeof(NeuralNetworkTrainingService));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

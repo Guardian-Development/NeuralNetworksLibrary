@@ -6,16 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NeuralNetworks.Examples.FraudDetection.Services;
 using NeuralNetworks.Examples.FraudDetection.Services.Application;
+using NeuralNetworks.Examples.FraudDetection.Services.Configuration;
 
 namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
 {
     public class PerformTrainingModel : PageModel
     {
-        private readonly NeuralNetworkService neuralNetworkService;
+        private readonly NeuralNetworkTrainingService networkTrainingService;
+        private readonly NeuralNetworkTrainingConfiguration trainingConfiguration;
 
-        public PerformTrainingModel(NeuralNetworkService neuralNetworkService)
+        public PerformTrainingModel(
+            NeuralNetworkTrainingService networkTrainingService,
+            NeuralNetworkTrainingConfiguration trainingConfiguration)
         {
-            this.neuralNetworkService = neuralNetworkService;
+            this.networkTrainingService = networkTrainingService;
+            this.trainingConfiguration = trainingConfiguration;
         }
 
         public void OnGet()
@@ -24,7 +29,7 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
 
         public async void RequestTraining(int epochAmount)
         {
-            await neuralNetworkService.BeginTraining(epochAmount);
+            await networkTrainingService.TrainConfiguredNetworkForEpochs(epochAmount, trainingConfiguration); 
         }
     }
 }
