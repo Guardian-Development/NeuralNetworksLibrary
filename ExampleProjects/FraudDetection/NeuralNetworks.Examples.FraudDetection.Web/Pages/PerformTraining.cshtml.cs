@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using NeuralNetworks.Examples.FraudDetection.Services;
 using NeuralNetworks.Examples.FraudDetection.Services.Application;
 using NeuralNetworks.Examples.FraudDetection.Services.Configuration;
@@ -17,10 +18,10 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
 
         public PerformTrainingModel(
             NeuralNetworkTrainingService networkTrainingService,
-            NeuralNetworkTrainingConfiguration trainingConfiguration)
+            IOptions<NeuralNetworkTrainingConfiguration> trainingConfiguration)
         {
             this.networkTrainingService = networkTrainingService;
-            this.trainingConfiguration = trainingConfiguration;
+            this.trainingConfiguration = trainingConfiguration.Value;
         }
 
         public void OnGet()

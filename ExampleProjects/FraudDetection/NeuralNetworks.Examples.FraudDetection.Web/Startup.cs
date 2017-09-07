@@ -29,14 +29,8 @@ namespace NeuralNetworks.Examples.FraudDetection.Web
         {
             services.AddMvc();
 
-            var dataSourceConfiguration = services.BindApplicationSettings<DataSourceConfiguration>(
-                Configuration.GetSection(DataSourceConfigurationSection)); 
-            
-            var neuralNetworkTrainingConfiguration = services.BindApplicationSettings<NeuralNetworkTrainingConfiguration>(
-                Configuration.GetSection(NeuralNetworkTrainingConfigurationSection));
-                
-            services.AddSingleton(dataSourceConfiguration)
-                    .AddSingleton(neuralNetworkTrainingConfiguration)
+            services.Configure<DataSourceConfiguration>(Configuration.GetSection(DataSourceConfigurationSection)) 
+                    .Configure<NeuralNetworkTrainingConfiguration>(Configuration.GetSection(NeuralNetworkTrainingConfigurationSection))
                     .ConfigureServiceLayer()
                     .AddTransient(typeof(NeuralNetworkTrainingService));
         }
