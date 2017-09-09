@@ -12,7 +12,7 @@ namespace NeuralNetworks.Examples.FraudDetection.Services
         {
             return services
                 .AddSingleton(new NeuralNetworkAccessor(NeuralNetwork))
-                .AddTransient(typeof(TrainingDataProvider));
+                .AddTransient(typeof(DataProvider));
         }
 
         private static NeuralNetwork NeuralNetwork => 

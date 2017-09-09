@@ -13,14 +13,14 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
     public class NeuralNetworkTrainingService
     {
         private readonly NeuralNetworkAccessor networkAccessor;
-        private readonly TrainingDataProvider trainingDataProvider;
+        private readonly DataProvider dataProvider;
 
         public NeuralNetworkTrainingService(
             NeuralNetworkAccessor networkAccessor,
-            TrainingDataProvider trainingDataProvider)
+            DataProvider dataProvider)
         {
             this.networkAccessor = networkAccessor;
-            this.trainingDataProvider = trainingDataProvider;
+            this.dataProvider = dataProvider;
         }
 
         public async Task TrainConfiguredNetworkForEpochs(
@@ -32,7 +32,7 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
                                             ParallelOptionsExtensions.MultiThreadedOptions(trainingConfig.ThreadCount), 
                                             trainingConfig.LearningRate,
                                             trainingConfig.Momentum))
-                                    .TrainForEpochs(trainingDataProvider.TrainingData, epochs);
+                                    .TrainForEpochs(dataProvider.TrainingData, epochs);
         }
     }
 }

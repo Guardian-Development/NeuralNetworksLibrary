@@ -5,13 +5,14 @@ using NeuralNetworks.Library.Data;
 
 namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
 {
-    public class TrainingDataProvider 
+    public class DataProvider 
     {
         public List<TrainingDataSet> TrainingData { get; }
+            = new List<TrainingDataSet>(); 
 
         private readonly DataSourceConfiguration dataSource;
 
-        public TrainingDataProvider(IOptions<DataSourceConfiguration> dataSource)
+        public DataProvider(IOptions<DataSourceConfiguration> dataSource)
         {
             this.dataSource = dataSource.Value;
         }
