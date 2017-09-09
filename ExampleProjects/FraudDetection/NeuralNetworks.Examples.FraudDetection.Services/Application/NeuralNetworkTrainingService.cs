@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NeuralNetworks.Examples.FraudDetection.Services.Configuration;
 using NeuralNetworks.Examples.FraudDetection.Services.Domain;
@@ -27,12 +28,16 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
             int epochs, 
             NeuralNetworkTrainingConfiguration trainingConfig)
         {
+            var trainingData = dataProvider.TrainingData
+                .Select(transaction => transaction.ToTrainingData())
+                .ToList();
+            
             await TrainingController.For(BackPropagation.WithConfiguration(
                                             networkAccessor.TargetNetwork,
                                             ParallelOptionsExtensions.MultiThreadedOptions(trainingConfig.ThreadCount), 
                                             trainingConfig.LearningRate,
                                             trainingConfig.Momentum))
-                                    .TrainForEpochs(dataProvider.TrainingData, epochs);
+                                    .TrainForEpochs(trainingData, epochs);
         }
     }
 }

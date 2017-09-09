@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Options;
 using NeuralNetworks.Examples.FraudDetection.Services.Configuration;
 using NeuralNetworks.Library.Data;
@@ -9,11 +10,48 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
 {
     public class DataProvider 
     {
-        public List<TrainingDataSet> TrainingData { get; }
-            = new List<TrainingDataSet>();
+        public List<BankTransaction> TrainingData => 
+            TrainingDataRowsForClass(BankTransactionClass.Fraudulent)
+                .Concat(TrainingDataRowsForClass(BankTransactionClass.Legitimate))
+                .Select(transaction => BankTransactionNormaliser
+                    .NormaliseTransactionAmount(
+                        transaction, 
+                        bankTransactionAmountMin.Value, 
+                        bankTransactionAmountMax.Value))
+                .ToList();
 
-        public List<BankTransaction> TestingData { get; }
-            = new List<BankTransaction>(); 
+        public List<BankTransaction> TestingData 
+            => allDataRows.Value
+                .Intersect(TrainingData)
+                .Select(transaction => BankTransactionNormaliser
+                    .NormaliseTransactionAmount(
+                        transaction, 
+                        bankTransactionAmountMin.Value, 
+                        bankTransactionAmountMax.Value))
+                .ToList();
+
+        private List<BankTransaction> TrainingDataRowsForClass(BankTransactionClass targetClass)
+        {
+            var dataRowsInClass = allDataRows.Value
+                .Where(transaction => transaction.Class == targetClass)
+                .ToList();
+            
+            return RandomSubsetOfDataSet(dataRowsInClass, rowCountOfSmallestTransactionCategory.Value / 2);
+        }
+
+        private List<TEntity> RandomSubsetOfDataSet<TEntity>(List<TEntity> dataSet, int subsetAmount)
+        {
+            var randomNumberGenerator = new Random(1); 
+
+            return Enumerable
+                        .Range(0, subsetAmount)
+                        .Select(_ => dataSet[randomNumberGenerator.Next(0, dataSet.Count)])
+                        .ToList();
+        }
+
+        private readonly Lazy<double> bankTransactionAmountMin;
+        private readonly Lazy<double> bankTransactionAmountMax; 
+        private readonly Lazy<int> rowCountOfSmallestTransactionCategory; 
 
         private readonly Lazy<IList<BankTransaction>> allDataRows; 
 
@@ -23,46 +61,22 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
                 () => CsvFileReader.ReadFromFile(
                 dataSource.Value.FileLocation, 
                 BankTransaction.For));
-        }
-    }
-
-    public static class CsvFileReader 
-    {
-        public static IList<TEntity> ReadFromFile<TEntity>(
-            string csvFilepath, 
-            Func<string[], TEntity> rowToEntity,
-            bool containsHeaders = true)
-        {
-            var readRowsAsEntity = new List<TEntity>(); 
-
-            using(var streamReader = File.OpenText(csvFilepath))
-            {
-                if(containsHeaders)
-                {
-                    ReadRowOfFileIfNotAtEnd(streamReader, out _);
-                }
-
-                while(!ReadRowOfFileIfNotAtEnd(streamReader, out var currentRow))
-                {
-                    readRowsAsEntity.Add(ProcessRowOfFile(currentRow, rowToEntity)); 
-                }
-            }
-
-            return readRowsAsEntity;
-        }
-
-        private static bool ReadRowOfFileIfNotAtEnd(StreamReader streamReader, out string currentRow)
-        {
-            currentRow = streamReader.ReadLine(); 
-            return currentRow == null ? true : false; 
-        }
-
-        private static TEntity ProcessRowOfFile<TEntity>(
-            string line, 
-            Func<string[], TEntity> rowToEntity)
-        {
-            var dataColumns = line.Split(',');
-            return rowToEntity.Invoke(dataColumns); 
+            
+            bankTransactionAmountMin = new Lazy<double>(
+                () => allDataRows.Value
+                        .Select(r => r.Amount)
+                        .Min());
+            
+            bankTransactionAmountMax = new Lazy<double>(
+                () => allDataRows.Value
+                        .Select(r => r.Amount)
+                        .Max());
+            
+            rowCountOfSmallestTransactionCategory = new Lazy<int>(
+                () => allDataRows.Value
+                        .GroupBy(transaction => transaction.Class)
+                        .Select(g => g.Count())
+                        .Min());
         }
     }
 }
