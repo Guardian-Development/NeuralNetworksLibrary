@@ -10,39 +10,39 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
 
     public class BankTransaction
     {
-        public BankTransactionCategory Class { get; set; }
+        public BankTransactionCategory Class { get; private set; }
 
-        public int TimeOfTransaction { get; set; }
-        public double Amount { get; set; }
+        public int TimeOfTransaction { get; private set; }
+        public double Amount { get; private set; }
 
-        public double DataPoint1 { get; set; }
-        public double DataPoint2 { get; set; }
-        public double DataPoint3 { get; set; }
-        public double DataPoint4 { get; set; }
-        public double DataPoint5 { get; set; }
-        public double DataPoint6 { get; set; }
-        public double DataPoint7 { get; set; }
-        public double DataPoint8 { get; set; }
-        public double DataPoint9 { get; set; }
-        public double DataPoint10 { get; set; }
-        public double DataPoint11 { get; set; }
-        public double DataPoint12 { get; set; }
-        public double DataPoint13 { get; set; }
-        public double DataPoint14 { get; set; }
-        public double DataPoint15 { get; set; }
-        public double DataPoint16 { get; set; }
-        public double DataPoint17 { get; set; }
-        public double DataPoint18 { get; set; }
-        public double DataPoint19 { get; set; }
-        public double DataPoint20 { get; set; }
-        public double DataPoint21 { get; set; }
-        public double DataPoint22 { get; set; }
-        public double DataPoint23 { get; set; }
-        public double DataPoint24 { get; set; }
-        public double DataPoint25 { get; set; }
-        public double DataPoint26 { get; set; }
-        public double DataPoint27 { get; set; }
-        public double DataPoint28 { get; set; }
+        public double DataPoint1 { get; private set; }
+        public double DataPoint2 { get; private set; }
+        public double DataPoint3 { get; private set; }
+        public double DataPoint4 { get; private set; }
+        public double DataPoint5 { get; private set; }
+        public double DataPoint6 { get; private set; }
+        public double DataPoint7 { get; private set; }
+        public double DataPoint8 { get; private set; }
+        public double DataPoint9 { get; private set; }
+        public double DataPoint10 { get; private set; }
+        public double DataPoint11 { get; private set; }
+        public double DataPoint12 { get; private set; }
+        public double DataPoint13 { get; private set; }
+        public double DataPoint14 { get; private set; }
+        public double DataPoint15 { get; private set; }
+        public double DataPoint16 { get; private set; }
+        public double DataPoint17 { get; private set; }
+        public double DataPoint18 { get; private set; }
+        public double DataPoint19 { get; private set; }
+        public double DataPoint20 { get; private set; }
+        public double DataPoint21 { get; private set; }
+        public double DataPoint22 { get; private set; }
+        public double DataPoint23 { get; private set; }
+        public double DataPoint24 { get; private set; }
+        public double DataPoint25 { get; private set; }
+        public double DataPoint26 { get; private set; }
+        public double DataPoint27 { get; private set; }
+        public double DataPoint28 { get; private set; }
 
 
         public static BankTransaction For(string[] orderedValues)

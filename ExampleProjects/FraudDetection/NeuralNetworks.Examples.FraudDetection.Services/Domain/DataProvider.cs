@@ -37,7 +37,12 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
 
             using(var streamReader = File.OpenText(csvFilepath))
             {
-                while(!EndOfFile(streamReader, out var currentRow))
+                if(containsHeaders)
+                {
+                    ReadRowOfFileIfNotAtEnd(streamReader, out _);
+                }
+
+                while(!ReadRowOfFileIfNotAtEnd(streamReader, out var currentRow))
                 {
                     readRowsAsEntity.Add(ProcessRowOfFile(currentRow, rowToEntity)); 
                 }
@@ -46,7 +51,7 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
             return readRowsAsEntity;
         }
 
-        private static bool EndOfFile(StreamReader streamReader, out string currentRow)
+        private static bool ReadRowOfFileIfNotAtEnd(StreamReader streamReader, out string currentRow)
         {
             currentRow = streamReader.ReadLine(); 
             return currentRow == null ? true : false; 

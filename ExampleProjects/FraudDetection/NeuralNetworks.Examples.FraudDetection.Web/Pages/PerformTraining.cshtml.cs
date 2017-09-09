@@ -24,10 +24,6 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
             this.trainingConfiguration = trainingConfiguration.Value;
         }
 
-        public void OnGet()
-        {
-        }
-
         public async Task OnPostTrainAsync(int epochAmount)
         {
             await networkTrainingService.TrainConfiguredNetworkForEpochs(epochAmount, trainingConfiguration); 
