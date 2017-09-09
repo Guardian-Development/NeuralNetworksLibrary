@@ -1,3 +1,5 @@
+using System;
+
 namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
 {
     public enum BankTransactionCategory
@@ -41,5 +43,11 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
         public double DataPoint26 { get; set; }
         public double DataPoint27 { get; set; }
         public double DataPoint28 { get; set; }
+
+
+        public static BankTransaction For(string[] orderedValues)
+        {
+            throw new NotImplementedException(); 
+        }
     }
 }
