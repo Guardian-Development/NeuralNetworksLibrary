@@ -10,6 +10,7 @@ using NeuralNetworks.Examples.FraudDetection.Web.Extensions;
 using NeuralNetworks.Examples.FraudDetection.Services.Application;
 using NeuralNetworks.Examples.FraudDetection.Services;
 using NeuralNetworks.Examples.FraudDetection.Services.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace NeuralNetworks.Examples.FraudDetection.Web
 {
@@ -35,8 +36,10 @@ namespace NeuralNetworks.Examples.FraudDetection.Web
                     .AddTransient(typeof(NeuralNetworkTrainingService));
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.ConfigureServiceLayerLogging(); 
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
