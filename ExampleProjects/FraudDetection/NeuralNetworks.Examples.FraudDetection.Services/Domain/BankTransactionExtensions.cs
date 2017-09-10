@@ -9,7 +9,6 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
         public static TrainingDataSet ToTrainingData(this BankTransaction bankTransaction)
         {
             var inputs = new [] {
-                bankTransaction.TimeOfTransaction,
                 bankTransaction.Amount, 
                 bankTransaction.DataPoint1,
                 bankTransaction.DataPoint2,

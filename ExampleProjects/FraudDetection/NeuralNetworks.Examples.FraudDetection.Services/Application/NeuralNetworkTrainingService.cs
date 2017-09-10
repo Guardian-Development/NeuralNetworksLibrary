@@ -25,7 +25,7 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
         }
 
         public async Task TrainConfiguredNetworkForEpochs(
-            int epochs, 
+            int epochs,
             NeuralNetworkTrainingConfiguration trainingConfig)
         {
             var trainingData = dataProvider.TrainingData
@@ -37,7 +37,7 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
                                             ParallelOptionsExtensions.MultiThreadedOptions(trainingConfig.ThreadCount), 
                                             trainingConfig.LearningRate,
                                             trainingConfig.Momentum))
-                                    .TrainForEpochs(trainingData, epochs);
+                                    .TrainForEpochsOrErrorThresholdMet(trainingData, epochs, trainingConfig.MinimumErrorThreshold);
         }
     }
 }

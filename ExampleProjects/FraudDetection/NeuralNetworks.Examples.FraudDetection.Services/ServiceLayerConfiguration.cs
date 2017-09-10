@@ -19,10 +19,9 @@ namespace NeuralNetworks.Examples.FraudDetection.Services
 
         private static NeuralNetwork NeuralNetwork => 
             NeuralNetwork.For(NeuralNetworkContext.MaximumPrecision)
-                .WithInputLayer(neuronCount: 30, activationType: ActivationType.Sigmoid)
-                .WithHiddenLayer(neuronCount: 40, activationType: ActivationType.TanH)
-                .WithHiddenLayer(neuronCount: 40, activationType: ActivationType.TanH)
-                .WithHiddenLayer(neuronCount: 40, activationType: ActivationType.TanH)
+                .WithInputLayer(neuronCount: 29, activationType: ActivationType.Sigmoid)
+                .WithHiddenLayer(neuronCount: 18, activationType: ActivationType.TanH)
+                .WithHiddenLayer(neuronCount: 27, activationType: ActivationType.TanH)
                 .WithHiddenLayer(neuronCount: 40, activationType: ActivationType.TanH)
                 .WithOutputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
                 .Build(); 
