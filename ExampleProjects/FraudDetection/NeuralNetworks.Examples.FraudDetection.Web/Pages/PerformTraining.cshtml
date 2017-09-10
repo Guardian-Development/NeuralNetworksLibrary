@@ -1,0 +1,13 @@
+@page
+@model PerformTrainingModel
+@{
+    ViewData["Title"] = "Training page";
+}
+
+<div>
+    <h1>Perform Network Training</h1>
+    <form method="POST">
+        <input type="number" name="epochAmount" />
+        <button asp-page-handler="train" type="submit" class="btn btn-primary">Train</button>
+    </form>
+</div>

@@ -1,0 +1,22 @@
+@page
+@model PerformPredictionsModel
+@{
+    ViewData["Title"] = "Prediction page";
+}
+
+<div>
+    <h1>Perform Network Predictions</h1>
+    <form method="POST">
+        <button asp-page-handler="predict" type="submit" class="btn btn-primary">Predict</button>
+    </form>
+
+    @if(@Model.PredictionsReport.TotalCorrectPredictions != 0 || @Model.PredictionsReport.TotalIncorrectPredictions != 0){
+        <h1>Prediction Report</h1>
+        <h4>Correct Predictions: @Model.PredictionsReport.TotalCorrectPredictions</h4>
+        <h4>Incorrect Predictions: @Model.PredictionsReport.TotalIncorrectPredictions</h4>
+        <h4>Correct Percentage: @Model.PredictionsReport.PercentageOfPredictionsCorrect</h4>
+        <h4>Incorrect Predictions That Were Legitimate: @Model.PredictionsReport.IncorrectLegitimatePredictions</h4>
+        <h4>Incorrect Predictions That Were Fraudulent: @Model.PredictionsReport.IncorrectFraudulentPredictions</h4>
+        <h4>Incorrect Predictions Fraudulent Percentage: @Model.PredictionsReport.PercentageOfIncorrectPredictionsFraudulent</h4>
+    }
+</div>
