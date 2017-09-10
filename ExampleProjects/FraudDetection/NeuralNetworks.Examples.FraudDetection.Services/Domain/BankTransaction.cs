@@ -45,6 +45,30 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
         public double DataPoint27 { get; internal set; }
         public double DataPoint28 { get; internal set; }
 
+        public override bool Equals(object obj)
+        {
+            var transaction = obj as BankTransaction; 
+            return transaction == null ? false : Equals(transaction); 
+        }
+
+        private bool Equals(BankTransaction transaction)
+        {
+            if(transaction.Class != Class) return false; 
+            if(transaction.Amount != Amount) return false; 
+            if(transaction.TimeOfTransaction != TimeOfTransaction) return false; 
+            return true; 
+        }
+
+        public override int GetHashCode()
+        {
+           var hashCode = 13;
+           unchecked {
+                hashCode = (hashCode * 397) ^ TimeOfTransaction;
+                hashCode = (hashCode * 397) ^ (int)Class; 
+                hashCode = (hashCode * 397) ^ (int)Amount;
+           }
+           return hashCode; 
+        }
 
         public static BankTransaction For(string[] orderedValues)
         {

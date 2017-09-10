@@ -12,5 +12,10 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
             NumberOfCorrectPredictions = numberOfCorrectPredictions; 
             NumberOfIncorrectPredictions = numberOfIncorrectPredictions; 
         }
+
+        public override string ToString()
+        {
+            return $"Correct: {NumberOfCorrectPredictions}. Incorrect: {NumberOfIncorrectPredictions}";
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NeuralNetworks.Examples.FraudDetection.Services.Domain;
 using NeuralNetworks.Library.Extensions;
 
@@ -8,20 +9,23 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
 {
     public sealed class NeuralNetworkPredictionService
     {
+        private readonly ILogger<NeuralNetworkPredictionService> logger; 
         private readonly NeuralNetworkAccessor networkAccessor;
         private readonly DataProvider dataProvider;
 
         public NeuralNetworkPredictionService(
+            ILogger<NeuralNetworkPredictionService> logger,
             NeuralNetworkAccessor networkAccessor,
             DataProvider dataProvider)
         {
+            this.logger = logger; 
             this.networkAccessor = networkAccessor; 
             this.dataProvider = dataProvider;
         }
 
         public NeuralNetworkPredictionsReport RunPredictions()
         {
-            return dataProvider.TrainingData
+            return dataProvider.TestingData
                 .Aggregate(new NeuralNetworkPredictionsReport(0, 0), MakePredictionRecordingResult);
         }
 
@@ -29,6 +33,8 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
             NeuralNetworkPredictionsReport report,
             BankTransaction transaction)
         {
+            logger.LogInformation($"Predicting new transaction. Current report: {report}"); 
+
             var networkPrediction = networkAccessor.TargetNetwork
                 .PredictionFor(transaction.ToNetworkInputData(), 
                 ParallelOptionsExtensions.UnrestrictedMultiThreadedOptions); 

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NeuralNetworks.Examples.FraudDetection.Services;
 using NeuralNetworks.Examples.FraudDetection.Services.Application;
+using NeuralNetworks.Examples.FraudDetection.Services.Domain;
+using NeuralNetworks.Examples.FraudDetection.Web.Models;
 
 namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
 {
@@ -18,9 +20,19 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
             this.networkPredictionService = networkPredictionService; 
         }
 
-        public void OnPostPredict()
+        public PredictionReport PredictionsReport { get; set; }
+        
+        public void OnGet(PredictionReport predictionsReport)
         {
-             networkPredictionService.RunPredictions();
+            PredictionsReport = predictionsReport; 
+        }
+
+        public IActionResult OnPostPredict()
+        {
+             var predictionsReport = networkPredictionService.RunPredictions();
+             return RedirectToPage(new PredictionReport(){
+                 NumberOfCorrectPredictions = predictionsReport.NumberOfCorrectPredictions,
+                 NumberOfIncorrectPredictions = predictionsReport.NumberOfIncorrectPredictions });
         }
     }
 }

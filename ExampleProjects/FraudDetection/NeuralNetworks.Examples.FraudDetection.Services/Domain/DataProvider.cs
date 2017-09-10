@@ -10,25 +10,15 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
 {
     public class DataProvider 
     {
-        public List<BankTransaction> TrainingData => 
-            TrainingDataRowsForClass(BankTransactionClass.Fraudulent)
-                .Concat(TrainingDataRowsForClass(BankTransactionClass.Legitimate))
-                .Select(transaction => BankTransactionNormaliser
-                    .NormaliseTransactionAmount(
-                        transaction, 
-                        bankTransactionAmountMin.Value, 
-                        bankTransactionAmountMax.Value))
-                .ToList();
+        public List<BankTransaction> TrainingData => trainingData.Value; 
+        
+        private readonly Lazy<List<BankTransaction>> trainingData; 
 
-        public List<BankTransaction> TestingData 
-            => allDataRows.Value
-                .Intersect(TrainingData)
-                .Select(transaction => BankTransactionNormaliser
-                    .NormaliseTransactionAmount(
-                        transaction, 
-                        bankTransactionAmountMin.Value, 
-                        bankTransactionAmountMax.Value))
-                .ToList();
+        public List<BankTransaction> TestingData => testingData.Value; 
+
+        private readonly Lazy<List<BankTransaction>> testingData; 
+
+        private readonly Lazy<IList<BankTransaction>> allDataRows; 
 
         private List<BankTransaction> TrainingDataRowsForClass(BankTransactionClass targetClass)
         {
@@ -53,8 +43,6 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
         private readonly Lazy<double> bankTransactionAmountMax; 
         private readonly Lazy<int> rowCountOfSmallestTransactionCategory; 
 
-        private readonly Lazy<IList<BankTransaction>> allDataRows; 
-
         public DataProvider(IOptions<DataSourceConfiguration> dataSource)
         {
             allDataRows = new Lazy<IList<BankTransaction>>(
@@ -77,6 +65,28 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
                         .GroupBy(transaction => transaction.Class)
                         .Select(g => g.Count())
                         .Min());
+            
+            trainingData = new Lazy<List<BankTransaction>>(
+               () => TrainingDataRowsForClass(BankTransactionClass.Fraudulent)
+                .Concat(TrainingDataRowsForClass(BankTransactionClass.Legitimate))
+                .Select(transaction => BankTransactionNormaliser
+                    .NormaliseTransactionAmount(
+                        transaction, 
+                        bankTransactionAmountMin.Value, 
+                        bankTransactionAmountMax.Value))
+                .ToList()
+            );
+
+            testingData = new Lazy<List<BankTransaction>>(
+                () => allDataRows.Value
+                .Select(transaction => BankTransactionNormaliser
+                    .NormaliseTransactionAmount(
+                        transaction, 
+                        bankTransactionAmountMin.Value, 
+                        bankTransactionAmountMax.Value))
+                .Except(TrainingData)
+                .ToList()
+            ); 
         }
     }
 }
