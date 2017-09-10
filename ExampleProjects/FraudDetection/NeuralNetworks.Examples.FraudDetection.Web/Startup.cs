@@ -33,7 +33,8 @@ namespace NeuralNetworks.Examples.FraudDetection.Web
             services.Configure<DataSourceConfiguration>(Configuration.GetSection(DataSourceConfigurationSection)) 
                     .Configure<NeuralNetworkTrainingConfiguration>(Configuration.GetSection(NeuralNetworkTrainingConfigurationSection))
                     .ConfigureServiceLayer()
-                    .AddTransient(typeof(NeuralNetworkTrainingService));
+                    .AddTransient(typeof(NeuralNetworkTrainingService))
+                    .AddTransient(typeof(NeuralNetworkPredictionService));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

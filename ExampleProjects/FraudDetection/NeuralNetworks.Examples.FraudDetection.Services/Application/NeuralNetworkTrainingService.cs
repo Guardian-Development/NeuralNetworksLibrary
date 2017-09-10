@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using NeuralNetworks.Library.Training.BackPropagation;
 
 namespace NeuralNetworks.Examples.FraudDetection.Services.Application
 {
-    public class NeuralNetworkTrainingService
+    public sealed class NeuralNetworkTrainingService
     {
         private readonly NeuralNetworkAccessor networkAccessor;
         private readonly DataProvider dataProvider;
