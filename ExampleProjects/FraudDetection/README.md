@@ -5,7 +5,7 @@ The aim of this project is to show how the Neural Networks library can be integr
 1. Download and unzip the Credit Card Transaction Data Set from: https://www.kaggle.com/dalpozz/creditcardfraud 
 
 2. Update the AppSettings.json file to have the correct location of the downloaded file
-3. Run the web project : dotnet run
+3. Run the web project : "dotnet run" from with the Web Project Directory
 
 ## How To Use 
 1. Navigate to the Train Tab. 

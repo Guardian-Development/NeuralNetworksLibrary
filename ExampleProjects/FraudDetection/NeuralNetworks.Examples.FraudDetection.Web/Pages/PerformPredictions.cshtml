@@ -10,11 +10,8 @@
         <button asp-page-handler="predict" type="submit" class="btn btn-primary">Predict</button>
     </form>
 
-    <h1>Prediction Report</h1>
-    @if(@Model.PredictionsReport.TotalCorrectPredictions == 0 && @Model.PredictionsReport.TotalIncorrectPredictions == 0){
-        <h2> No Predictions have been made </h2>
-    }
-    else{
+    @if(@Model.PredictionsReport.TotalCorrectPredictions != 0 || @Model.PredictionsReport.TotalIncorrectPredictions != 0){
+        <h1>Prediction Report</h1>
         <h4>Correct Predictions: @Model.PredictionsReport.TotalCorrectPredictions</h4>
         <h4>Incorrect Predictions: @Model.PredictionsReport.TotalIncorrectPredictions</h4>
         <h4>Correct Percentage: @Model.PredictionsReport.PercentageOfPredictionsCorrect</h4>
