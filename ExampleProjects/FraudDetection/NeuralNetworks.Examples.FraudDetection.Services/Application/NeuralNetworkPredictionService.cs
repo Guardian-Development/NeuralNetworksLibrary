@@ -26,7 +26,7 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
         public NeuralNetworkPredictionsReport RunPredictions()
         {
             return dataProvider.TestingData
-                .Aggregate(new NeuralNetworkPredictionsReport(0, 0), MakePredictionRecordingResult);
+                .Aggregate(NeuralNetworkPredictionsReport.EmptyReport(), MakePredictionRecordingResult);
         }
 
         private NeuralNetworkPredictionsReport MakePredictionRecordingResult(
@@ -41,14 +41,16 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
             
             if(IsCorrectPrediction(networkPrediction, transaction.Class))
             {
-                return new NeuralNetworkPredictionsReport(
-                    report.NumberOfCorrectPredictions + 1, 
-                    report.NumberOfIncorrectPredictions); 
+                return NeuralNetworkPredictionsReport.UpdateFor(
+                    report, 
+                    transaction.Class, 
+                    predictionWasCorrect: true);
             }
 
-            return new NeuralNetworkPredictionsReport(
-                report.NumberOfCorrectPredictions,
-                report.NumberOfIncorrectPredictions + 1); 
+            return NeuralNetworkPredictionsReport.UpdateFor(
+                report, 
+                transaction.Class,
+                predictionWasCorrect: false); 
         }
 
         private bool IsCorrectPrediction(double[] prediction, BankTransactionClass actualClass)

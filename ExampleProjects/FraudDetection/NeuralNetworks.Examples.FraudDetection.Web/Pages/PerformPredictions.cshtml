@@ -11,12 +11,15 @@
     </form>
 
     <h1>Prediction Report</h1>
-    @if(@Model.PredictionsReport.NumberOfCorrectPredictions == 0 && @Model.PredictionsReport.NumberOfIncorrectPredictions == 0){
+    @if(@Model.PredictionsReport.TotalCorrectPredictions == 0 && @Model.PredictionsReport.TotalIncorrectPredictions == 0){
         <h2> No Predictions have been made </h2>
     }
     else{
-        <h4>Correct Predictions: @Model.PredictionsReport.NumberOfCorrectPredictions</h4>
-        <h4>Incorrect Predictions: @Model.PredictionsReport.NumberOfIncorrectPredictions</h4>
-        <h4>Correct Percentage: @Model.PredictionsReport.CorrectPercentage</h4>
+        <h4>Correct Predictions: @Model.PredictionsReport.TotalCorrectPredictions</h4>
+        <h4>Incorrect Predictions: @Model.PredictionsReport.TotalIncorrectPredictions</h4>
+        <h4>Correct Percentage: @Model.PredictionsReport.PercentageOfPredictionsCorrect</h4>
+        <h4>Incorrect Predictions That Were Legitimate: @Model.PredictionsReport.IncorrectLegitimatePredictions</h4>
+        <h4>Incorrect Predictions That Were Fraudulent: @Model.PredictionsReport.IncorrectFraudulentPredictions</h4>
+        <h4>Incorrect Predictions Fraudulent Percentage: @Model.PredictionsReport.PercentageOfIncorrectPredictionsFraudulent</h4>
     }
 </div>

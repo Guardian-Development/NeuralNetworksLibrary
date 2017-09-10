@@ -20,9 +20,9 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
             this.networkPredictionService = networkPredictionService; 
         }
 
-        public PredictionReport PredictionsReport { get; set; }
+        public PredictionsReport PredictionsReport { get; set; }
         
-        public void OnGet(PredictionReport predictionsReport)
+        public void OnGet(PredictionsReport predictionsReport)
         {
             PredictionsReport = predictionsReport; 
         }
@@ -30,9 +30,11 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
         public IActionResult OnPostPredict()
         {
              var predictionsReport = networkPredictionService.RunPredictions();
-             return RedirectToPage(new PredictionReport(){
-                 NumberOfCorrectPredictions = predictionsReport.NumberOfCorrectPredictions,
-                 NumberOfIncorrectPredictions = predictionsReport.NumberOfIncorrectPredictions });
+             return RedirectToPage(new PredictionsReport(){
+                TotalCorrectPredictions = predictionsReport.TotalCorrectPredictions,
+                TotalIncorrectPredictions = predictionsReport.TotalIncorrectPredictions,
+                IncorrectFraudulentPredictions = predictionsReport.IncorrectFraudulentPredictions,
+                IncorrectLegitimatePredictions = predictionsReport.IncorrectLegitimatePredictions});
         }
     }
 }
