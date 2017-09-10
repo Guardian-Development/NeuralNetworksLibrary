@@ -18,8 +18,9 @@ namespace NeuralNetworks.Examples.FraudDetection.Web.Pages
             this.networkPredictionService = networkPredictionService; 
         }
 
-        public void OnGet()
+        public void OnPostPredict()
         {
+             networkPredictionService.RunPredictions();
         }
     }
 }

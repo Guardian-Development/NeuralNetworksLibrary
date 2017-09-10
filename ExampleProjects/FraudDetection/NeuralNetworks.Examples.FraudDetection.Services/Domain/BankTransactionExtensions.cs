@@ -8,7 +8,17 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
     {
         public static TrainingDataSet ToTrainingData(this BankTransaction bankTransaction)
         {
-            var inputs = new [] {
+            var inputs = bankTransaction.ToNetworkInputData();
+
+            var outputs = Enumerable.Repeat(0.0, 2).ToList(); 
+            outputs[Convert.ToInt32(bankTransaction.Class)] = 1;
+
+            return TrainingDataSet.For(inputs.ToArray(), outputs.ToArray());
+        }
+
+        public static double[] ToNetworkInputData(this BankTransaction bankTransaction)
+        {
+            return new [] {
                 bankTransaction.Amount, 
                 bankTransaction.DataPoint1,
                 bankTransaction.DataPoint2,
@@ -39,11 +49,6 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Domain
                 bankTransaction.DataPoint27,
                 bankTransaction.DataPoint28
             }; 
-
-            var outputs = Enumerable.Repeat(0.0, 2).ToList(); 
-            outputs[Convert.ToInt32(bankTransaction.Class)] = 1;
-
-            return TrainingDataSet.For(inputs.ToArray(), outputs.ToArray());
         }
     }
 }
