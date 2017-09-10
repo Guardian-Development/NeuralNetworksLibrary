@@ -53,7 +53,7 @@ namespace NeuralNetworks.Examples.FraudDetection.Services.Application
 
         private bool IsCorrectPrediction(double[] prediction, BankTransactionClass actualClass)
         {
-            var predictedClass = Array.IndexOf(prediction, prediction.Max()) + 1;
+            var predictedClass = Array.IndexOf(prediction, prediction.Max());
             
             return (BankTransactionClass)predictedClass == actualClass ? true : false; 
         }
