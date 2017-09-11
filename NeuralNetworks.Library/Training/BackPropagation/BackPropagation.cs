@@ -11,13 +11,13 @@ namespace NeuralNetworks.Library.Training.BackPropagation
     {
         private readonly NeuralNetwork neuralNetwork;
 		private readonly NeuronErrorGradientCalculator neuronErrorGradientCalculator;
-		private readonly SynapseWeightCalculator synapseWeightCalculator;
+		private readonly IUpdateSynapseWeights synapseWeightCalculator;
         private readonly ParallelOptions parallelOptions; 
 
         private BackPropagation(
             NeuralNetwork neuralNetwork, 
             NeuronErrorGradientCalculator neuronErrorGradientCalculator, 
-            SynapseWeightCalculator synapseWeightCalculator,
+            IUpdateSynapseWeights synapseWeightCalculator,
             ParallelOptions parallelOptions)
             : base(neuralNetwork)
         {
@@ -94,9 +94,21 @@ namespace NeuralNetworks.Library.Training.BackPropagation
             return new BackPropagation(
                 network,
                 NeuronErrorGradientCalculator.Create(),
-                SynapseWeightCalculator.For(learningRate, momentum),
+                BackPropagationSynapseWeightCalculator.For(learningRate, momentum),
                 parallelOptions
             ); 
+        }
+
+        public static BackPropagation ResilientBackPropagation(
+            NeuralNetwork network, 
+            ParallelOptions parallelOptions)
+        {
+            return new BackPropagation(
+                network, 
+                NeuronErrorGradientCalculator.Create(),
+                ResilientBackPropagationSynapseWeightCalculator.Create(),
+                parallelOptions
+            );
         }
     }
 }

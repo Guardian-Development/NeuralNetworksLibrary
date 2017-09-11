@@ -16,11 +16,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
     public sealed class BackPropagationSynapseWeightUpdateTester : NeuralNetworkTester<BackPropagationSynapseWeightUpdateTester>
     {
         private static ParallelOptions UnrestrictedThreading = new ParallelOptions(); 
-        private readonly SynapseWeightCalculator synapseWeightCalculator; 
+        private readonly BackPropagationSynapseWeightCalculator synapseWeightCalculator; 
 
         private BackPropagationSynapseWeightUpdateTester(double learningRate, double momentum)
         {
-            synapseWeightCalculator = SynapseWeightCalculator.For(learningRate, momentum); 
+            synapseWeightCalculator = BackPropagationSynapseWeightCalculator.For(learningRate, momentum); 
         }
 
         public void UpdateSynapseExpectingWeight(

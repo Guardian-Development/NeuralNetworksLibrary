@@ -4,12 +4,12 @@ using NeuralNetworks.Library.Extensions;
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {
-    public sealed class SynapseWeightCalculator
+    public sealed class BackPropagationSynapseWeightCalculator : IUpdateSynapseWeights
     {
         private readonly double learningRate;
         private readonly double momentum;
 
-        private SynapseWeightCalculator(double learningRate, double momentum)
+        private BackPropagationSynapseWeightCalculator(double learningRate, double momentum)
         {
 			this.learningRate = learningRate;
 			this.momentum = momentum;
@@ -27,7 +27,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
             synapse.Weight = synapse.Weight + synapse.WeightDelta + (momentum * prevDelta);
         }
 
-        public static SynapseWeightCalculator For(double learningRate, double momentum)
-            => new SynapseWeightCalculator(learningRate, momentum);
+        public static BackPropagationSynapseWeightCalculator For(double learningRate, double momentum)
+            => new BackPropagationSynapseWeightCalculator(learningRate, momentum);
     }
 }
