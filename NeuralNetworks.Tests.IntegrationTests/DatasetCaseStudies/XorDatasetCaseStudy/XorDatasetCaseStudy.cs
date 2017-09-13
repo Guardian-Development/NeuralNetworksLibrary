@@ -14,6 +14,23 @@ namespace NeuralNetworks.Tests.IntegrationTests.DatasetCaseStudies.XorDatasetCas
 {
     public sealed class XorDatasetCaseStudy : NeuralNetworkTest
     {
+        [Fact(Skip="Test only used to show the current implementation of resilient back prop")]
+        public async void TestingTheOverallPerformanceOfResilientBackProp()
+        {
+             var neuralNetwork = NeuralNetwork.For(NeuralNetworkContext.MaximumPrecision)
+                .WithInputLayer(neuronCount: 2, activationType: ActivationType.Sigmoid)
+                .WithHiddenLayer(neuronCount: 2, activationType: ActivationType.TanH)
+                .WithOutputLayer(neuronCount: 1, activationType: ActivationType.Sigmoid)
+                .Build();
+
+            await TrainingController
+                    .For(BackPropagation.ResilientBackPropagation(
+                        neuralNetwork,  
+                        ParallelOptionsExtensions.SingleThreadedOptions))
+                    .TrainForEpochsOrErrorThresholdMet(XorTrainingData(), maximumEpochs: 3000, errorThreshold: 0.01);
+
+            AssertPredictionsForTrainedNeuralNetwork(neuralNetwork); 
+        }
 
         [Fact]
         public async void CanSuccessfullySolveXorProblemTrainingForEpochsOrErrorThresholdMet()
