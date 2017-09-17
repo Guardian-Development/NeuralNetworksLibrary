@@ -16,11 +16,11 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
     public sealed class BackPropagationSynapseWeightUpdateTester : NeuralNetworkTester<BackPropagationSynapseWeightUpdateTester>
     {
         private static ParallelOptions UnrestrictedThreading = new ParallelOptions(); 
-        private readonly BackPropagationSynapseWeightCalculator synapseWeightCalculator; 
+        private readonly IUpdateSynapseWeights synapseWeightCalculator; 
 
-        private BackPropagationSynapseWeightUpdateTester(double learningRate, double momentum)
+        private BackPropagationSynapseWeightUpdateTester(IUpdateSynapseWeights synapseWeightCalculator)
         {
-            synapseWeightCalculator = BackPropagationSynapseWeightCalculator.For(learningRate, momentum); 
+            this.synapseWeightCalculator = synapseWeightCalculator; 
         }
 
         public void UpdateSynapseExpectingWeight(
@@ -52,7 +52,16 @@ namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.Sy
             return synapse; 
         }
 
-        public static BackPropagationSynapseWeightUpdateTester Create(double learningRate, double momentum)
-            => new BackPropagationSynapseWeightUpdateTester(learningRate, momentum); 
+        public static BackPropagationSynapseWeightUpdateTester ForBackPropagation(double learningRate, double momentum)
+        {
+            var backPropagationSynapseUpdater = BackPropagationSynapseWeightCalculator.For(learningRate, momentum); 
+            return new BackPropagationSynapseWeightUpdateTester(backPropagationSynapseUpdater);
+        }
+
+        public static BackPropagationSynapseWeightUpdateTester ForResilientBackPropagation()
+        {
+            var resilientBackPropagationSynapseUpdater = ResilientBackPropagationSynapseWeightCalculator.Create(); 
+            return new BackPropagationSynapseWeightUpdateTester(resilientBackPropagationSynapseUpdater); 
+        }
     }
 }

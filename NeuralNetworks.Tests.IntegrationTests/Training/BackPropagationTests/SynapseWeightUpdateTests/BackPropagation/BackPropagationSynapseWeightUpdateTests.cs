@@ -3,12 +3,12 @@ using NeuralNetworks.Library.Components.Activation;
 using NeuralNetworks.Tests.Support;
 using Xunit;
 
-namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.SynapseWeightUpdateTests
+namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.SynapseWeightUpdateTests.BackPropagation
 {
     public sealed class BackPropagationSynapseWeightUpdateTests : NeuralNetworkTest
     {
         public BackPropagationSynapseWeightUpdateTester SynapseWeightUpdateTester(double learningRate, double momentum)
-            => BackPropagationSynapseWeightUpdateTester.Create(learningRate, momentum);
+            => BackPropagationSynapseWeightUpdateTester.ForBackPropagation(learningRate, momentum);
             
         private NeuralNetworkContext TestContext => 
             new NeuralNetworkContext(
