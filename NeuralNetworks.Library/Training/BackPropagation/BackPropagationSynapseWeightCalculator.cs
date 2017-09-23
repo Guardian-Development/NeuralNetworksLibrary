@@ -16,9 +16,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
         }
 
         public void CalculateAndUpdateInputSynapseWeights(Neuron neuron, ParallelOptions parallelOptions) 
-            => neuron.InputSynapses.ParallelForEach(
-                synapse => UpdateSynapseWeight(synapse),
-                parallelOptions);
+            => neuron.InputSynapses.ParallelForEach(UpdateSynapseWeight, parallelOptions);
 
         private void UpdateSynapseWeight(Synapse synapse)
         {

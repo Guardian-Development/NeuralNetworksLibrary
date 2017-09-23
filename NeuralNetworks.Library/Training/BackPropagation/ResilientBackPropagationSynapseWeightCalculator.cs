@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NeuralNetworks.Library.Components;
-using NeuralNetworks.Library.Extensions;
 using NeuralNetworks.Library.Logging;
 
 namespace NeuralNetworks.Library.Training.BackPropagation
@@ -13,7 +12,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
     {
         private static ILogger Log => LoggerProvider.For<ResilientBackPropagationSynapseWeightCalculator>();
 
-        private Dictionary<Synapse, double> synapseToPreviousErrorRate 
+        private readonly Dictionary<Synapse, double> synapseToPreviousErrorRate 
             = new Dictionary<Synapse, double>();
 
         private ResilientBackPropagationSynapseWeightCalculator()
@@ -75,27 +74,21 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
     internal static class ResilientBackPropagationHelper
     {
-        private const double negativeWeightUpdateAmount = 0.5; 
-        private const double positiveWeightUpdateAmount = 1.2;
-        private const double maximumWeightUpdate = 50.0; 
-        private const double minimumWeightUpdate = 1.0E-6;
-        private const double initialUpdateValue = 0.1;
+        private const double NegativeWeightUpdateAmount = 0.5; 
+        private const double PositiveWeightUpdateAmount = 1.2;
+        private const double MaximumWeightUpdate = 50.0; 
+        private const double MinimumWeightUpdate = 1.0E-6;
+        private const double InitialUpdateValue = 0.1;
 
         public static int SignOfSum(params double[] values) 
-        {
-            if(values.Contains(0))
-            {
-                return 0; 
-            }
-            return Math.Sign(values.Sum()); 
-        }
-        
+            => values.Contains(0) ? 0 : Math.Sign(values.Sum());
+
         public static void ContinueToIncreaseWeightTowardsErrorGradientMinimum(
             Synapse synapse,
             double currentErrorGradient)
         {
-            var newDelta = synapse.WeightDelta * positiveWeightUpdateAmount;
-            var newWeightDelta = Math.Min(newDelta, maximumWeightUpdate);
+            var newDelta = synapse.WeightDelta * PositiveWeightUpdateAmount;
+            var newWeightDelta = Math.Min(newDelta, MaximumWeightUpdate);
 
             UpdateSynapseWeightCalculatingWeightDeltaDirection(
                 synapse,
@@ -105,8 +98,8 @@ namespace NeuralNetworks.Library.Training.BackPropagation
 
         public static void RevertPreviousWeightAdjustment(Synapse synapse)
         {
-            var newDelta = synapse.WeightDelta * negativeWeightUpdateAmount;
-            var newWeightDelta = Math.Max(newDelta, minimumWeightUpdate); 
+            var newDelta = synapse.WeightDelta * NegativeWeightUpdateAmount;
+            var newWeightDelta = Math.Max(newDelta, MinimumWeightUpdate); 
             synapse.Weight = synapse.Weight - synapse.WeightDelta;
             synapse.WeightDelta = newWeightDelta;
         }
@@ -115,7 +108,7 @@ namespace NeuralNetworks.Library.Training.BackPropagation
             Synapse synapse,
             double currentErrorGradient)
         {
-            var weightDelta = synapse.WeightDelta == 0 ? initialUpdateValue : synapse.WeightDelta;
+            var weightDelta = synapse.WeightDelta == 0 ? InitialUpdateValue : synapse.WeightDelta;
 
             UpdateSynapseWeightCalculatingWeightDeltaDirection(
                 synapse,
