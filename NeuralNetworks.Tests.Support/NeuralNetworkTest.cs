@@ -21,8 +21,10 @@ namespace NeuralNetworks.Tests.Support
 
         private void ConfigureLoggingForTest()
         {
+            var testName = GetType().Name; 
             Logger
                 .AddConsole(LogLevel.Debug)
+                .AddFile($"Logs/{testName}-{{Date}}.txt", LogLevel.Trace)
                 .InitialiseLoggingForNeuralNetworksLibrary();
         }
     }

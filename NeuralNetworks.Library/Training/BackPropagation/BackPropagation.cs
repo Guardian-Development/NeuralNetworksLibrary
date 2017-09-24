@@ -4,6 +4,7 @@ using NeuralNetworks.Library.Data;
 using NeuralNetworks.Library.Extensions;
 using NeuralNetworks.Library.Components;
 using System.Threading.Tasks;
+using NeuralNetworks.Library.Training.BackPropagation.Resilient;
 
 namespace NeuralNetworks.Library.Training.BackPropagation
 {

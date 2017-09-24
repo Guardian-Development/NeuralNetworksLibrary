@@ -16,6 +16,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
-    <PackageReference Include="NuGet.Build.Packaging" Version="0.1.324" developmentDependency="true"/>
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.1.324" developmentDependency="true" />
   </ItemGroup>
 </Project>

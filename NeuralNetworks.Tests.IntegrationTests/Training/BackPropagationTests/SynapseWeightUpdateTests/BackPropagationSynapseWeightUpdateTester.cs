@@ -1,21 +1,17 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
-using NeuralNetworks.Library;
 using NeuralNetworks.Library.Components;
-using NeuralNetworks.Library.NetworkInitialisation;
 using NeuralNetworks.Library.Training.BackPropagation;
+using NeuralNetworks.Library.Training.BackPropagation.Resilient;
 using NeuralNetworks.Tests.Support;
 using NeuralNetworks.Tests.Support.Assertors;
-using NeuralNetworks.Tests.Support.Builders;
-using NeuralNetworks.Tests.Support.Helpers;
 using Xunit;
 
 namespace NeuralNetworks.Tests.IntegrationTests.Training.BackPropagationTests.SynapseWeightUpdateTests
 {
     public sealed class BackPropagationSynapseWeightUpdateTester : NeuralNetworkTester<BackPropagationSynapseWeightUpdateTester>
     {
-        private static ParallelOptions UnrestrictedThreading = new ParallelOptions(); 
+        private static readonly ParallelOptions UnrestrictedThreading = new ParallelOptions(); 
         private readonly IUpdateSynapseWeights synapseWeightCalculator; 
 
         private BackPropagationSynapseWeightUpdateTester(IUpdateSynapseWeights synapseWeightCalculator)
